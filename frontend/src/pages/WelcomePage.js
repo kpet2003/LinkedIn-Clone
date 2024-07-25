@@ -11,7 +11,7 @@ function ClickButton() {
          <h1 >Welcome</h1>
         <form>
           <label>E-mail:</label><br></br>
-          <input type='text'></input><br></br>
+          <input type='email'></input><br></br>
           <label>Password:</label><br></br>
           <input type='password'></input><br></br>
           <input className='LoginButton' type='submit' value={'Login'}></input><br></br>
