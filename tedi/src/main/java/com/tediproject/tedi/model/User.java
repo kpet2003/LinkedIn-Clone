@@ -28,6 +28,8 @@ public class User {
     protected String image_path;
     @Column
     protected String resume_path;
+    @Column
+    protected Boolean admin;
 
     public User() {}
 
