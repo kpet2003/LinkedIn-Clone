@@ -1,29 +1,55 @@
-*{background-color: rgb(175, 235, 255)};
-
-.Background {
-  background-color: white;
+body {
+  background-color: rgb(175, 235, 255);
+  text-align: center;
+  font-family: 'Arial';
 }
 
-.App {
+
+.LoginButton {
+  text-align: center;
+  background-color: royalblue;
+  color: white;
+  margin-top: 10px;
+  margin-left: 5px;
+  cursor: pointer;
+  border-radius: 100px;
+  border-style: none;
+  width: 185px;
+  margin-bottom: 10px;
+  height:25px;
+}
+
+
+.login {
   text-align: center;
   margin: auto;
   margin-top: 200px;
   width: 350px;
-  height: 145px;
+  height: 250px;
   border: 5px solid grey;
   background-color: white;
+  padding: 20px;
+}
+
+.signup {
+  margin-top: 25px;
+  text-align: left;
+  text-shadow: 0px;
+  padding: 10px;
+  font-weight: 250px;
 }
 
 .WelcomeButton {
-  text-align: center;
-  background-color: royalblue;
-  color: white;
-  margin: 3px;
-  cursor: pointer;
-  border: none;
-}
-
-.Buttons {
-  text-align: center;
+  margin-left: 5px;
+  text-align: left;
+  text-decoration-line: dashed;
+  border-style: none;
+  border-radius: 100px;
   background-color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  
 }

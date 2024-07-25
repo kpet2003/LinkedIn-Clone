@@ -3,25 +3,27 @@ import './App.css';
 
 function ClickButton() {
   return (
-    <form>
-      <label>E-mail:</label><br></br>
-      <input type='text'></input><br></br>
-      <label>Username:</label><br></br>
-      <input type='text'></input><br></br>
-      <input type='submit' value={'Login'}></input>
-    </form>
+    <div className='login'>
+       <h1 >Welcome</h1>
+      <form>
+        <label>E-mail:</label><br></br>
+        <input type='text'></input><br></br>
+        <label>Password:</label><br></br>
+        <input type='text'></input><br></br>
+        <input className='LoginButton' type='submit' value={'Login'}></input><br></br>
+        <div className='signup'>
+          Create an account:
+          <input className='WelcomeButton' type='submit' value={'Sign Up'}></input>
+        </div>
+      </form>
+    </div>
    );
 }
 
-function Button(){
+function WelcomePage(){
   return (
-    <div className='Buttons'>
-      <button className='WelcomeButton'>
-        Sign Up
-      </button>
-      <button className='WelcomeButton'>
-        Login
-      </button>
+    <div>
+     <ClickButton />
     </div>
   );
 }
@@ -30,9 +32,7 @@ function Button(){
 function App() {
   return (
     <div className="App">
-      <h1 className='Buttons'>Welcome</h1>
-      <Button></Button>
-      <ClickButton></ClickButton>
+       <WelcomePage />
     </div>
   );
 }
