@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 function SignUpPage() {
     return (
         <div>
-            <from>
+            <form className="signUp">
                 <label>E-mail:</label><br></br>
                 <input type='email'></input> <br></br>
                 <label>First Name:</label><br></br>
@@ -17,14 +17,23 @@ function SignUpPage() {
                 <input type='password'></input><br></br>
                 <label>Phone Number:</label><br></br>
                 <input type='tel'></input><br></br>
-                <label>Profile Picture:</label><br></br>
-                <input type='file'></input><br></br>
-                <label>CV:</label><br></br>
-                <input type='file'></input><br></br>
-                <label>Reset:</label><br></br>
-                <input type='reset' value="Reset"></input><br></br>
 
-            </from>
+                <div className='profile'>
+                    <label>Profile Picture:</label>
+                    <input type='file' className='button'></input><br></br>
+                </div>
+               
+                <div className='profile'>
+                    <label>CV: </label>
+                    <input type='file' className='button'></input><br></br>
+                </div>
+               
+               <div className='submit'>
+                    <label>Reset:</label>
+                    <input type='reset' value="Reset" className='button'></input>
+                    <input type='button' value="Sign Up"  className='submit_button'></input>
+               </div>
+            </form>
         </div>
       );
 }
