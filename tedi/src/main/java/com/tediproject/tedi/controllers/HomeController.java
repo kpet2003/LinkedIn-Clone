@@ -10,10 +10,10 @@ public class HomeController {
         // Forward to index.html
         return "forward:/index.html";
     }
-    @RequestMapping(value = "/SignUp")
-    public String SignUp() {
-        // Forward to index.html
-        return "forward:/index.html";
-    }
+    // @RequestMapping(value = "/SignUp")
+    // public String SignUp() {
+    //     // Forward to index.html
+    //     return "forward:/index.html";
+    // }
 }
 
