@@ -1,9 +1,12 @@
 package com.tediproject.tedi.model;
+import java.io.File;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 
 @Entity
@@ -24,10 +27,15 @@ public class User {
     protected String password;
     @Column
     protected long phone_number;
-    @Column
-    protected String image_path;
-    @Column
-    protected String resume_path;
+    
+    @Lob
+    @Column(length=100000)
+    protected File image_path;
+    
+    @Lob
+    @Column(length=100000)
+    protected File resume_path;
+    
     @Column
     protected Boolean admin;
 
