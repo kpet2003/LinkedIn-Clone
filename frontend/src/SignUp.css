@@ -6,8 +6,7 @@ body {
   
 
 .signUp {
-    display: flex;
-    flex-direction: column;
+    display: center;
     text-align: center;
     margin: auto;
     margin-top: 200px;
@@ -20,8 +19,7 @@ body {
 }
 
 .profile {
-    display: flex;
-    flex-direction: row;
+    display: center;
     margin-top: 3px;
 }
 
@@ -31,8 +29,7 @@ body {
 }
 
 .submit {
-    display: flex;
-    flex-direction: row;
+    display: center;
     margin-top: 30px;
 }
 
