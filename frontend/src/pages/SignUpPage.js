@@ -1,40 +1,40 @@
 import '../SignUp.css';
 import React, { useState } from 'react'
-import userService from '../service/user.service';
+//import userService from '../service/user.service';
 
 function SignUpPage() {
 
-    const [user, setUser] = useState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone_number: "",
-        password: "",
-    });
-    const [msg, setMsg] = useState("")
+    // const [user, setUser] = useState({
+    //     first_name: "",
+    //     last_name: "",
+    //     email: "",
+    //     phone_number: "",
+    //     password: "",
+    // });
+    // const [msg, setMsg] = useState("")
 
-    const handleChange = (e) => {
-        const value = e.target.value;
-        setUser({ ...user, [e.target.name]: value })
-    }
+    // const handleChange = (e) => {
+    //     const value = e.target.value;
+    //     setUser({ ...user, [e.target.name]: value })
+    // }
 
-    const RegisterUser = (e) => {
-        e.preventDefault();
-        console.log(user);
-        userService.saveUser(user)
-            .then((res) => {
-                console.log("User Added Successfully");
-                setMsg("Used Added Sucessfully");
-                setUser({
-                    userName: "",
-                    email: "",
-                    mobile: "",
-                    address: "",
-                })
-            }).catch((error) => {
-                console.log(error);
-            });
-    }
+    // const RegisterUser = (e) => {
+    //     e.preventDefault();
+    //     console.log(user);
+    //     userService.saveUser(user)
+    //         .then((res) => {
+    //             console.log("User Added Successfully");
+    //             setMsg("Used Added Sucessfully");
+    //             setUser({
+    //                 userName: "",
+    //                 email: "",
+    //                 mobile: "",
+    //                 address: "",
+    //             })
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
 
 
     return (
