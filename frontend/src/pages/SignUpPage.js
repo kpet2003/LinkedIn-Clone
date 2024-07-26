@@ -1,5 +1,5 @@
 import '../SignUp.css';
-import {useNavigate} from "react-router-dom";
+
 
 function SignUpPage() {
     return (
