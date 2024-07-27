@@ -10,13 +10,11 @@ public class UserControllers {
     
     @Autowired
     private UserRepo user_repo;
-    @PostMapping(value="/signUp") 
+    
+    @PostMapping(value="/SignUp") 
     public void saveUser()  {
         
     }
 
-    // @GetMapping(value="/")
-    // public List <User> get_users() {
-    //     return user_repo.findAll();
-    // }
+
 }
