@@ -74,7 +74,6 @@ function SignUpPage(){
 
     return (
         <div>
-            <h1> Sign up</h1>
             <form className="signUp" onSubmit={handleSubmit}>
                 <label>E-mail:</label><br></br>
                 <input type='email' required value = {user.email} onChange={handleChange}  id="email"></input> <br></br>
