@@ -17,6 +17,7 @@ public class UserService {
     private UserRepo userRepo;
 
     public User createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
+        
         if (userRepo.findUser(email) != null) {
             throw new Exception("User already exists");
         }

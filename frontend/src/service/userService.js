@@ -6,5 +6,4 @@ class UserService {
         return axios.post(API_URL + "/signUp", user);
     }
 }
-
-export default new UserService;
+export default new UserService();
