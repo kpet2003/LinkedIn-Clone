@@ -27,7 +27,6 @@ function ClickButton() {
 
         try {
             const response =  await UserService.loginUser(formData);
-            alert("User registered successfully");
             if(response.data){
               navigate('/AdminPage');
             }

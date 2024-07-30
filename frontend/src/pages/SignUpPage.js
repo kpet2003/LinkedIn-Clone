@@ -1,6 +1,7 @@
 import '../SignUp.css';
 import React, { useState } from 'react'
-import UserService from '../service/userService.js'; 
+import UserService from '../service/userService.js';
+import {useNavigate} from "react-router-dom";
 
 function SignUpPage(){
 
@@ -17,6 +18,7 @@ function SignUpPage(){
 
     const [user, setUser] = useState(initialState);
 
+    const navigate = useNavigate();
     const handleSubmit = async(event) => {
         event.preventDefault();
         
@@ -38,7 +40,8 @@ function SignUpPage(){
         try {
             const response =  await UserService.saveUser(formData);
             alert("User registered successfully");
-            console.log(response.data);  
+            console.log(response.data);
+            navigate(-1);  
         } catch (error) {
             console.error("There was an error registering the user:", error);
             alert("There was an error registering the user.");
