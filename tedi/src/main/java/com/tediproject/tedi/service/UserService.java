@@ -18,8 +18,6 @@ public class UserService {
             throw new Exception("User already exists");
         }
 
-
-
         User user = new User();
 
         user.setFirstName(firstName);
@@ -30,7 +28,7 @@ public class UserService {
         if(pfp!=null) {
             user.setProfilePicture(pfp.getBytes());
         }
-        if(pfp!=null) {
+        if(cv!=null) {
             user.setResume(cv.getBytes());
         }
 
