@@ -1,5 +1,7 @@
 package com.tediproject.tedi.service;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,11 +33,20 @@ public class UserService {
         if(cv!=null) {
             user.setResume(cv.getBytes());
         }
-
-        
        
         return userRepo.save(user);
 
+    }
+
+    @PostConstruct
+    public void init() {
+        if (userRepo.findByEmail("admin@gmail.com") == null) {
+            User user = new User();
+            user.setEmail("admin@gmail.com");
+            user.setPassword("admin");
+            user.setAdmin();
+            userRepo.save(user);
+        }
     }
 }
 
