@@ -18,5 +18,49 @@ public class HomeController {
         return "forward:/index.html";
     }
 
+    @RequestMapping(value = "/HomePage")
+    public String HomePage() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Network")
+    public String Network() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Jobs")
+    public String Jobs() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Messages")
+    public String Messages() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Notifications")
+    public String Notifications() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Profile")
+    public String Profile() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value = "/Settings")
+    public String Settings() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+    
+
+
 }
 

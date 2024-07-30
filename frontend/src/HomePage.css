@@ -1,0 +1,18 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.navigation {
+    display: inline;
+    list-style-type:none;
+    overflow:hidden ;
+    background-color: darkblue;
+    color: white;
+}
+
+.link {
+    text-align: center;
+    padding: 5px;
+}
