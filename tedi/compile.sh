@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ../frontend
-npm run build
+NODE_OPTIONS=--openssl-legacy-provider npm run build
 
 cd ..
 cp -r frontend/build/* tedi/src/main/resources/static/

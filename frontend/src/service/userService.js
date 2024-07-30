@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/SignUp/signup";
+const API_URL = "/SignUp/signup";
 
 class UserService {
     saveUser(user) {
