@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.exceptions.UserAlreadyExists;
+import com.tediproject.tedi.exceptions.UserDoesNotExist;
+import com.tediproject.tedi.exceptions.WrongPassword;
 import com.tediproject.tedi.model.User;
 import com.tediproject.tedi.repo.UserRepo;
 
@@ -17,7 +20,7 @@ public class UserService {
     public User createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
         
         if (userRepo.findByEmail(email) != null) {
-            throw new Exception("User already exists");
+            throw new UserAlreadyExists("User already exists");
         }
 
         User user = new User();
@@ -36,6 +39,23 @@ public class UserService {
        
         return userRepo.save(user);
 
+    }
+
+    public Boolean loginUser(String email, String password){
+
+        User user;
+
+        if ((user = userRepo.findByEmail(email)) == null) {
+            throw new UserDoesNotExist("User Not Found");
+        }
+
+        String word = user.getPassword();
+
+        if(word.equals(password)){
+            throw new WrongPassword("Wrong Password");
+        }
+
+        return true;
     }
 
     @PostConstruct

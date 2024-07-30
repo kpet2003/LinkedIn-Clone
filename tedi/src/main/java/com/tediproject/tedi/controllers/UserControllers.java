@@ -33,5 +33,17 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PostMapping(value= "/Login")
+    public ResponseEntity<?> login(
+        @RequestParam(value="email", required = false) String email,
+        @RequestParam(value="password", required = false) String password){
+        try {
+            Boolean check = userService.loginUser(email, password);
+            return ResponseEntity.ok(check);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
     
 }
