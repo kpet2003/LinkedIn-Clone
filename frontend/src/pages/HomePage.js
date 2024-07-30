@@ -8,7 +8,7 @@ import UserService from '../service/userService.js';
 function NavigationBar() {
     
     return(
-        <h1 >
+        <header >
             <nav className='navigation'>
                 <a href='/HomePage' className='link'>HomePage </a> 
                 <a href='/Network' className='link'>Network </a> 
@@ -18,7 +18,7 @@ function NavigationBar() {
                 <a href='/Profile' className='link'>Profile </a> 
                 <a href='/Settings' className='link'>Settings </a> 
             </nav>
-        </h1>
+        </header>
 
 
 

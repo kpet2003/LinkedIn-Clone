@@ -8,11 +8,17 @@ body {
     display: inline;
     list-style-type:none;
     overflow:hidden ;
-    background-color: darkblue;
-    color: white;
+    background-color: darkblue; 
+    height: 100px;
+    width: 100%;
 }
 
 .link {
+    color: white;
     text-align: center;
-    padding: 5px;
+    padding: auto;
+    border: 5px solid;
+    border-color: darkblue;
+    background-color: darkblue; 
+    font-size: xx-large;
 }
