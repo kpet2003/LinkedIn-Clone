@@ -1,8 +1,4 @@
 package com.tediproject.tedi.service;
-import java.io.InputStream;
-import java.sql.Blob;
-
-import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +18,7 @@ public class UserService {
             throw new Exception("User already exists");
         }
 
-        InputStream fileInputStream = pfp.getInputStream();
-        byte[] fileBytes = fileInputStream.readAllBytes();
-        Blob pfpBlob = new SerialBlob(fileBytes);
 
-        fileInputStream = cv.getInputStream();
-        fileBytes = fileInputStream.readAllBytes();
-        Blob cvBlob = new SerialBlob(fileBytes);
 
         User user = new User();
 
@@ -37,10 +27,17 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(password);
         user.setPhoneNumber(phoneNumber);
-        user.setProfilePicture(pfpBlob.getBytes(1, (int) pfpBlob.length()));
-        user.setResume(cvBlob.getBytes(1, (int) cvBlob.length()));
+        if(pfp!=null) {
+            user.setProfilePicture(pfp.getBytes());
+        }
+        if(pfp!=null) {
+            user.setResume(cv.getBytes());
+        }
 
+        
+       
         return userRepo.save(user);
+
     }
 }
 

@@ -25,45 +25,40 @@ function SignUpPage(){
             return;
         }
 
-        const UserData = {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,
-            password: user.password,
-            phone: user.phone,
-            profile_picture: user.profile_picture,
-            cv: user.cv
-        }
+        const formData = new FormData();
+        formData.append('email', user.email);
+        formData.append('firstName', user.first_name);
+        formData.append('lastName', user.last_name);
+        formData.append('password', user.password);
+        formData.append('phoneNumber', user.phone);
+        formData.append('profilePicture', user.profile_picture);
+        formData.append('resume', user.cv);
+
 
         try {
-            const response =  await UserService.saveUser(user);
+            const response =  await UserService.saveUser(formData);
             alert("User registered successfully");
-            console.log(response.data);  // Handle the response as needed
+            console.log(response.data);  
         } catch (error) {
             console.error("There was an error registering the user:", error);
             alert("There was an error registering the user.");
         }
-
-
     }
-
     const handleChange = (event) => {
-        event.preventDefault();
         setUser({
-          ...user,
-          [event.target.id]: event.target.value,
+            ...user,
+            [event.target.id]: event.target.value,
         });
     };
-
+    
     const handleFiles = (event) => {
-        event.preventDefault();
-
         const { id, files } = event.target;
         setUser(prevState => ({
             ...prevState,
             [id]: files[0]
         }));
-    }
+    };
+    
 
     const Reset = () => {
         setUser(initialState);  

@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 public class User {
@@ -91,12 +91,12 @@ public class User {
         return this.phone_number;
     }
 
-    public void getProfilePicture(){
-        
-    }
+    public byte[] getProfilePicture(){
+        return this.image;
+    }   
 
-    public void getResume(){
-
+    public byte[] getResume(){
+        return this.resume;
     }
 
     public Boolean getAdmin(){
