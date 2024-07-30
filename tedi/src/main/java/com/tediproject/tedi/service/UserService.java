@@ -1,5 +1,7 @@
 package com.tediproject.tedi.service;
 
+import java.io.Console;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +53,9 @@ public class UserService {
 
         String word = user.getPassword();
 
-        if(word.equals(password)){
+        if(word.equals(password) == false){
             throw new WrongPassword("Wrong Password");
         }
-
         return true;
     }
 
