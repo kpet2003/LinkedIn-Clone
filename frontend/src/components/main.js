@@ -8,6 +8,8 @@ const Main=()=>{
         <Routes>
             <Route exact path='/' Component={WelcomePage}></Route>
             <Route exact path='/SignUp' Component={SignUpPage}></Route>
+            <Route exact path='/AdminPage' Component={SignUpPage}></Route>
+            <Route exact path='/HomePage' Component={SignUpPage}></Route>
         </Routes>
     );
 }

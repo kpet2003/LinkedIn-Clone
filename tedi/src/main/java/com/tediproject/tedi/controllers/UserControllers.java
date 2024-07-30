@@ -39,8 +39,8 @@ public class UserControllers {
         @RequestParam(value="email", required = false) String email,
         @RequestParam(value="password", required = false) String password){
         try {
-            Boolean check = userService.loginUser(email, password);
-            return ResponseEntity.ok(check);
+            Boolean isAdmin = userService.loginUser(email, password);
+            return ResponseEntity.ok(isAdmin);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

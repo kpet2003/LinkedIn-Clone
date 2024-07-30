@@ -26,11 +26,14 @@ function ClickButton() {
         formData.append('password', user.password);
 
         try {
-            alert(JSON.stringify(formData, null, 2));  
             const response =  await UserService.loginUser(formData);
             alert("User registered successfully");
-            console.log(response.data);
-            //navigate('/Homepage');
+            if(response.data){
+              navigate('/AdminPage');
+            }
+            else{
+              navigate('/HomePage');
+            }
         } 
         catch (error) {
             console.error("There was an error registering the user:", error);
