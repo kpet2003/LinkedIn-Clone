@@ -13,33 +13,37 @@ function UserList() {
     useEffect(() => {
         const fetchUsers = async() => {
             try {
-                const response =  AdminService.getUsers();
-                setUsers(response);
-                alert(JSON.stringify(users));
-                console.log(JSON.stringify(users));
+                const response = await  AdminService.getUsers();
+                const finalUsers = response.filter(user => user.admin !== true);
+                setUsers(finalUsers);
             } 
-            
             catch (error) {
-                console.error("There was an error getting the user list:", error);
+                console.error("There was an error getting the user list", error);
             }
         };
         fetchUsers();
     }, []);
  
-
-
-    
-
-
     return (
   
         <table className='userlist'> 
+        <thead>
             <tr>
                 <th> Name </th>
                 <th> E-mail </th>
                 <th> Profile Page</th>
             </tr>
-        </table>    
+        </thead>
+        <tbody>
+            {users.map(user => (
+                <tr key={user.id}>
+                    <td>{user.firstName} {user.lastName}</td>
+                    <td> {user.email}</td>
+                    <td> <a href={`/profile/${user.firstName}${user.lastName}`}> Visit Profile </a></td>
+                </tr>
+            ))}
+        </tbody>
+    </table>    
     );
 
 }
