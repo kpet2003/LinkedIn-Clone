@@ -1,0 +1,11 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.userlist {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}

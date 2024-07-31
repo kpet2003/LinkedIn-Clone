@@ -59,6 +59,12 @@ public class HomeController {
         // Forward to index.html
         return "forward:/index.html";
     }
+
+    @RequestMapping(value="/AdminPage") 
+    public String AdminPage() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
     
 
 
