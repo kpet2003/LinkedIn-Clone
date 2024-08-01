@@ -27,7 +27,8 @@ function ClickButton() {
 
         try {
             const response =  await UserService.loginUser(formData);
-            if(response.data){
+            localStorage.setItem('userID',response.data);
+            if(response.data === 1){
               navigate('/AdminPage');
             }
             else{

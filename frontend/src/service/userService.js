@@ -18,5 +18,11 @@ class UserService {
             }
         });
     }
+
+    static async getUser(id, url) {
+        console.log(id);
+        const response = await axios.post(url,{ params: { id } });
+        return response.data;
+    }
 }
 export default new UserService();

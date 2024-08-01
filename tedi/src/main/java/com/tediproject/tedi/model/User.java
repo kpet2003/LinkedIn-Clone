@@ -103,4 +103,8 @@ public class User {
         return this.admin;
     }
 
+    public Long getID(){
+        return this.id;
+    }
+
 }

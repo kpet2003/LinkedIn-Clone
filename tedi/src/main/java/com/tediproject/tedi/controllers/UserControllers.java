@@ -39,11 +39,24 @@ public class UserControllers {
         @RequestParam(value="email", required = false) String email,
         @RequestParam(value="password", required = false) String password){
         try {
-            Boolean isAdmin = userService.loginUser(email, password);
-            return ResponseEntity.ok(isAdmin);
+            Long id = userService.loginUser(email, password);
+            return ResponseEntity.ok(id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
     
+    @PostMapping(value = "/NewEmail")
+    public ResponseEntity<User> getUser(@RequestParam(value="id", required = false) Long id) {
+        
+        User user = userService.getUserById(id);
+        
+        if(user != null){
+            return ResponseEntity.ok(userService.getUserById(id));
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

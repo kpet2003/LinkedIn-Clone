@@ -65,6 +65,18 @@ public class HomeController {
         // Forward to index.html
         return "forward:/index.html";
     }
+
+    @RequestMapping(value="/NewEmail") 
+    public String NewEmail() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
+    @RequestMapping(value="/NewPassword") 
+    public String NewPassword() {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
     
 
 

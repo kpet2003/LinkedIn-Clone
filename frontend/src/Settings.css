@@ -1,0 +1,64 @@
+body {
+    background-color: rgb(175, 235, 255);
+    font-family: 'Arial';
+}
+
+a, a:visited {
+    color: black;
+    text-decoration: none;
+    font-size: large;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 300px;
+    height: 180px;
+    border: 5px solid grey;
+    background-color: white;
+    padding: 20px;
+    justify-content: initial;
+}
+
+.email-table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 300px;
+    height: 220px;
+    border: 5px solid grey;
+    background-color: white;
+    padding: 20px;
+    justify-content: initial;
+}
+
+.password-table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 500px;
+    height: 210px;
+    border: 5px solid grey;
+    background-color: white;
+    padding: 20px;
+    justify-content: initial;
+}
+
+
+

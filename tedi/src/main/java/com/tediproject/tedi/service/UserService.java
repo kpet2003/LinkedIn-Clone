@@ -41,7 +41,7 @@ public class UserService {
 
     }
 
-    public Boolean loginUser(String email, String password){
+    public Long loginUser(String email, String password){
 
         User user;
 
@@ -55,7 +55,11 @@ public class UserService {
             throw new WrongPassword("Wrong Password");
         }
         
-        return user.getAdmin();
+        return user.getID();
+    }
+
+    public User getUserById(long id) {
+        return userRepo.findById(id).orElse(null);
     }
 
     @PostConstruct

@@ -19,13 +19,6 @@ function NavigationBar() {
                 <a href='/Settings' className='link'>Settings </a> 
             </nav>
         </header>
-
-
-
-    
-    
-  
-      
         
     );
 }
