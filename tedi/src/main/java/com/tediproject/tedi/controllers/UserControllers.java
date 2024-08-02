@@ -2,6 +2,7 @@ package com.tediproject.tedi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -46,16 +47,23 @@ public class UserControllers {
         }
     }
     
-    @PostMapping(value = "/NewEmail")
+    @GetMapping(value = "/NewEmail")
     public ResponseEntity<User> getUser(@RequestParam(value="id", required = false) Long id) {
         
-        User user = userService.getUserById(id);
+        try{
+            
+            //id = (long)2;
+            User user = userService.getUserById(id);
         
         if(user != null){
             return ResponseEntity.ok(userService.getUserById(id));
         }
         else{
             return ResponseEntity.notFound().build();
+        }
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().build();
         }
     }
 

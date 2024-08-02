@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        return userRepo.findById(id).orElse(null);
+        return userRepo.findById(id);
     }
 
     @PostConstruct

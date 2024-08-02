@@ -1,8 +1,6 @@
 import "../Settings.css";
-import React, { useState } from 'react';
 
 function SettingsPage() {
-
     return(
         <div className="table">
             <h1><b>Settings</b></h1><br></br>

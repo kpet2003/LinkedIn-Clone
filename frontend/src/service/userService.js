@@ -19,10 +19,14 @@ class UserService {
         });
     }
 
-    static async getUser(id, url) {
+    async getUserEmail(id) {
         console.log(id);
-        const response = await axios.post(url,{ params: { id } });
-        return response.data;
+        const response = await axios.get(`/NewEmail/?id=${id}`,{
+            responseType: 'json'
+        } );
+        const email = response.data.email;
+        return email;
     }
 }
+
 export default new UserService();

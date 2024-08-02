@@ -5,21 +5,18 @@ import React, { useState, useEffect } from 'react';
 
 
 function NewEmail(){
-    const userID = localStorage.getItem('userID');
+    let userID = localStorage.getItem('userID');
 
-    const initialState = {
-        email: ''
-    };
-
-    const [user, setUser] = useState(initialState);
+    const [email, setEmail] = useState('');
 
     useEffect(() => {
     const fetchUser = async () => {
         try{
-            const userData = await UserService.getUser(userID,"/NewEmail");
-            setUser(userData);  
+            const emailData = await UserService.getUserEmail(userID);
+            setEmail(emailData);  
         }
         catch(err){
+            console.log(err);
             throw Error('DID NOT GET USER DATA');
         }
         
@@ -30,7 +27,7 @@ function NewEmail(){
     return(
         <div className='email-table'>
             <h1>Change Email</h1>
-            <p>Your current email is: {user.email}</p><br></br>
+            <p>Your current email is: {email}</p><br></br>
             <form>
                 <label>New email: </label>
                 <input type='email'></input><br></br><br></br>
