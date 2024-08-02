@@ -32,3 +32,13 @@ body {
 .userlist td.select {
     width: 50px;
 }
+
+
+
+.buttons{
+    float: right;
+    margin-right: 560px;
+    margin-top: 10px;
+}
+
+

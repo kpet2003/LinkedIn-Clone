@@ -47,7 +47,16 @@ function UserList() {
 
     // export the user data in JSON form
     const exportJSON = () => {
-        alert('JSON');
+            
+            const finalUsers = users.filter(user => selectedUsers.includes(user.id));
+            const jsonData = new Blob([JSON.stringify(finalUsers, null, 2)], { type: 'application/json' });
+            const jsonURL = URL.createObjectURL(jsonData);
+            const link = document.createElement('a');
+            link.href = jsonURL;
+            link.download = `users.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
     }
 
     // export the user data in XML form
@@ -79,9 +88,11 @@ function UserList() {
                     ))}
                 </tbody>
             </table>
+            <div className='buttons'>
+                <input type='button' value={'Export in JSON '}className='button'onClick={exportJSON}/>
+                <input type='button' value={'Export in XML '}className='button'onClick={exportXML}/>
+            </div>
             
-            <input type='button' value={'Export in JSON '}className='button'onClick={exportJSON}/>
-            <input type='button' value={'Export in XML '}className='button'onClick={exportXML}/>
         </div>
         
     );
