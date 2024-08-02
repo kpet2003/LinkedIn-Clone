@@ -18,28 +18,29 @@ function ClickButton() {
 
     const [user, setUser] = useState(initialState);
 
+    
     const handleSubmit = async(event) => {
-        event.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('email', user.email);
-        formData.append('password', user.password);
+      event.preventDefault();
+      
+      const formData = new FormData();
+      formData.append('email', user.email);
+      formData.append('password', user.password);
 
-        try {
-            const response =  await UserService.loginUser(formData);
-            localStorage.setItem('userID',response.data);
-            if(user.email === 'admin@gmail.com'){
-              navigate('/AdminPage');
-            }
-            else{
-              navigate('/HomePage');
-            }
-        } 
-        catch (error) {
-            console.error("There was an error registering the user:", error);
-            alert("There was an error registering the user.");
-        }
-    }
+      try {
+          const response =  await UserService.loginUser(formData);
+          localStorage.setItem('userID',response.data);
+          if(response.data === 1){
+            navigate('/AdminPage');
+          }
+          else{
+            navigate('/HomePage');
+          }
+      } 
+      catch (error) {
+          console.error("There was an error registering the user:", error);
+          alert("There was an error registering the user.");
+      }
+  }
     
     const handleChange = (event) => {
         setUser({

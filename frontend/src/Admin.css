@@ -5,7 +5,30 @@ body {
 }
 
 .userlist {
-    margin-top: 30px;
+    border: 5px solid grey;
+    margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
+    border-collapse: collapse; 
+}
+
+.userlist tr, .userlist td {
+    border: 1px solid grey; 
+    padding: 8px; 
+    width: 200px;
+}
+
+.header {
+    border-bottom: 3px solid grey;
+    height: 35px;
+}
+
+.userlist th.select{
+    width: 50px;
+    border-right: 1px solid grey ;
+}
+
+
+.userlist td.select {
+    width: 50px;
 }
