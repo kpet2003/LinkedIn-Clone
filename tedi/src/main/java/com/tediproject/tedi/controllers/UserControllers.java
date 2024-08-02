@@ -47,7 +47,7 @@ public class UserControllers {
         }
     }
     
-    @GetMapping(value = "/NewEmail")
+    @GetMapping(value = "/NewEmail/?id=")
     public ResponseEntity<User> getUser(@RequestParam(value="id", required = false) Long id) {
         
         try{

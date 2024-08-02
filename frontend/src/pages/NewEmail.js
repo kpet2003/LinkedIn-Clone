@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 
 function NewEmail(){
     let userID = localStorage.getItem('userID');
-
     const [email, setEmail] = useState('');
 
     useEffect(() => {
@@ -17,7 +16,7 @@ function NewEmail(){
         }
         catch(err){
             console.log(err);
-            throw Error('DID NOT GET USER DATA');
+            alert('DID NOT GET USER DATA');
         }
         
     };

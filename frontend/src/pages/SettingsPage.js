@@ -1,4 +1,5 @@
 import "../Settings.css";
+import React, { useState, useEffect } from 'react';
 
 function SettingsPage() {
     return(
