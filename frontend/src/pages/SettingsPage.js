@@ -1,4 +1,5 @@
-import "../Settings.css"
+import "../Settings.css";
+import React, { useState } from 'react';
 
 function SettingsPage() {
 

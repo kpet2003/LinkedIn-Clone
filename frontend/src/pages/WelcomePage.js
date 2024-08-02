@@ -28,7 +28,7 @@ function ClickButton() {
         try {
             const response =  await UserService.loginUser(formData);
             localStorage.setItem('userID',response.data);
-            if(response.data === 1){
+            if(user.email === 'admin@gmail.com'){
               navigate('/AdminPage');
             }
             else{
