@@ -5,13 +5,14 @@ import React, { useState, useEffect } from 'react';
 
 
 function NewEmail(){
-    let userID = localStorage.getItem('userID');
+    const userID = localStorage.getItem('userID');
     const [email, setEmail] = useState('');
 
     useEffect(() => {
     const fetchUser = async () => {
         try{
             const emailData = await UserService.getUserEmail(userID);
+            console.log('email data ', emailData);
             setEmail(emailData);  
         }
         catch(err){
@@ -20,9 +21,12 @@ function NewEmail(){
         }
         
     };
-    fetchUser();
+    if (userID) {
+        fetchUser();
+    }
     },[userID]);
     
+
     return(
         <div className='email-table'>
             <h1>Change Email</h1>
