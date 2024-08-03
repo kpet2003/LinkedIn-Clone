@@ -62,6 +62,26 @@ public class UserService {
         return userRepo.findById(id);
     }
 
+    public void changeUserEmail(long id, String email){
+        try {
+            User user = userRepo.findById(id);
+            user.setEmail(email);
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("User not found");
+        }
+    }
+    public void changeUserPassword(long id, String password){
+        try {
+            User user = userRepo.findById(id);
+            user.setPassword(password);
+            System.out.println("password is "+password);
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("User not found");
+        }
+    }
+
     @PostConstruct
     public void init() {
         if (userRepo.findByEmail("admin@gmail.com") == null) {

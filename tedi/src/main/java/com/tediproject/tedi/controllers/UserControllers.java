@@ -1,6 +1,7 @@
 package com.tediproject.tedi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,11 +47,35 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PostMapping(value= "/NewEmail")
+    public ResponseEntity<?> changeEmail(
+        @RequestParam(value="email", required = false) String email,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            userService.changeUserEmail(id, email);
+            return ResponseEntity.ok(email);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PostMapping(value= "/NewPassword")
+    public ResponseEntity<?> changePassword(
+        @RequestParam(value="password", required = false) String password,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            System.out.println("password is "+password);
+            userService.changeUserPassword(id, password);
+            return ResponseEntity.ok(password);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
-    @GetMapping(value = "/NewEmail")
+    @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
         try{
-            System.out.println("id is " + id);
+
             User user = userService.getUserById(id);
         
         if(user != null){

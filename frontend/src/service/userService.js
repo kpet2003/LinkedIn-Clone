@@ -19,21 +19,35 @@ class UserService {
         });
     }
 
+    changeEmail(email) {
+        const API_URL = "/NewEmail";
+        return axios.post(API_URL, email, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
+
+    changePassword(password) {
+        const API_URL = "/NewPassword";
+        return axios.post(API_URL, password, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
+
     async getUserEmail(ID) {
         if (!ID) {
             console.error("Invalid ID");
             return;
         }
-        console.log(ID);
         const url = "/NewEmail";
         const response = await axios.get(url,{
             params: {id : ID},
             responseType: 'json'
-        }).then( function (response){
-                console.log('got response ', response);
-            }
-        );
-        
+        });
+    
         const email = response.data.email;
         return email;
     }
