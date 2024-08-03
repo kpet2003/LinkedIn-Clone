@@ -47,21 +47,24 @@ public class UserControllers {
         }
     }
     
-    @GetMapping(value = "/NewEmail/?id=")
-    public ResponseEntity<User> getUser(@RequestParam(value="id", required = false) Long id) {
-        
+    @GetMapping(value = "/NewEmail")
+    public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
         try{
+<<<<<<< HEAD
+=======
+            System.out.println("id is " + id);
+>>>>>>> bf8532d1437711eaa85a2bc4c8f0b6712d657a53
             User user = userService.getUserById(id);
         
         if(user != null){
-            return ResponseEntity.ok(userService.getUserById(id));
+            return ResponseEntity.ok(user);
         }
         else{
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         }
         catch(Exception e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("ID is required");
         }
     }
 

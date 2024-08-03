@@ -19,14 +19,25 @@ class UserService {
         });
     }
 
-    async getUserEmail(id) {
-        console.log(id);
-        const response = await axios.get(`/NewEmail/?id=${id}`,{
+    async getUserEmail(ID) {
+        if (!ID) {
+            console.error("Invalid ID");
+            return;
+        }
+        console.log(ID);
+        const url = "/NewEmail";
+        const response = await axios.get(url,{
+            params: {id : ID},
             responseType: 'json'
-        } );
+        }).then( function (response){
+                console.log('got response ', response);
+            }
+        );
+        
         const email = response.data.email;
         return email;
     }
+    
 }
 
 export default new UserService();
