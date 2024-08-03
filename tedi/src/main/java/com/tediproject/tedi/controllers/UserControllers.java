@@ -51,8 +51,6 @@ public class UserControllers {
     public ResponseEntity<User> getUser(@RequestParam(value="id", required = false) Long id) {
         
         try{
-            
-            //id = (long)2;
             User user = userService.getUserById(id);
         
         if(user != null){
