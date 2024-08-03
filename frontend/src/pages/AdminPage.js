@@ -1,9 +1,8 @@
 import '../Admin.css';
-import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
-
-
+import { json2xml } from 'xml-js';
+import exportFromJSON from 'export-from-json'
 
 
 
@@ -61,7 +60,16 @@ function UserList() {
 
     // export the user data in XML form
     const exportXML = () => {
-        alert('XML');
+        const finalUsers = users.filter(user => selectedUsers.includes(user.id));
+        const xml = json2xml({ user: finalUsers }, {compact: true, spaces: 4, });
+        const xmlString = `<?xml version="1.0" encoding="UTF-8"?>\n<users>\n${xml}\n</users>`;
+        const blob = new Blob([xmlString], { type: "application/xml"});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = "users.xml";
+        link.href = url;
+        link.click();
+
     }
 
  
