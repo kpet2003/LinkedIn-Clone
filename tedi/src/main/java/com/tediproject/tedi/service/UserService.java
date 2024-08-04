@@ -75,11 +75,50 @@ public class UserService {
         try {
             User user = userRepo.findById(id);
             user.setPassword(password);
-            System.out.println("password is "+password);
             userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("User not found");
         }
+    }
+
+    public void changeUserPfp(long id, MultipartFile img){
+        try {
+            User user = userRepo.findById(id);
+            user.setProfilePicture(img.getBytes());
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("File save failed");
+         }
+    }
+
+    public void changeUserEdu(long id, String edu){
+        try {
+            User user = userRepo.findById(id);
+            user.setEducation(edu);
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("File save failed");
+         }
+    }
+
+    public void changeUserWork(long id, String work){
+        try {
+            User user = userRepo.findById(id);
+            user.setWorkExperience(work);
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("File save failed");
+         }
+    }
+
+    public void changeUserSkills(long id, String skills){
+        try {
+            User user = userRepo.findById(id);
+            user.setSkills(skills);
+            userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("File save failed");
+         }
     }
 
     @PostConstruct

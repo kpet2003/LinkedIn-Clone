@@ -1,4 +1,5 @@
 import "../Settings.css";
+import React from "react";
 
 function SettingsPage() {
     return(
