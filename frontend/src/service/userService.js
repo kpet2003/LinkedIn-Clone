@@ -51,6 +51,20 @@ class UserService {
         const email = response.data.email;
         return email;
     }
+
+    async getUserData(ID) {
+        if (!ID) {
+            console.error("Invalid ID");
+            return;
+        }
+        const url = "/Profile";
+        const response = await axios.get(url,{
+            params: {id : ID},
+            responseType: 'json'
+        });
+        console.log(response.data);
+        return response.data;
+    }
     
 }
 

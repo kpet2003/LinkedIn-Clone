@@ -1,4 +1,6 @@
 package com.tediproject.tedi.controllers;
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.dto.UserDto;
 import com.tediproject.tedi.model.User;
 import com.tediproject.tedi.service.UserService;
+
 
 @RestController
 public class UserControllers {
@@ -75,7 +79,7 @@ public class UserControllers {
     @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
         try{
-
+            
             User user = userService.getUserById(id);
         
         if(user != null){
@@ -90,4 +94,38 @@ public class UserControllers {
         }
     }
 
+    @GetMapping(value = "/Profile", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserProfile(@RequestParam(value="id", required = false) Long id) {
+        try{
+            
+            User user = userService.getUserById(id);
+        
+        if(user != null){
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getID());
+            userDto.setFirstName(user.getFirstName());
+            userDto.setLastName(user.getLastName());
+            userDto.setEmail(user.getEmail());
+            userDto.setPhoneNumber(user.getPhoneNumber());
+            userDto.setResume(user.getResume());
+            userDto.setWorkExperience(user.getWorkExperience());
+            userDto.setEducation(user.getEducation());
+            userDto.setSkills(user.getSkills());
+            userDto.setPublicWork(user.getPublicWork());
+            userDto.setPublicEducation(user.getPublicEducation());
+            userDto.setPublicSkills(user.getPublicSkills());
+            if (user.getProfilePicture() != null) {
+                String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
+                userDto.setProfilePicture(base64Image);
+            }
+            return ResponseEntity.ok(userDto);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body("ID is required");
+        }
+    }
 }

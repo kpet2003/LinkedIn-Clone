@@ -3,12 +3,6 @@ body {
     font-family: 'Arial';
 }
 
-a, a:visited {
-    color: black;
-    text-decoration: none;
-    font-size: large;
-}
-
 .table {
     display: flex;
     flex-direction: column;
@@ -60,5 +54,9 @@ a, a:visited {
     justify-content: initial;
 }
 
-
+.gotolink {
+    color: black;
+    text-decoration: none;
+    font-size: large;
+}
 

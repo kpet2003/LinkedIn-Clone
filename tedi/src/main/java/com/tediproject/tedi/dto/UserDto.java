@@ -1,61 +1,26 @@
-package com.tediproject.tedi.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+package com.tediproject.tedi.dto;
 
-
-@Entity
-public class User {
-    
-    // primary key of User table
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+public class UserDto {
     protected long id;
-    
-    @Column
     protected String first_name;
-    @Column
     protected String last_name;
-    @Column
     protected String email;
-    @Column
-    protected String password;
-    @Column
     protected long phone_number;
-    
-    @Lob
-    @Column(length=100000)
-    protected byte[] image;
-    
-    @Lob
-    @Column(length=100000)
+    protected String image;
     protected byte[] resume;
-    
-    @Column
     protected Boolean admin = false;
-
-    @Column
     protected String workExperience;
-
-    @Column
     protected String education;
-
-    @Column
     protected String skills;
-
-    @Column
     protected Boolean isPublicWorkExperience = true;
-
-    @Column
     protected Boolean isPublicEducation = true;
-
-    @Column
     protected Boolean isPublicSkills = true;
 
-    public User() {}
+    public UserDto() {}
+
+    public void setId(long id){
+        this.id = id;
+    }
 
     public void setFirstName(String name){
         this.first_name = name;
@@ -69,15 +34,11 @@ public class User {
         this.email = Email;
     }
 
-    public void setPassword(String word){
-        this.password = word;
-    }
-
     public void setPhoneNumber(Long num){
         this.phone_number = num;
     }
 
-    public void setProfilePicture(byte[] pfp){
+    public void setProfilePicture(String pfp){
         this.image = pfp;
     }
 
@@ -125,15 +86,11 @@ public class User {
         return this.email;
     }
 
-    public String getPassword(){
-        return this.password;
-    }
-
     public Long getPhoneNumber(){
         return this.phone_number;
     }
 
-    public byte[] getProfilePicture(){
+    public String getProfilePicture(){
         return this.image;
     }   
 
@@ -145,7 +102,7 @@ public class User {
         return this.admin;
     }
 
-    public long getID(){
+    public Long getID(){
         return this.id;
     }
 
@@ -172,5 +129,4 @@ public class User {
     public Boolean getPublicSkills(){
         return this.isPublicSkills;
     }
-
 }

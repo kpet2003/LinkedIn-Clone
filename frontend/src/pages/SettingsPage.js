@@ -1,13 +1,12 @@
 import "../Settings.css";
-import React, { useState, useEffect } from 'react';
 
 function SettingsPage() {
     return(
         <div className="table">
             <h1><b>Settings</b></h1><br></br>
             <nav>
-                <a href="/NewEmail">Change e-mail</a><br></br><br></br>
-                <a href="/NewPassword">Change password</a>
+                <a href="/NewEmail" className="gotolink">Change e-mail</a><br></br><br></br>
+                <a href="/NewPassword" className="gotolink">Change password</a>
             </nav>
         </div>
     );
