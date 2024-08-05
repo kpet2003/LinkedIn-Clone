@@ -37,6 +37,41 @@ class UserService {
         }).data;
     }
 
+    changeProfilePicture(picture) {
+        const API_URL = "/Profile/pfpchange";
+        return axios.post(API_URL, picture, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
+
+    changeEducation(education) {
+        const API_URL = "/Profile/educhange";
+        return axios.post(API_URL, education, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
+
+    changeWork(work) {
+        const API_URL = "/Profile/workchange";
+        return axios.post(API_URL, work, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
+
+    changeSkills(skills) {
+        const API_URL = "/Profile/skillchange";
+        return axios.post(API_URL, skills, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).data;
+    }
     async getUserEmail(ID) {
         if (!ID) {
             console.error("Invalid ID");

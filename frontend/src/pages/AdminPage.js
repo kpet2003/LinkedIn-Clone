@@ -2,8 +2,6 @@ import '../Admin.css';
 import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
 import { json2xml } from 'xml-js';
-import exportFromJSON from 'export-from-json'
-
 
 
 
@@ -46,8 +44,15 @@ function UserList() {
 
     // export the user data in JSON form
     const exportJSON = () => {
+
+        const excludeAttributes = ['profilePicture'];
+            const finalUsers = users.filter(user => selectedUsers.includes(user.id)).map(user => {
+            // Create a new object excluding specified attributes
+            const { [excludeAttributes[0]]: _, ...rest } = user;
+            return rest;
+        });
             
-            const finalUsers = users.filter(user => selectedUsers.includes(user.id));
+        
             const jsonData = new Blob([JSON.stringify(finalUsers, null, 2)], { type: 'application/json' });
             const jsonURL = URL.createObjectURL(jsonData);
             const link = document.createElement('a');
@@ -60,8 +65,15 @@ function UserList() {
 
     // export the user data in XML form
     const exportXML = () => {
-        const finalUsers = users.filter(user => selectedUsers.includes(user.id));
+        const excludeAttributes = ['profilePicture'];
+        const finalUsers = users.filter(user => selectedUsers.includes(user.id)).map(user => {
+            // Create a new object excluding specified attributes
+            const { [excludeAttributes[0]]: _, ...rest } = user;
+            return rest;
+        });
+            
         const xml = json2xml({ user: finalUsers }, {compact: true, spaces: 4, });
+        console.log(xml);
         const xmlString = `<?xml version="1.0" encoding="UTF-8"?>\n<users>\n${xml}\n</users>`;
         const blob = new Blob([xmlString], { type: "application/xml"});
         const url = URL.createObjectURL(blob);
@@ -69,7 +81,6 @@ function UserList() {
         link.download = "users.xml";
         link.href = url;
         link.click();
-
     }
 
  
@@ -91,7 +102,7 @@ function UserList() {
                             <td  className='select' > <input type="checkbox" name={user.id}  checked={selectedUsers.includes(user.id)} onChange={() => {handleSelect(user.id)}}/>  </td>
                             <td>{user.firstName} {user.lastName}</td>
                             <td> {user.email}</td>
-                            <td> <a href={`/profile/${user.firstName}${user.lastName}`}> Visit Profile </a></td>
+                            <td> <a href={`/Profile/`}> Visit Profile </a></td>
                         </tr>
                     ))}
                 </tbody>

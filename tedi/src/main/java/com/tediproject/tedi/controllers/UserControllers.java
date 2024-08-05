@@ -75,6 +75,54 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PostMapping(value= "/Profile/pfpchange")
+    public ResponseEntity<?> changePfp(
+        @RequestParam(value="profilePicture", required = false) MultipartFile image,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            userService.changeUserPfp(id, image);
+            return ResponseEntity.ok(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value= "/Profile/educhange")
+    public ResponseEntity<?> changeEdu(
+        @RequestParam(value="education", required = false) String edu,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            userService.changeUserEdu(id, edu);
+            return ResponseEntity.ok(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value= "/Profile/workchange")
+    public ResponseEntity<?> changeWork(
+        @RequestParam(value="workExperience", required = false) String work,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            userService.changeUserWork(id, work);
+            return ResponseEntity.ok(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value= "/Profile/skillchange")
+    public ResponseEntity<?> changeSkill(
+        @RequestParam(value="skills", required = false) String skills,
+        @RequestParam(value ="id", required= false) Long id){
+        try {
+            userService.changeUserSkills(id, skills);
+            return ResponseEntity.ok(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
     @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
