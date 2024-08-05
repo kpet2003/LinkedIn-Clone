@@ -3,6 +3,9 @@ package com.tediproject.tedi.service;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +16,24 @@ import com.tediproject.tedi.model.User;
 import com.tediproject.tedi.repo.UserRepo;
 
 @Service
-public class UserService {
+public class UserService /*implements UserDetailsService*/{
     @Autowired
     private UserRepo userRepo;
+
+
+    // @Override
+    // public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    //     User user = userRepo.findByEmail(email);
+    //     if (user == null) {
+    //         throw new UsernameNotFoundException("User not found with email: " + email);
+    //     }
+    //     // Assuming you have a method to convert your User entity to UserDetails
+    //     return org.springframework.security.core.userdetails.User
+    //             .withUsername(user.getEmail())
+    //             .password(user.getPassword())
+    //             .authorities(user.getAuthorities()) // Add your logic to convert User to GrantedAuthority list
+    //             .build();
+    // }
 
     public User createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
         
