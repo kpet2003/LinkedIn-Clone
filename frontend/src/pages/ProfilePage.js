@@ -153,13 +153,7 @@ function Pfp(){
                     )}
                 </Popup>
                 <div>
-<<<<<<< HEAD
                     <h1 className="username">{user.firstName} {user.lastName} </h1>
-=======
-                    <h1 className="username">
-                    {user.firstName} {user.lastName}
-                    </h1>
->>>>>>> 30c474dff9aa7506a7e0e3ff92ebc32aff4c9c2e
                 </div>
             </div>
             <br></br>
