@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.context.annotation.Bean;
 
 
 import com.tediproject.tedi.dto.UserDto;
@@ -29,8 +28,8 @@ public class UserControllers {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
 
 
     @Autowired
@@ -56,14 +55,14 @@ public class UserControllers {
     @PostMapping(value= "/Login")
     public ResponseEntity<?> login( @RequestParam(value="email", required = false) String email,
     @RequestParam(value="password", required = false) String password) {
-        try {
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-            );
-        } 
-        catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
+        // try {
+        //     authenticationManager.authenticate(
+        //         new UsernamePasswordAuthenticationToken(email, password)
+        //     );
+        // } 
+        // catch (BadCredentialsException e) {
+        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        // }
         
         try {
             Long id = userService.loginUser(email, password);
