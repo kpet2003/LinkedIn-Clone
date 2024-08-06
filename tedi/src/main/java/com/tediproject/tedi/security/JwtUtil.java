@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import com.tediproject.tedi.model.User;
+import com.tediproject.tedi.model.UserEntity;
 
 @Component
 public class JwtUtil {
@@ -52,7 +52,7 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, User user) {
+    public boolean validateToken(String token, UserEntity user) {
         final String email = extractEmail(token);
         return (email.equals(user.getEmail()) && !isTokenExpired(token));
     }

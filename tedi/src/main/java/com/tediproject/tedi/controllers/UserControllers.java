@@ -17,7 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.tediproject.tedi.dto.UserDto;
-import com.tediproject.tedi.model.User;
+import com.tediproject.tedi.model.Role;
+import com.tediproject.tedi.model.UserEntity;
+import com.tediproject.tedi.repo.RoleRepo;
+import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 import com.tediproject.tedi.service.UserService;
 
@@ -28,8 +31,14 @@ public class UserControllers {
     @Autowired
     private UserService userService;
 
-    // @Autowired
-    // private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private RoleRepo roleRepo;
 
 
     @Autowired
@@ -45,7 +54,10 @@ public class UserControllers {
         @RequestPart(value = "profilePicture", required = false) MultipartFile pfp,
         @RequestPart(value = "resume", required = false) MultipartFile cv) {
         try {
-            User createdUser = userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
+            UserEntity createdUser = userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
+            Role new_role = roleRepo.findByRole("user");
+            createdUser.setRoles(new_role);
+
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -55,14 +67,14 @@ public class UserControllers {
     @PostMapping(value= "/Login")
     public ResponseEntity<?> login( @RequestParam(value="email", required = false) String email,
     @RequestParam(value="password", required = false) String password) {
-        // try {
-        //     authenticationManager.authenticate(
-        //         new UsernamePasswordAuthenticationToken(email, password)
-        //     );
-        // } 
-        // catch (BadCredentialsException e) {
-        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        // }
+        try {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+            );
+        } 
+        catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
         
         try {
             Long id = userService.loginUser(email, password);
@@ -165,7 +177,7 @@ public class UserControllers {
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
         try{
             
-            User user = userService.getUserById(id);
+            UserEntity user = userService.getUserById(id);
         
         if(user != null){
             return ResponseEntity.ok(user);
@@ -183,7 +195,7 @@ public class UserControllers {
     public ResponseEntity<?> getUserProfile(@RequestParam(value="id", required = false) Long id) {
         try{
             
-            User user = userService.getUserById(id);
+            UserEntity user = userService.getUserById(id);
         
         if(user != null){
             UserDto userDto = new UserDto();

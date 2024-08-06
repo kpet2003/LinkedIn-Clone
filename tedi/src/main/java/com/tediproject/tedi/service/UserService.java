@@ -3,6 +3,7 @@ package com.tediproject.tedi.service;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,18 +13,23 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tediproject.tedi.exceptions.UserAlreadyExists;
 import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
-import com.tediproject.tedi.model.User;
+import com.tediproject.tedi.model.Role;
+import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.UserRepo;
+import com.tediproject.tedi.repo.RoleRepo;
 
 @Service
 public class UserService /*implements UserDetailsService*/{
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private RoleRepo roleRepo;
+
 
     // @Override
     // public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    //     User user = userRepo.findByEmail(email);
+    //     UserEntity user = userRepo.findByEmail(email);
     //     if (user == null) {
     //         throw new UsernameNotFoundException("User not found with email: " + email);
     //     }
@@ -35,13 +41,13 @@ public class UserService /*implements UserDetailsService*/{
     //             .build();
     // }
 
-    public User createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
+    public UserEntity createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
         
         if (userRepo.findByEmail(email) != null) {
             throw new UserAlreadyExists("User already exists");
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -61,7 +67,7 @@ public class UserService /*implements UserDetailsService*/{
 
     public Long loginUser(String email, String password){
 
-        User user;
+        UserEntity user;
 
         if ((user = userRepo.findByEmail(email)) == null) {
             throw new UserDoesNotExist("User Not Found");
@@ -76,13 +82,13 @@ public class UserService /*implements UserDetailsService*/{
         return user.getID();
     }
 
-    public User getUserById(long id) {
+    public UserEntity getUserById(long id) {
         return userRepo.findById(id);
     }
 
     public void changeUserEmail(long id, String email){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setEmail(email);
             userRepo.save(user);
         } catch (Exception e) {
@@ -91,7 +97,7 @@ public class UserService /*implements UserDetailsService*/{
     }
     public void changeUserPassword(long id, String password){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setPassword(password);
             userRepo.save(user);
         } catch (Exception e) {
@@ -101,7 +107,7 @@ public class UserService /*implements UserDetailsService*/{
 
     public void changeUserPfp(long id, MultipartFile img){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setProfilePicture(img.getBytes());
             userRepo.save(user);
         } catch (Exception e) {
@@ -111,7 +117,7 @@ public class UserService /*implements UserDetailsService*/{
 
     public void changeUserEdu(long id, String edu){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setEducation(edu);
             userRepo.save(user);
         } catch (Exception e) {
@@ -121,7 +127,7 @@ public class UserService /*implements UserDetailsService*/{
 
     public void changeUserWork(long id, String work){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setWorkExperience(work);
             userRepo.save(user);
         } catch (Exception e) {
@@ -131,7 +137,7 @@ public class UserService /*implements UserDetailsService*/{
 
     public void changeUserSkills(long id, String skills){
         try {
-            User user = userRepo.findById(id);
+            UserEntity user = userRepo.findById(id);
             user.setSkills(skills);
             userRepo.save(user);
         } catch (Exception e) {
@@ -141,13 +147,41 @@ public class UserService /*implements UserDetailsService*/{
 
     @PostConstruct
     public void init() {
+
+        // set admin role
+        if (roleRepo.findById(1) == null) {
+            Role role = new Role();
+            role.setRole("admin");
+            roleRepo.save(role);
+        }
+        
+            // set user role
+        if (roleRepo.findById(2) == null) {
+            Role role = new Role();
+            role.setRole("user");
+            roleRepo.save(role);
+        }
+
         if (userRepo.findByEmail("admin@gmail.com") == null) {
-            User user = new User();
+            UserEntity user = new UserEntity();
             user.setEmail("admin@gmail.com");
             user.setPassword("admin");
             user.setAdmin();
+
+            Role role = roleRepo.findByRole("admin");
+            user.setRoles(role);
+            role.addUser(user);
+            
             userRepo.save(user);
+            
+          
+
+
+
         }
+        
+
+
     }
 }
 

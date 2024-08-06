@@ -2,9 +2,9 @@ package com.tediproject.tedi.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tediproject.tedi.model.User;
+import com.tediproject.tedi.model.UserEntity;
 
-public interface UserRepo extends JpaRepository<User, Long>{
-    User findById(long id);
-    User findByEmail(String email);
+public interface UserRepo extends JpaRepository<UserEntity, Long>{
+    UserEntity findById(long id);
+    UserEntity findByEmail(String email);
 }

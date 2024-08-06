@@ -1,16 +1,29 @@
 package com.tediproject.tedi.model;
+
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 
 
 @Entity
-public class User {
+@Table(name="user")
+public class UserEntity {
     
-    // primary key of User table
+    // primary key of UserEntity table
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     protected long id;
@@ -55,7 +68,13 @@ public class User {
     @Column
     protected Boolean isPublicSkills = true;
 
-    public User() {}
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    protected Role role;
+    public UserEntity() {}
+    
+
 
     public void setFirstName(String name){
         this.first_name = name;
@@ -111,6 +130,10 @@ public class User {
 
     public void setPublicSkills(Boolean val){
         this.isPublicSkills = val;
+    }
+
+    public void setRoles(Role role) {
+        this.role = role;
     }
 
     public String getFirstName(){
@@ -172,5 +195,13 @@ public class User {
     public Boolean getPublicSkills(){
         return this.isPublicSkills;
     }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+
+
+
 
 }

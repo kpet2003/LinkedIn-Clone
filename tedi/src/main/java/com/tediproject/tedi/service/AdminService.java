@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tediproject.tedi.model.User;
+import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.UserRepo;
 
 @Service
@@ -13,7 +13,7 @@ public class AdminService {
     @Autowired
     private UserRepo userRepo;
 
-    public List<User> findAllUsers() {
+    public List<UserEntity> findAllUsers() {
         return userRepo.findAll();   
     }
 
