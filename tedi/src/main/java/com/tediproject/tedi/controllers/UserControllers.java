@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import com.tediproject.tedi.dto.UserDto;
-import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -55,9 +54,6 @@ public class UserControllers {
         @RequestPart(value = "resume", required = false) MultipartFile cv) {
         try {
             UserEntity createdUser = userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
-            Role new_role = roleRepo.findByRole("user");
-            createdUser.setRoles(new_role);
-
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
