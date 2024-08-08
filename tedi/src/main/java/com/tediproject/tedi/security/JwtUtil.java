@@ -3,9 +3,11 @@ package com.tediproject.tedi.security;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -15,9 +17,14 @@ public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private final long EXPIRATION_TIME = 1800_000; // half an hour
 
-    // public String extractEmail(String token) {
-    //     return extractClaim(token, Claims::getSubject);
-    // }
+    public String getEmailFromJWT(String token){
+		Claims claims = Jwts.parserBuilder()
+				.setSigningKey(key)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+		return claims.getSubject();
+	}
 
     // public Date extractExpiration(String token) {
     //     return extractClaim(token, Claims::getExpiration);
@@ -62,10 +69,17 @@ public class JwtUtil {
     //     return extractExpiration(token).before(new Date());
     // }
 
-    // public boolean validateToken(String token, UserEntity user) {
-    //     final String email = extractEmail(token);
-    //     return (email.equals(user.getEmail()) && !isTokenExpired(token));
-    // }
+    public boolean validateToken(String token) {
+		try {
+			Jwts.parserBuilder()
+			.setSigningKey(key)
+			.build()
+			.parseClaimsJws(token);
+			return true;
+		} catch (Exception ex) {
+			throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect",ex.fillInStackTrace());
+		}
+	}
 
 }
 

@@ -1,73 +1,70 @@
-// package com.tediproject.tedi.security;
+package com.tediproject.tedi.security;
 
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.servlet.http.HttpServletResponse;
-// import jakarta.servlet.FilterChain;
-// import jakarta.servlet.ServletException;
+import java.io.IOException;
 
-// import org.springframework.security.core.context.SecurityContextHolder;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-// import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-// import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.tediproject.tedi.repo.UserRepo;
+import com.tediproject.tedi.service.UserService;
 
-// import com.tediproject.tedi.model.User;
-// import com.tediproject.tedi.repo.UserRepo;
-// import com.tediproject.tedi.service.UserService;
-
-// import java.io.IOException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-// public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Autowired
+    private UserService userService;
 
-//     @Autowired
-//     private UserService userService;
-
-//     @Autowired
-//     private UserDetailsService userDetailsService;
-
-
-//     @Autowired
-//     private UserRepo userRepo;
-
-//     @Autowired
-//     private JwtUtil jwtUtil;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
 
-//     @Override
-//     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-//             throws ServletException, IOException {
-//         final String authorizationHeader = request.getHeader("Authorization");
+    @Autowired
+    private UserRepo userRepo;
 
-//         String email = null;
-//         String jwtToken = null;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-//         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//             jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
-//             try {
-//                 email = jwtUtil.extractEmail(jwtToken); // Extract email from the token
-//             } catch (Exception e) {
-//                 // Handle token extraction/validation errors
-//                 System.out.println("Error extracting email from token: " + e.getMessage());
-//             }
-//         }
 
-//         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//             User userDetails = userRepo.findByEmail(email); // Load user details
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        final String authorizationHeader = request.getHeader("Authorization");
 
-//             if (jwtUtil.validateToken(jwtToken, userDetails)) {
-//                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//                     userDetails, null, userDetails.getAuthorities()); // Create authentication token
+        String email = null;
+        String jwtToken = null;
 
-//                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+            try {
+                email = jwtUtil.getEmailFromJWT(jwtToken); // Extract email from the token
+            } catch (Exception e) {
+                // Handle token extraction/validation errors
+                System.out.println("Error extracting email from token: " + e.getMessage());
+            }
+        }
 
-//                 SecurityContextHolder.getContext().setAuthentication(authenticationToken); // Set authentication in context
-//             }
-//         }
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email); // Load user details
 
-//         filterChain.doFilter(request, response); // Continue the filter chain
-//     }
-// }
+            if (jwtUtil.validateToken(jwtToken)) {
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities()); // Create authentication token
+
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken); // Set authentication in context
+            }
+        }
+
+        filterChain.doFilter(request, response); // Continue the filter chain
+    }
+}

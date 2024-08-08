@@ -11,8 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.tediproject.tedi.security.CustomUserDetailsService;
+import com.tediproject.tedi.security.JwtAuthenticationFilter;
+import com.tediproject.tedi.security.JwtEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -21,8 +24,13 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    private JwtEntryPoint jwtEntryPoint;
+
+
+    @Autowired
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtEntryPoint jwtEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.jwtEntryPoint = jwtEntryPoint;
     }
     
     @Bean
@@ -31,12 +39,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF protection for APIs
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/static/css/**", "/static/js/**", "/**").permitAll() // Allow static resources
-                .requestMatchers("/").permitAll() // Allow access to the root endpoint
-                .requestMatchers("/SignUp/signup").permitAll() // Allow sign-up endpoint
-                .requestMatchers("/Login").permitAll() // Allow login endpoint
+                // .requestMatchers("/").permitAll() // Allow access to the root endpoint
+                // .requestMatchers("/SignUp/signup").permitAll() // Allow sign-up endpoint
                 .anyRequest().authenticated()) // Secure other endpoints
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint(jwtEntryPoint)) // Set JwtEntryPoint
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless sessions
-            .build();
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+            .build(); 
     }
 
 
@@ -51,6 +61,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 
     // @Bean
