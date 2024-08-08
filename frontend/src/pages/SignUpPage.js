@@ -88,12 +88,12 @@ function SignUpPage(){
 
                 <div className='profile'>
                     <label>Profile Picture:</label>
-                    <input type='file' className='button' onChange={handleFiles} id="profile_picture"></input><br></br>
+                    <input type='file' onChange={handleFiles} id="profile_picture"></input><br></br>
                 </div>
                
                 <div className='profile'>
                     <label>CV: </label>
-                    <input type='file' className='button' onChange={handleFiles}  id="cv" ></input><br></br>
+                    <input type='file' onChange={handleFiles}  id="cv" ></input><br></br>
                 </div>
                
                <div className='submit'>
