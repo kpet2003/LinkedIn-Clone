@@ -1,8 +1,7 @@
 package com.tediproject.tedi.service;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,21 +10,23 @@ import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
 import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.UserEntity;
-import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.repo.RoleRepo;
+import com.tediproject.tedi.repo.UserRepo;
 
 @Service
 public class UserService{
+
     @Autowired
     private UserRepo userRepo;
 
     @Autowired
     private RoleRepo roleRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
-
-    public UserEntity createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
+    public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
         
         if (userRepo.findByEmail(email) != null) {
             throw new UserAlreadyExists("User already exists");
@@ -36,7 +37,9 @@ public class UserService{
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
-        user.setPassword(password);
+        System.out.println("HERE");
+        user.setPassword(passwordEncoder.encode(password));
+        System.out.println("HERE");
         user.setPhoneNumber(phoneNumber);
         if(pfp!=null) {
             user.setProfilePicture(pfp.getBytes());
@@ -48,9 +51,7 @@ public class UserService{
         Role new_role = roleRepo.findByRole("user");
         user.setRoles(new_role);
 
-       
-        
-        return userRepo.save(user);
+        userRepo.save(user);
 
     }
 
@@ -61,10 +62,8 @@ public class UserService{
         if ((user = userRepo.findByEmail(email)) == null) {
             throw new UserDoesNotExist("User Not Found");
         }
-
-        String word = user.getPassword();
-
-        if(word.equals(password) == false){
+        
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new WrongPassword("Wrong Password");
         }
         
@@ -134,43 +133,43 @@ public class UserService{
          }
     }
 
-    @PostConstruct
-    public void init() {
+    // @PostConstruct
+    // public void init() {
 
-        // set admin role
-        if (roleRepo.findById(1) == null) {
-            Role role = new Role();
-            role.setRole("admin");
-            roleRepo.save(role);
-        }
+    //     // set admin role
+    //     if (roleRepo.findById(1) == null) {
+    //         Role role = new Role();
+    //         role.setRole("admin");
+    //         roleRepo.save(role);
+    //     }
         
-            // set user role
-        if (roleRepo.findById(2) == null) {
-            Role role = new Role();
-            role.setRole("user");
-            roleRepo.save(role);
-        }
+    //         // set user role
+    //     if (roleRepo.findById(2) == null) {
+    //         Role role = new Role();
+    //         role.setRole("user");
+    //         roleRepo.save(role);
+    //     }
 
-        if (userRepo.findByEmail("admin@gmail.com") == null) {
-            UserEntity user = new UserEntity();
-            user.setEmail("admin@gmail.com");
-            user.setPassword("admin");
-            user.setAdmin();
+    //     if (userRepo.findByEmail("admin@gmail.com") == null) {
+    //         UserEntity user = new UserEntity();
+    //         user.setEmail("admin@gmail.com");
+    //         user.setPassword("admin");
+    //         user.setAdmin();
 
-            Role role = roleRepo.findByRole("admin");
-            user.setRoles(role);
-            role.addUser(user);
+    //         Role role = roleRepo.findByRole("admin");
+    //         user.setRoles(role);
+    //         role.addUser(user);
             
-            userRepo.save(user);
+    //         userRepo.save(user);
             
           
 
 
 
-        }
+    //     }
         
 
 
-    }
+    // }
 }
 
