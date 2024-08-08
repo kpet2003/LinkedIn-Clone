@@ -13,6 +13,8 @@ import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class UserService{
 
@@ -133,43 +135,46 @@ public class UserService{
          }
     }
 
-    // @PostConstruct
-    // public void init() {
 
-    //     // set admin role
-    //     if (roleRepo.findById(1) == null) {
-    //         Role role = new Role();
-    //         role.setRole("admin");
-    //         roleRepo.save(role);
-    //     }
+    @PostConstruct
+    public void init() {
+        System.out.println("\nhello??\n\n");
+        // set admin role
+        if (roleRepo.findById(1) == null) {
+            Role role = new Role();
+            System.out.println("add admin role");
+            role.setRole("admin");
+            roleRepo.save(role);
+        }
         
-    //         // set user role
-    //     if (roleRepo.findById(2) == null) {
-    //         Role role = new Role();
-    //         role.setRole("user");
-    //         roleRepo.save(role);
-    //     }
+            // set user role
+        if (roleRepo.findById(2) == null) {
+            Role role = new Role();
+            System.out.println("add user role");
+            role.setRole("user");
+            roleRepo.save(role);
+        }
 
-    //     if (userRepo.findByEmail("admin@gmail.com") == null) {
-    //         UserEntity user = new UserEntity();
-    //         user.setEmail("admin@gmail.com");
-    //         user.setPassword("admin");
-    //         user.setAdmin();
+        if (userRepo.findByEmail("admin@gmail.com") == null) {
+            UserEntity user = new UserEntity();
+            user.setEmail("admin@gmail.com");
+            user.setPassword("admin");
+            user.setAdmin();
 
-    //         Role role = roleRepo.findByRole("admin");
-    //         user.setRoles(role);
-    //         role.addUser(user);
+            Role role = roleRepo.findByRole("admin");
+            user.setRoles(role);
+            role.addUser(user);
+
+            System.out.println("add admin in user table");
             
-    //         userRepo.save(user);
+            userRepo.save(user);
             
-          
 
 
-
-    //     }
+        }
         
 
 
-    // }
+    }
 }
 
