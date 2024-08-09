@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 class UserService {
     saveUser(user) {
@@ -17,6 +18,13 @@ class UserService {
                 'Content-Type': 'multipart/form-data'
             }
         });
+    }
+
+    decodeToken(token) {
+        const decoded = jwtDecode(token);
+        console.log(decoded);
+        return decoded;
+
     }
 
     changeEmail(email) {

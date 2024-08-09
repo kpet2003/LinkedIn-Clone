@@ -28,8 +28,12 @@ function ClickButton() {
 
       try {
           const response =  await UserService.loginUser(formData);
-          localStorage.setItem('userID',response.data);
-          if(response.data === 1){
+
+          localStorage.setItem('jwt_token',response.data);
+          
+          const token_data = UserService.decodeToken(localStorage.getItem('jwt_token'));
+
+          if(token_data.sub === 'admin@gmail.com'){
             navigate('/AdminPage');
           }
           else{
@@ -37,8 +41,8 @@ function ClickButton() {
           }
       } 
       catch (error) {
-          console.error("There was an error registering the user:", error);
-          alert("There was an error registering the user.");
+        console.error("Login error:", error);
+        alert("Wrong email or password");
       }
   }
     

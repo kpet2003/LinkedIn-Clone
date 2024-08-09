@@ -26,18 +26,7 @@ public class JwtUtil {
 		return claims.getSubject();
 	}
 
-    // public Date extractExpiration(String token) {
-    //     return extractClaim(token, Claims::getExpiration);
-    // }
 
-    // public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    //     final Claims claims = extractAllClaims(token);
-    //     return claimsResolver.apply(claims);
-    // }
-
-    // private Claims extractAllClaims(String token) {
-    //     return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-    // }
 
     public String generateToken(Authentication auth) {
         String username = auth.getName();

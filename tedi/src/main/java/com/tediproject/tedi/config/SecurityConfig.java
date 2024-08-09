@@ -36,16 +36,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http 
-            .csrf(csrf -> csrf.disable()) // Disable CSRF protection for APIs
+            .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/static/css/**", "/static/js/**", "/**").permitAll() // Allow static resources
-                // .requestMatchers("/").permitAll() // Allow access to the root endpoint
-                // .requestMatchers("/SignUp/signup").permitAll() // Allow sign-up endpoint
-                .anyRequest().authenticated()) // Secure other endpoints
+                .requestMatchers("/static/css/**", "/static/js/**", "/**").permitAll()
+                .requestMatchers("/").permitAll() 
+                .requestMatchers("/SignUp/signup").permitAll() 
+                .requestMatchers("/AdminPage").hasRole("admin")
+                .anyRequest().authenticated()) 
             .exceptionHandling(exceptionHandling -> exceptionHandling
-                .authenticationEntryPoint(jwtEntryPoint)) // Set JwtEntryPoint
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless sessions
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+                .authenticationEntryPoint(jwtEntryPoint))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) 
             .build(); 
     }
 

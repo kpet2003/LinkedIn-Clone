@@ -138,7 +138,6 @@ public class UserService{
 
     @PostConstruct
     public void init() {
-        System.out.println("\nhello??\n\n");
         // set admin role
         if (roleRepo.findById(1) == null) {
             Role role = new Role();
@@ -150,7 +149,6 @@ public class UserService{
             // set user role
         if (roleRepo.findById(2) == null) {
             Role role = new Role();
-            System.out.println("add user role");
             role.setRole("user");
             roleRepo.save(role);
         }
@@ -158,7 +156,7 @@ public class UserService{
         if (userRepo.findByEmail("admin@gmail.com") == null) {
             UserEntity user = new UserEntity();
             user.setEmail("admin@gmail.com");
-            user.setPassword("admin");
+            user.setPassword(passwordEncoder.encode("admin"));
             user.setAdmin();
 
             Role role = roleRepo.findByRole("admin");
