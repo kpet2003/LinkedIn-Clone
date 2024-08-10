@@ -11,6 +11,7 @@ import ProfilePage from '../pages/ProfilePage';
 import SettingsPage from '../pages/SettingsPage';
 import NewEmail from '../pages/NewEmail';
 import NewPassword from '../pages/NewPassword';
+import Notifications from '../pages/NotificationPage';
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,6 +35,7 @@ const Main=()=>{
             <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
             <Route exact path='/AdminPage' Component={AdminPage}></Route>
             <Route exact path='/HomePage' Component={HomePage}></Route>
+            <Route exact path='/Notifications' Component={Notifications}></Route>
             <Route exact path='/Profile' Component={ProfilePage}></Route>
             <Route exact path='/Settings' Component={SettingsPage}></Route>
             <Route exact path='/NewEmail' Component={NewEmail}></Route>
