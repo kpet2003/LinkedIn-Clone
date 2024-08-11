@@ -13,11 +13,7 @@ class UserService {
     
     loginUser(user) {
         const API_URL = "/Login";
-        return axios.post(API_URL, user, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        return axios.post(API_URL, user);
     }
 
     decodeToken(token) {

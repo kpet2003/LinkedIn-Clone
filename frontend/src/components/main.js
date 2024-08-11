@@ -15,32 +15,45 @@ import Notifications from '../pages/NotificationPage';
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const checkAuthentication = () => {
+        const token = localStorage.getItem('jwt_token');
+        if (token !== null) {
+        setIsAuthenticated(true);
+        } else {
+        console.log('User not authenticated');
+        setIsAuthenticated(false);
+        }
+        setIsLoading(false); // Loading complete
+    };
 
     useEffect(() => {
-        // Check if the user is authenticated
-        const token = localStorage.getItem('jwt_token');
-        if (token) {
-            setIsAuthenticated(true);
-        } 
-        else {
-            setIsAuthenticated(false);
-        }
+        checkAuthentication();
     }, []);
 
+    const handleLoginSuccess = () => {
+        checkAuthentication();
+    };
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Show a loading state until auth status is determined
+    }
 
     return(
         <Routes>
-            <Route exact path='/' Component={WelcomePage}></Route>
+            <Route exact path='/' element={<WelcomePage onLoginSuccess={handleLoginSuccess} />} ></Route>
             <Route exact path='/SignUp' Component={SignUpPage}></Route>
             <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
                 <Route exact path='/AdminPage' Component={AdminPage}></Route>
                 <Route exact path='/HomePage' Component={HomePage}></Route>
+                <Route exact path='/Notifications' Component={Notifications}></Route>
+                <Route exact path='/Profile' Component={ProfilePage}></Route>
+                <Route exact path='/Settings' Component={SettingsPage}></Route>
+                <Route exact path='/NewEmail' Component={NewEmail}></Route>
+                <Route exact path='/NewPassword' Component={NewPassword}></Route>
             </Route>
-            <Route exact path='/Notifications' Component={Notifications}></Route>
-            <Route exact path='/Profile' Component={ProfilePage}></Route>
-            <Route exact path='/Settings' Component={SettingsPage}></Route>
-            <Route exact path='/NewEmail' Component={NewEmail}></Route>
-            <Route exact path='/NewPassword' Component={NewPassword}></Route>
+            
             
         </Routes>
     );

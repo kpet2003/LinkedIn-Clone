@@ -29,12 +29,12 @@ public class JwtUtil {
 
 
     public String generateToken(Authentication auth) {
-        String username = auth.getName();
+        String email = auth.getName();
 		Date currentDate = new Date();
 		Date expireDate = new Date(currentDate.getTime() + EXPIRATION_TIME);
 		
 		String token = Jwts.builder()
-				.setSubject(username)
+				.setSubject(email)
 				.setIssuedAt( new Date())
 				.setExpiration(expireDate)
 				.signWith(key,SignatureAlgorithm.HS512)

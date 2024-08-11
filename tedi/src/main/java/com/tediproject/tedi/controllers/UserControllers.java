@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,12 +62,11 @@ public class UserControllers {
     }
 
     @PostMapping(value= "/Login")
-    public ResponseEntity<?> login( @RequestParam(value="email", required = false) String email,
-    @RequestParam(value="password", required = false) String password) {
+    public ResponseEntity<?> login( @RequestBody UserEntity user) {
         Authentication auth;
         try {
             auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
         } 
         catch (BadCredentialsException e) {
@@ -74,7 +74,7 @@ public class UserControllers {
         }
         
         try {
-            Long id = userService.loginUser(email, password);
+            Long id = userService.loginUser(user.getEmail(), user.getPassword());
             String token = jwtUtil.generateToken(auth);
             return ResponseEntity.ok(token);
         } 

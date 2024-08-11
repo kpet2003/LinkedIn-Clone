@@ -3,7 +3,8 @@ import {useNavigate} from "react-router-dom";
 import React, { useState } from 'react';
 import UserService from '../service/userService.js'; 
 
-function ClickButton() {
+  
+const WelcomePage = ({ onLoginSuccess }) => {
     const navigate = useNavigate();
     
     const SignUpPage=()=>{
@@ -22,17 +23,20 @@ function ClickButton() {
     const handleSubmit = async(event) => {
       event.preventDefault();
       
-      const formData = new FormData();
-      formData.append('email', user.email);
-      formData.append('password', user.password);
+      const data = {
+        email: user.email,
+        password: user.password
+      };
 
       try {
-          const response =  await UserService.loginUser(formData);
+          const response =  await UserService.loginUser(data);
 
           localStorage.setItem('jwt_token',response.data);
           
           const token_data = UserService.decodeToken(localStorage.getItem('jwt_token'));
 
+          onLoginSuccess();
+          
           if(token_data.sub === 'admin@gmail.com'){
             navigate('/AdminPage');
           }
@@ -53,7 +57,6 @@ function ClickButton() {
         });
     };
 
-
     return (
       <div className='login'>
          <h1 >Welcome</h1>
@@ -69,16 +72,8 @@ function ClickButton() {
           </div>
         </form>
       </div>
-     );
-  }
-  
-  function WelcomePage(){
-    return (
-      <div>
-       <ClickButton />
-      </div>
     );
-  }
+  };
 
   export default WelcomePage;
 
