@@ -87,17 +87,6 @@ public class UserControllers {
 
   
 
-
-        // @RequestParam(value="email", required = false) String email,
-        // @RequestParam(value="password", required = false) String password){
-        // try {
-        //     Long id = userService.loginUser(email, password);
-        //     return ResponseEntity.ok(id);
-        // } catch (Exception e) {
-        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        // }
-    
-
     @PostMapping(value= "/NewEmail")
     public ResponseEntity<?> changeEmail(
         @RequestParam(value="email", required = false) String email,
