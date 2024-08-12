@@ -5,6 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.dto.EmailChangeDto;
+import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.exceptions.UserAlreadyExists;
 import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
@@ -12,6 +14,7 @@ import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
+import com.tediproject.tedi.security.JwtUtil;
 
 import jakarta.annotation.PostConstruct;
 
@@ -26,6 +29,9 @@ public class UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
@@ -76,19 +82,19 @@ public class UserService{
         return userRepo.findById(id);
     }
 
-    public void changeUserEmail(long id, String email){
+    public void changeUserEmail(EmailChangeDto change){
         try {
-            UserEntity user = userRepo.findById(id);
-            user.setEmail(email);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(change.getToken()));
+            user.setEmail(change.getNewEmail());
             userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("User not found");
         }
     }
-    public void changeUserPassword(long id, String password){
+    public void changeUserPassword(PasswordChangeDto change){
         try {
-            UserEntity user = userRepo.findById(id);
-            user.setPassword(password);
+            UserEntity user = userRepo.findByEmail(change.getEmail());
+            user.setPassword(change.getNewPassword());
             userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("User not found");

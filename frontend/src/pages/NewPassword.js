@@ -14,12 +14,13 @@ function NewPassword(){
             return;
         }
 
-        const formData = new FormData();
-        formData.append('password', pass);
-        formData.append('id', localStorage.getItem('userID'));
+        const data = {
+            email: UserService.decodeToken(localStorage.getItem('jwt_token')).sub,
+            newPassword: pass
+        };
   
         try {
-            const response =  await UserService.changePassword(formData);
+            await UserService.changePassword(data);
             alert("Password changed successfully");
         } 
         catch (error) {
