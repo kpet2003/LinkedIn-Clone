@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
 import glass from "../glass.png";
 import '../Network.css';
+import { jwtDecode } from 'jwt-decode';
 
 function SearchBar() {
 
@@ -38,15 +39,67 @@ function SearchBar() {
                 (user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                  user.lastName?.toLowerCase().includes(searchTerm.toLowerCase())) || false
             );
-            
             setSelectedUsers(newFilter);
         }
     };
 
+    const handleSearchClick = () => {
+        handleFilter();
+    };
+
+
+    const makeRequest = (userID) => {
+        alert('send friend request',userID);
+    }
+
+    const clearInput = () => {
+        setSearchTerm("");
+        setSelectedUsers([]);
+    };
+
     return (
         <div className='searchBar'>
-            <img src = {glass} alt='search' className='photo' onClick={handleFilter}/> 
-            <input type='text'  value={searchTerm}  onChange={handleFilter} className='search' placeholder='Search Users'></input>
+            <input 
+                type='text'  
+                value={searchTerm}  
+                onChange={handleFilter} 
+                className='search' 
+                placeholder='Search Users'
+            />
+            <img 
+                src={glass} 
+                alt='search' 
+                className='photo' 
+                onClick={handleSearchClick} 
+            />
+           
+            {selectedUsers.length > 0 && (
+                <div className="dataResult">
+                    {selectedUsers.slice(0, 15).map((value) => (
+                        <div key={value.id} className="dataItem">
+                            <p>
+                                <img 
+                                    src={`data:image/jpeg;base64,${value.profilePicture}`} 
+                                    alt='profile' 
+                                    className='profile_photo' 
+                                />
+                                {value.firstName} {value.lastName}
+                                <a href='/Profile'> Visit Profile </a>
+
+
+                                <input 
+                                type='button' 
+                                value='Make connection' 
+                                className='button'
+                                onClick={() => makeRequest(value.id)} 
+                            />
+                            </p>
+                           
+                        </div>
+                    ))}
+                </div>
+            )}
+  
         </div>
     );
 }
