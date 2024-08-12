@@ -5,35 +5,27 @@ import React, { useState, useEffect } from 'react';
 
 
 function NewEmail(){
-    const [email, setEmail] = useState('');
     const [newEmail, setNewEmail] = useState('');
 
-    useEffect(() => {
-    const fetchUser = async () => {
-        try{
-            const emailData = await UserService.getUserEmail(localStorage.getItem('userID'));
-            setEmail(emailData);  
-        }
-        catch(err){
-            console.log(err);
-            alert('DID NOT GET USER DATA');
-        }
-        
-    };
-        fetchUser();
-    },[]);
-    
+    const token = UserService.decodeToken(localStorage.getItem('jwt_token'));
+    const email = token.sub;
 
     const handleSubmit = async(event) => {
         event.preventDefault();
         
-        const formData = new FormData();
-        formData.append('email', newEmail);
-        formData.append('id', localStorage.getItem('userID'));
+        const data = {
+            token: localStorage.getItem('jwt_token'),
+            newEmail: newEmail
+        };
   
         try {
-            const response =  await UserService.changeEmail(formData);
-            alert("E-mail changed successfully to: ", response);
+            const response =  await UserService.changeEmail(data);
+            localStorage.removeItem('jwt_token');
+            localStorage.setItem('jwt_token',response.data);
+          
+            const token_data = UserService.decodeToken(localStorage.getItem('jwt_token'));
+
+            alert("E-mail changed successfully to: ", token_data.sub);
         } 
         catch (error) {
             console.error("There was an error changing email", error);

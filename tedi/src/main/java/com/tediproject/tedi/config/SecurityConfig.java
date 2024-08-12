@@ -42,7 +42,12 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll() 
                 .requestMatchers("/SignUp/signup").permitAll() 
                 .requestMatchers("/AdminPage").hasRole("admin")
+<<<<<<< HEAD
                 .anyRequest().permitAll()) 
+=======
+                .requestMatchers("/NewEmail").permitAll()
+                .anyRequest().authenticated()) 
+>>>>>>> 667bfba5472f95a9aa073b98b13666122ce9db19
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 

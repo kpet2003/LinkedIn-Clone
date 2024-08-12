@@ -23,22 +23,14 @@ class UserService {
 
     }
 
-    changeEmail(email) {
+    changeEmail(data) {
         const API_URL = "/NewEmail";
-        return axios.post(API_URL, email, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).data;
+        return axios.put(API_URL, data);
     }
 
     changePassword(password) {
         const API_URL = "/NewPassword";
-        return axios.post(API_URL, password, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).data;
+        return axios.post(API_URL, password).data;
     }
 
     changeProfilePicture(picture) {

@@ -11,12 +11,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.dto.EmailChangeDto;
+import com.tediproject.tedi.dto.LoginDto;
+import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.dto.UserDto;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
@@ -62,7 +66,7 @@ public class UserControllers {
     }
 
     @PostMapping(value= "/Login")
-    public ResponseEntity<?> login( @RequestBody UserEntity user) {
+    public ResponseEntity<?> login( @RequestBody LoginDto user) {
         Authentication auth;
         try {
             auth = authenticationManager.authenticate(
@@ -84,28 +88,39 @@ public class UserControllers {
         
         
     }
-
   
 
-    @PostMapping(value= "/NewEmail")
-    public ResponseEntity<?> changeEmail(
-        @RequestParam(value="email", required = false) String email,
-        @RequestParam(value ="id", required= false) Long id){
+    @PutMapping(value= "/NewEmail")
+    public ResponseEntity<?> changeEmail(@RequestBody EmailChangeDto change){
         try {
-            userService.changeUserEmail(id, email);
-            return ResponseEntity.ok(email);
+            jwtUtil.validateToken(change.getToken());
+            userService.changeUserEmail(change);
+            String userPassword = userRepo.findByEmail(change.getNewEmail()).getPassword();
+            System.out.println("HELLOOOOOOOOOOOOOOOO");
+            Authentication auth;
+            try {
+                auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(change.getNewEmail(), userPassword)
+                );
+            } 
+            catch (BadCredentialsException e) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            }
+            System.out.println("BYEEEEEEEEEEEEEEEEEEEEEEEEE");
+            String token = jwtUtil.generateToken(auth);
+            System.out.println("BYEEEEEEEEEEEEEEEEEEEEEEEEE");
+            return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+
     @PostMapping(value= "/NewPassword")
-    public ResponseEntity<?> changePassword(
-        @RequestParam(value="password", required = false) String password,
-        @RequestParam(value ="id", required= false) Long id){
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto change){
         try {
-            System.out.println("password is "+password);
-            userService.changeUserPassword(id, password);
-            return ResponseEntity.ok(password);
+            userService.changeUserPassword(change);
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
