@@ -26,8 +26,18 @@ public class Request {
     @Column
     protected LocalDateTime date_sent;
 
-    Request() {}
+    public Request() {}
+    public void set_sender(long sender) {
+        this.sender = sender;
+    }
 
+    public void set_receiver(long receiver) {
+        this.receiver = receiver;
+    }
+
+    public void set_date() {
+        this.date_sent = LocalDateTime.now();
+    }
 
 
 

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
 import glass from "../glass.png";
 import '../Network.css';
-import { jwtDecode } from 'jwt-decode';
+import networkService from '../service/networkService.js'; 
+import UserService from '../service/userService.js';
 
 function SearchBar() {
 
@@ -48,14 +49,22 @@ function SearchBar() {
     };
 
 
-    const makeRequest = (userID) => {
-        alert('send friend request',userID);
+    const makeRequest = async (userID) => {
+     
+        const token = localStorage.getItem('jwt_token');
+        try {
+            
+            const response =  await networkService.newRequest(userID,token);
+            console.log(response);
+        }
+        catch(error) {
+            console.log("Error creating request",error);
+        }
+            
+        
     }
 
-    const clearInput = () => {
-        setSearchTerm("");
-        setSelectedUsers([]);
-    };
+
 
     return (
         <div className='searchBar'>
