@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/SignUp/signup").permitAll() 
                 .requestMatchers("/AdminPage").hasRole("admin")
                 .requestMatchers("/NewEmail").permitAll()
+                .requestMatchers("/Network/newRequest").authenticated()
                 .anyRequest().authenticated()) 
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtEntryPoint))

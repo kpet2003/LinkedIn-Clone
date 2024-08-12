@@ -1,22 +1,33 @@
 package com.tediproject.tedi.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.tediproject.tedi.dto.NewRequestDto;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.service.NetworkService;
 
+
+@RestController
 public class NetworkController {
 
+    @Autowired
     UserRepo userRepo;
+
+    @Autowired
     NetworkService networkService;
 
     @PostMapping(value = "/Network/newRequest")
-    public ResponseEntity<?> newRequest(@RequestParam(value="user_id", required = false) long  id, @RequestParam(value ="sender_email", required= false) String email) {
+    public ResponseEntity<?> newRequest(@RequestBody NewRequestDto request) {
+
+
         try {
-            networkService.createRequest(id,email);
+
+            networkService.createRequest(request.getUser_id(),request.getToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
         

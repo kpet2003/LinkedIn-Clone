@@ -53,14 +53,12 @@ function SearchBar() {
      
         const token = localStorage.getItem('jwt_token');
         try {
-            
             const response =  await networkService.newRequest(userID,token);
             console.log(response);
         }
         catch(error) {
             console.log("Error creating request",error);
         }
-            
         
     }
 
