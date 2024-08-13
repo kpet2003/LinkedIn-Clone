@@ -1,0 +1,60 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+    width: 75%;
+    margin: auto;
+}
+
+.user{
+    margin: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px; 
+    margin-bottom: 0px; 
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    display: block; 
+    overflow: hidden; 
+}
+
+.profile_photo {
+    border-radius: 50%;
+    width: 50px;
+    height: 30px;
+    margin-right: 15px;
+    margin-left: 5px;
+}
+
+
+p {
+    margin-right: 5px;
+}
+
+.profile {
+    margin-right: 5px;
+}
+
+
+
+.accept_button {
+    background-color: royalblue;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.decline_button {
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
