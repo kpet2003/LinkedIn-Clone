@@ -34,5 +34,28 @@ public class NetworkController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PostMapping(value = "/Notifications/newConnection")
+    public ResponseEntity<?> newConnection(@RequestBody NewRequestDto connection) {
+        try {
+            networkService.addConnection(connection.getUser_id(),connection.getToken());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } 
+        
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @PostMapping(value="/Notifications/declineRequest")
+    public ResponseEntity<?> declineRequest(@RequestBody NewRequestDto request) {
+        try {
+            networkService.removeRequest(request.getUser_id(),request.getToken());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } 
+        
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
         
 }

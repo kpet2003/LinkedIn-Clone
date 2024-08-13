@@ -22,4 +22,24 @@ public class Connection {
 
     public Connection() {}
 
+    public long getId() {
+        return id;
+    }
+
+    public long getUser_a() {
+        return user_a;
+    }
+
+    public long getUser_b() {
+        return user_b;
+    }
+
+    public void setUser_a(long user_a) {
+        this.user_a = user_a;
+    }
+
+    public void setUser_b(long user_b) {
+        this.user_b = user_b;
+    }
+
 }

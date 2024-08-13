@@ -12,6 +12,30 @@ class networkService {
             }
         });
     }
+
+    newConnection(user_id,token) {
+        const API_URL = "/Notifications/newConnection";
+        return axios.post(API_URL, {
+            user_id: user_id,
+            token: token
+        }, {
+            headers: {
+                'Content-Type': 'application/json'  
+            }
+        });
+    }
+
+    declineRequest(user_id,token) {
+        const API_URL = "/Notifications/declineRequest";
+        return axios.post(API_URL, {
+            user_id: user_id,
+            token: token
+        }, {
+            headers: {
+                'Content-Type': 'application/json'  
+            }
+        });
+    }
 }
 
 export default new networkService();

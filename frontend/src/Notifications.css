@@ -42,7 +42,6 @@ p {
 }
 
 
-
 .accept_button {
     background-color: royalblue;
     color: #fff;
@@ -50,6 +49,7 @@ p {
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
+    margin-right: 5px;
 }
 
 .decline_button {

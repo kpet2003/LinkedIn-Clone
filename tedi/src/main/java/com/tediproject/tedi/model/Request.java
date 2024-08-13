@@ -27,6 +27,18 @@ public class Request {
     protected LocalDateTime date_sent;
 
     public Request() {}
+    public long getId() {
+        return id;
+    }
+    public long getSender() {
+        return sender;
+    }
+    public long getReceiver() {
+        return receiver;
+    }
+    public LocalDateTime getDate_sent() {
+        return date_sent;
+    }
     public void set_sender(long sender) {
         this.sender = sender;
     }

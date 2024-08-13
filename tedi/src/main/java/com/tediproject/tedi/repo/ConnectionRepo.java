@@ -13,4 +13,5 @@ public interface ConnectionRepo extends JpaRepository<Connection, Long>{
     // find all connections with user
     @Query("select c from Connection c where c.user_a = ?1 or c.user_b = ?1 ")
     List<Connection> findByUser(long user_id);
+    
 }
