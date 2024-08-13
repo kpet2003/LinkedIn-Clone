@@ -102,7 +102,6 @@ function Pfp(){
                 alert('Skills changed successfully');
             }
         
-            // Optionally refetch user data or update the local state
             const updatedUser = await userService.getUserData(localStorage.getItem('userID'));
             setUser((user) => ({
                 ...user,
@@ -114,8 +113,6 @@ function Pfp(){
         }
         setChangedField('');
     };
-
-    console.log(user.profilePicture);
 
     const base64Image = `data:image/jpeg;base64,${user.profilePicture}`;
 

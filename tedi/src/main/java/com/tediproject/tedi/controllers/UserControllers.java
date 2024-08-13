@@ -94,21 +94,17 @@ public class UserControllers {
     public ResponseEntity<?> changeEmail(@RequestBody EmailChangeDto change){
         try {
             jwtUtil.validateToken(change.getToken());
-            userService.changeUserEmail(change);
-            String userPassword = userRepo.findByEmail(change.getNewEmail()).getPassword();
-            System.out.println("HELLOOOOOOOOOOOOOOOO");
             Authentication auth;
             try {
                 auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(change.getNewEmail(), userPassword)
+                    new UsernamePasswordAuthenticationToken(jwtUtil.getEmailFromJWT(change.getToken()), change.getPassword())
                 );
+                userService.changeUserEmail(change);
             } 
             catch (BadCredentialsException e) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }
-            System.out.println("BYEEEEEEEEEEEEEEEEEEEEEEEEE");
             String token = jwtUtil.generateToken(auth);
-            System.out.println("BYEEEEEEEEEEEEEEEEEEEEEEEEE");
             return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
