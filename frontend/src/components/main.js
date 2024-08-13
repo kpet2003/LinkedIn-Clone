@@ -50,12 +50,12 @@ const Main=()=>{
                 <Route exact path='/HomePage' Component={HomePage}></Route>
                 <Route exact path='/Network' Component={Network}></Route>
                 <Route exact path='/Notifications' Component={Notifications}></Route>
-                <Route exact path='/Profile' Component={ProfilePage}></Route>
+                
                 <Route exact path='/Settings' Component={SettingsPage}></Route>
                 <Route exact path='/NewEmail' Component={NewEmail}></Route>
                 <Route exact path='/NewPassword' Component={NewPassword}></Route>
             </Route>
-            
+            <Route exact path='/Profile' Component={ProfilePage}></Route>
             
         </Routes>
     );

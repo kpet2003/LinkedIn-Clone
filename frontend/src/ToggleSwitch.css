@@ -1,0 +1,39 @@
+.toggle-checkbox {
+    height: 0px;
+    width: 0px;
+    opacity: 0;
+  }
+  
+  .toggle {
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    border-radius: 10px;
+    background-color: darkblue;
+    right: 55%;
+    transition: all 0.6s;
+    cursor: pointer;
+  }
+  
+  .toggle-switch {
+    border: solid 2px darkblue;
+    position: relative;
+    display: inline-block;
+    border-radius: 20px;
+    padding: 1px;
+    width: 25px;
+    height: 10px;
+    background-color: white; /* Default background color */
+    transition: background-color 0.5s;
+  }
+  
+  .toggled {
+    background-color: darkblue; /* Background color when toggled */
+    border: solid 2px white;
+  }
+  
+  .toggled .toggle {
+    right: 3px;
+    background-color: white; /* Toggle color when toggled */
+  }
+  

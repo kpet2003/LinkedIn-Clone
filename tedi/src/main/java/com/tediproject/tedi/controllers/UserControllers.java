@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.dto.BoolChangeDto;
 import com.tediproject.tedi.dto.EmailChangeDto;
 import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
@@ -115,6 +116,7 @@ public class UserControllers {
     @PostMapping(value= "/NewPassword")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto change){
         try {
+            jwtUtil.validateToken(change.getToken());
             userService.changeUserPassword(change);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
@@ -165,6 +167,40 @@ public class UserControllers {
         try {
             userService.changeUserSkills(id, skills);
             return ResponseEntity.ok(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value= "/Profile/edubool")
+    public ResponseEntity<?> changeEduBool(@RequestBody BoolChangeDto change){
+        try {
+            jwtUtil.validateToken(change.getToken());
+            userService.changeEduBool(change.getToken());
+            System.out.println("DID IT");
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/Profile/workbool")
+    public ResponseEntity<?> changeWorkBool(@RequestBody BoolChangeDto change){
+        try {
+            jwtUtil.validateToken(change.getToken());
+            userService.changeWorkBool(change.getToken());
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value= "/Profile/skillsbool")
+    public ResponseEntity<?> changeSkillsBool(@RequestBody BoolChangeDto change){
+        try {
+            jwtUtil.validateToken(change.getToken());
+            userService.changeSkillsBool(change.getToken());
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

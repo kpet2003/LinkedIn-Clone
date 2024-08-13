@@ -15,7 +15,7 @@ function NewPassword(){
         }
 
         const data = {
-            email: UserService.decodeToken(localStorage.getItem('jwt_token')).sub,
+            token: localStorage.getItem('jwt_token'),
             newPassword: pass
         };
   

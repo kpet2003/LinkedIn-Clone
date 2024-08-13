@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import NavigationBar from './HomePage.js'
 import userService from "../service/userService.js";
 import Popup from 'reactjs-popup';
+import ToggleSwitch from "../components/ToggleSwitch.js";
 
 
 
@@ -114,6 +115,19 @@ function Pfp(){
         setChangedField('');
     };
 
+    const handleEduBool = async (event) => {
+        event.preventDefault();
+        const data={
+            token: localStorage.getItem('jwt_token'),
+        };
+        try{
+        await userService.changeEduState(data);
+        } catch(error){
+            console.error('Could not change bool', error);
+            alert('Could not change the state of your information');
+        }
+    }
+
     const base64Image = `data:image/jpeg;base64,${user.profilePicture}`;
 
     return (
@@ -157,8 +171,12 @@ function Pfp(){
             <br></br>
             <div className="info">
                 <h2>About me</h2><br></br>
-                <h3>Education</h3>
+                <div className="header-container">
+                <h3 className="title">Education</h3>
+                <ToggleSwitch className="switch" onClick={handleEduBool}></ToggleSwitch>
+                </div>
                 <p>{user.education}</p>
+
                 <Popup
                     trigger={
                     <div className="pen-icon" title="Edit Education Info">

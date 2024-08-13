@@ -68,6 +68,22 @@ class UserService {
             }
         }).data;
     }
+
+    changeEduState(state){
+        const API_URL = "/Profile/edubool";
+        return axios.put(API_URL,state);
+    }
+
+    changeWorkState(state){
+        const API_URL = "/Profile/workbool";
+        return axios.put(API_URL,state);
+    }
+
+    changeSkillsState(state){
+        const API_URL= "/Profile/skillsbool";
+        return axios.put(API_URL,state);
+    }
+
     async getUserEmail(ID) {
         if (!ID) {
             console.error("Invalid ID");

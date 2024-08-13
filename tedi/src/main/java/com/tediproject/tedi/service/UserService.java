@@ -91,9 +91,10 @@ public class UserService{
             throw new RuntimeException("User not found");
         }
     }
+
     public void changeUserPassword(PasswordChangeDto change){
         try {
-            UserEntity user = userRepo.findByEmail(change.getEmail());
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(change.getToken()));
             user.setPassword(change.getNewPassword());
             userRepo.save(user);
         } catch (Exception e) {
@@ -141,6 +142,35 @@ public class UserService{
          }
     }
 
+    public void changeEduBool(String token){
+        try{
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+            user.setPublicEducation(!user.getPublicEducation());
+            userRepo.save(user);
+        } catch(Exception e){
+            throw new RuntimeException("Error changing bool");
+        }
+    }
+
+    public void changeWorkBool(String token){
+        try{
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+            user.setPublicWork(!user.getPublicWork());
+            userRepo.save(user);
+        } catch(Exception e){
+            throw new RuntimeException("Error changing bool");
+        }
+    }
+
+    public void changeSkillsBool(String token){
+        try{
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+            user.setPublicSkills(!user.getPublicSkills());
+            userRepo.save(user);
+        } catch(Exception e){
+            throw new RuntimeException("Error changing bool");
+        }
+    }
 
     @PostConstruct
     public void init() {

@@ -107,3 +107,16 @@ body {
     text-align: left;
     margin-left: 5%;
 }
+
+.header-container{
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    margin-right: 5%;
+}
+
+.switch{
+    margin-top: 2px;
+}

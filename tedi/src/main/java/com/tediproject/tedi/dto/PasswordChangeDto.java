@@ -1,19 +1,19 @@
 package com.tediproject.tedi.dto;
 
 public class PasswordChangeDto {
-    private String email;
+    private String token;
     private String newPassword;
 
-    public String getEmail(){
-        return this.email;
+    public String getToken() {
+        return token;
     }
 
     public String getNewPassword(){
         return this.newPassword;
     }
 
-    public void setEmail(String email){
-        this.email = email;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setNewPassword(String password){
