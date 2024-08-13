@@ -26,7 +26,6 @@ public class NetworkController {
 
 
         try {
-
             networkService.createRequest(request.getUser_id(),request.getToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
