@@ -18,4 +18,8 @@ public interface  RequestRepo  extends JpaRepository<Request, Long>{
     // find request based on users
     @Query("select r from Request r where r.receiver = ?1 and r.sender = ?2")
     Request findByUsers(long user_a,long user_b);
+    
+    // find all the requests that a user has made
+    @Query("select r.receiver from Request r where r.sender = ?1 ")
+    List<Long> findReceivers(long sender_id);
 }

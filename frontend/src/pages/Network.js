@@ -11,19 +11,60 @@ function SearchBar() {
     const [users, setUsers] = useState([]);
     const [selectedUsers,setSelectedUsers] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [requestUsers,setRequestUsers] = useState([]);
+    const [connectedUsers,setConnectedUsers] = useState([]);
 
     // renders the list of existing users, except for the admin 
     useEffect(() => {
+        const token = localStorage.getItem('jwt_token');
+        const email = UserService.decodeToken(token).sub;
+     
         const fetchUsers = async() => {
             try {
                 const response = await  AdminService.getUsers();
-                const finalUsers = response.filter(user => user.admin !== true);
+                const finalUsers = response.filter(user => user.admin !== true && 
+                    user.email !== email &&
+                    !connectedUsers.includes(user.id) &&
+                    !requestUsers.includes(user.id))
                 setUsers(finalUsers);
             } 
             catch (error) {
                 console.error("There was an error getting the user list", error);
             }
         };
+
+        const findRequests = async() => {
+            const token = localStorage.getItem('jwt_token');
+
+            try {
+                const response = await networkService.fetchRequests(token);
+                const finalUsers = response;
+                setRequestUsers(finalUsers);
+                console.log(finalUsers);
+            }
+            catch (error) {
+                console.error("There was an error getting the request list", error);
+            }
+
+        }
+
+        const findConnections = async() => {
+            const token = localStorage.getItem('jwt_token');
+
+            try {
+                const response = await networkService.fetchConnections(token);
+                const finalUsers = response;
+                setConnectedUsers(finalUsers);
+                console.log(finalUsers);
+            }
+            catch (error) {
+                console.error("There was an error getting the connections list", error);
+            }
+
+        }
+
+        findConnections();
+        findRequests();
         fetchUsers();
     }, []);
 
@@ -82,34 +123,40 @@ function SearchBar() {
            
             {selectedUsers.length > 0 && (
                 <div className="dataResult">
-                    {selectedUsers.slice(0, 15).map((value) => (
-                        <div key={value.id} className="dataItem">
-                            <p>
-                                <img 
-                                    src={`data:image/jpeg;base64,${value.profilePicture}`} 
-                                    alt='profile' 
-                                    className='profile_photo' 
-                                />
-                                {value.firstName} {value.lastName}
-                                <a href='/Profile'> Visit Profile </a>
-
-
-                                <input 
-                                type='button' 
-                                value='Make connection' 
-                                className='button'
-                                onClick={() => makeRequest(value.id)} 
-                            />
-                            </p>
-                           
-                        </div>
-                    ))}
+                    {selectedUsers.slice(0, 15).map((value) => {
+                        const isConnected = connectedUsers.some(user => user.id === value.id);
+                        const isRequested = requestUsers.some(user => user.id === value.id);
+    
+                        return (
+                            <div key={value.id} className="dataItem">
+                                <p>
+                                    <img 
+                                        src={`data:image/jpeg;base64,${value.profilePicture}`} 
+                                        alt='profile' 
+                                        className='profile_photo' 
+                                    />
+                                    {value.firstName} {value.lastName}
+                                    <a href='/Profile'> Visit Profile </a>
+    
+                                    {isConnected && <p>Connected</p>}
+                                    {isRequested && !isConnected && <p>Pending Request</p>}
+                                    {!isConnected && !isRequested && (
+                                        <input 
+                                            type='button' 
+                                            value='Make connection' 
+                                            className='button'
+                                            onClick={() => makeRequest(value.id)} 
+                                        />
+                                    )}
+                                </p>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
-  
         </div>
     );
-}
+}    
 
 
 

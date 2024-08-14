@@ -1,13 +1,18 @@
 package com.tediproject.tedi.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tediproject.tedi.dto.NewRequestDto;
+import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.service.NetworkService;
 
@@ -56,6 +61,16 @@ public class NetworkController {
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/Network/Requests")
+    public List<UserEntity> getRequests(@RequestParam(value="token", required = false)String token ) {
+        return networkService.findUsers(token);
+    }
+
+    @GetMapping(value = "/Network/Connections")
+    public List<UserEntity> getConnections(@RequestParam(value="token", required = false)String token ) {
+        return networkService.findConnections(token);
     }
         
 }

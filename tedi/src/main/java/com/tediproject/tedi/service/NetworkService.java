@@ -1,5 +1,7 @@
 package com.tediproject.tedi.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,26 @@ public class NetworkService {
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         Request request = requestRepo.findByUsers(user_a.getID(), user_id);
         requestRepo.delete(request);
+    }
+
+    public List<UserEntity> findUsers(String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<Long> receivers = requestRepo.findReceivers(user.getID());
+
+        List<UserEntity> senders = userRepo.findAllById(receivers);
+        return senders;
+
+    }
+
+    public List<UserEntity> findConnections(String token) {
+        
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        Long user_id = user.getID();
+        List<Long> connected_ids = connectionRepo.findByUser(user_id);
+        List<UserEntity> connections = userRepo.findAllById(connected_ids);
+
+        return connections;
+        
     }
 
 }
