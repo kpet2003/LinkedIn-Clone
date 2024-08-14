@@ -13,7 +13,7 @@ public interface  RequestRepo  extends JpaRepository<Request, Long>{
 
     // find all requests to user
     @Query("select r.sender from Request r where r.receiver = ?1 order by r.date_sent desc")
-    List <Long> findReceiver(long receiver_id);
+    List <Long> findSenders(long receiver_id);
 
     // find request based on users
     @Query("select r from Request r where r.receiver = ?1 and r.sender = ?2")
