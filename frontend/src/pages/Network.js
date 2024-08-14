@@ -121,7 +121,7 @@ function SearchBar() {
                 onClick={handleSearchClick} 
             />
            
-            {selectedUsers.length > 0 && (
+            {searchTerm !== "" && selectedUsers.length > 0 && (
                 <ul className='list'>
                     {selectedUsers.slice(0, 15).map((value) => {
                         const isConnected = connectedUsers.some(user => user.id === value.id);
