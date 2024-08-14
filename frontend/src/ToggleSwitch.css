@@ -37,3 +37,6 @@
     background-color: white; /* Toggle color when toggled */
   }
   
+  .label{
+    font-size: small;
+  }

@@ -12,9 +12,9 @@ public class UserDto {
     protected String workExperience;
     protected String education;
     protected String skills;
-    protected Boolean isPublicWorkExperience = true;
-    protected Boolean isPublicEducation = true;
-    protected Boolean isPublicSkills = true;
+    protected Boolean isPublicWorkExperience;
+    protected Boolean isPublicEducation;
+    protected Boolean isPublicSkills;
 
     public UserDto() {}
 

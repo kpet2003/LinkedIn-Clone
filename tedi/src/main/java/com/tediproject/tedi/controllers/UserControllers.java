@@ -175,9 +175,11 @@ public class UserControllers {
     @PutMapping(value= "/Profile/edubool")
     public ResponseEntity<?> changeEduBool(@RequestBody BoolChangeDto change){
         try {
+            System.out.println("IN FUNC");
             jwtUtil.validateToken(change.getToken());
+            System.out.println("VALIDATION");
             userService.changeEduBool(change.getToken());
-            System.out.println("DID IT");
+            System.out.println("CHANGE DONE");
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -225,37 +227,37 @@ public class UserControllers {
     }
 
     @GetMapping(value = "/Profile", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUserProfile(@RequestParam(value="id", required = false) Long id) {
+    public ResponseEntity<?> getUserProfile(@RequestParam(value="token", required = false) String token) {
         try{
-            
-            UserEntity user = userService.getUserById(id);
-        
-        if(user != null){
-            UserDto userDto = new UserDto();
-            userDto.setId(user.getID());
-            userDto.setFirstName(user.getFirstName());
-            userDto.setLastName(user.getLastName());
-            userDto.setEmail(user.getEmail());
-            userDto.setPhoneNumber(user.getPhoneNumber());
-            userDto.setResume(user.getResume());
-            userDto.setWorkExperience(user.getWorkExperience());
-            userDto.setEducation(user.getEducation());
-            userDto.setSkills(user.getSkills());
-            userDto.setPublicWork(user.getPublicWork());
-            userDto.setPublicEducation(user.getPublicEducation());
-            userDto.setPublicSkills(user.getPublicSkills());
-            if (user.getProfilePicture() != null) {
-                String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
-                userDto.setProfilePicture(base64Image);
+            jwtUtil.validateToken(token);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+ 
+            if(user != null){
+                UserDto userDto = new UserDto();
+                userDto.setId(user.getID());
+                userDto.setFirstName(user.getFirstName());
+                userDto.setLastName(user.getLastName());
+                userDto.setEmail(user.getEmail());
+                userDto.setPhoneNumber(user.getPhoneNumber());
+                userDto.setResume(user.getResume());
+                userDto.setWorkExperience(user.getWorkExperience());
+                userDto.setEducation(user.getEducation());
+                userDto.setSkills(user.getSkills());
+                userDto.setPublicWork(user.getPublicWork());
+                userDto.setPublicEducation(user.getPublicEducation());
+                userDto.setPublicSkills(user.getPublicSkills());
+                if (user.getProfilePicture() != null) {
+                    String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
+                    userDto.setProfilePicture(base64Image);
+                }
+                return ResponseEntity.ok(userDto);
             }
-            return ResponseEntity.ok(userDto);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
         }
         catch(Exception e){
-            return ResponseEntity.badRequest().body("ID is required");
+            return ResponseEntity.badRequest().body("token is required");
         }
     }
 }

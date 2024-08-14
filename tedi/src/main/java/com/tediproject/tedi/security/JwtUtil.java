@@ -26,8 +26,6 @@ public class JwtUtil {
 		return claims.getSubject();
 	}
 
-
-
     public String generateToken(Authentication auth) {
         String email = auth.getName();
 		Date currentDate = new Date();

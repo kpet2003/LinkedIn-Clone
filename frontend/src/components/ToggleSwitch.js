@@ -1,7 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import '../ToggleSwitch.css';
-import userService from "../service/userService.js";
+import '../ToggleSwitch.css'
 
 ToggleSwitch.propTypes={
     onChange: PropTypes.func,
@@ -13,20 +12,35 @@ ToggleSwitch.propTypes={
 function ToggleSwitch(props){
     const toggle = useRef();
     const checkbox = useRef();
-    function handleToggle() {
-        if (props.onChange) props.onChange();
+    const [isPrivate, setIsPrivate] = useState(false);
+
+    useEffect(() => {
+      if (!props.checked) {
+          toggle.current.classList.add('toggled');
+          checkbox.current.checked = true;
+      } else {
+          toggle.current.classList.remove('toggled');
+          checkbox.current.checked = false;
+      }
+  }, [props.checked]);
+
+    function handleToggle(event) {
         toggle.current.classList.toggle('toggled');
         checkbox.current.checked = !checkbox.current.checked;
+        setIsPrivate(checkbox.current.checked);
+        if (props.onChange){
+           props.onChange(event);
+        }
         
     }
   return (
     <>
+     <label className='label'>{isPrivate ? 'Private' : 'Public'}</label>
       <input
         ref={checkbox}
         name={props.name}
         className='toggle-checkbox'
         type='checkbox'
-        defaultChecked={props.value}
         value={props.value || false}
       />
       <span

@@ -99,14 +99,14 @@ class UserService {
         return email;
     }
 
-    async getUserData(ID) {
-        if (!ID) {
-            console.error("Invalid ID");
+    async getUserData(token) {
+        if (!token) {
+            console.error("Invalid token");
             return;
         }
         const url = "/Profile";
         const response = await axios.get(url,{
-            params: {id : ID},
+            params: {token: token},
             responseType: 'json'
         });
         console.log(response.data);

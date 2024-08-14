@@ -32,7 +32,7 @@ function Pfp(){
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const data = await userService.getUserData(localStorage.getItem('userID'));
+                const data = await userService.getUserData(localStorage.getItem('jwt_token'));
                 setUser((user) => ({
                     ...user,
                     ...data
@@ -173,7 +173,7 @@ function Pfp(){
                 <h2>About me</h2><br></br>
                 <div className="header-container">
                 <h3 className="title">Education</h3>
-                <ToggleSwitch className="switch" onClick={handleEduBool}></ToggleSwitch>
+                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicEducation}></ToggleSwitch>
                 </div>
                 <p>{user.education}</p>
 
