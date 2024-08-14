@@ -98,3 +98,62 @@ body {
 .button:hover {
     background-color: #0056b3;
 }
+
+
+.net {
+    display: grid;
+    column-gap: 1%;
+    row-gap: 2%;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px;
+    padding: 2%;
+    margin: 0 auto;
+}
+
+
+.ConnectedUser {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 100%;
+    border-style: none;
+    background-color: #f9f9f9;
+    padding: 10px;
+    max-width: 250px;
+    margin: 0 auto;
+    height: 200px; 
+    text-align: center;
+    display: block;
+    border-radius: 20px;
+}
+
+.ConnectedUser img{
+    display: block; 
+    margin: auto;
+    border-radius: 50%; 
+    width: 80px; 
+    height: 80px; 
+    object-fit: cover; 
+}
+
+
+.ConnectedUser p{
+    margin: 5px 0;
+    line-height: 1.4;
+    display: block; 
+    border-radius: 50%; 
+    width: 80px; 
+    height: 80px; 
+    object-fit: cover; 
+    margin: auto;
+}
+
+
+.ConnectedUser a{
+    margin: 5px 0;
+    line-height: 1.4;
+    display: block; 
+    border-radius: 50%; 
+    width: 80px; 
+    height: 80px; 
+    object-fit: cover; 
+}

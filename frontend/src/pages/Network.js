@@ -158,6 +158,47 @@ function SearchBar() {
     );
 }    
 
+function MyNetwork() {
+
+    const [connectedUsers,setConnectedUsers] = useState([]);
+
+    useEffect(() => {
+        const findConnections = async() => {
+            const token = localStorage.getItem('jwt_token');
+
+            try {
+                const response = await networkService.fetchConnections(token);
+                const finalUsers = response;
+                setConnectedUsers(finalUsers);
+                console.log(finalUsers);
+            }
+            catch (error) {
+                console.error("There was an error getting the connections list", error);
+            }
+
+        }
+
+        findConnections();
+    }, []);
+
+
+
+    return(
+        <div >
+            <div className='net'>
+            {connectedUsers.map(connectedUser => (
+                    <span key={connectedUser.id} className='ConnectedUser' >
+                        <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='profile_photo' />
+                       <p>{connectedUser.firstName} {connectedUser.lastName} </p> <p>{connectedUser.workExperience}</p> <a href={`/Profile/${connectedUser.id}`} className='profile'>Visit Profile</a> 
+                     
+                    </span>
+                ))}
+            </div>
+        
+        </div>
+    );
+}
+
 
 
 function Network(){
@@ -165,7 +206,7 @@ function Network(){
         <div>
             <NavigationBar></NavigationBar>
             <SearchBar></SearchBar>
-
+            <MyNetwork></MyNetwork>
         </div>
     );
 }
