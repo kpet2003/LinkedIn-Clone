@@ -36,6 +36,16 @@ class networkService {
             }
         });
     }
+
+    fetchRequests(token) {
+        const API_URL = `/Network/Requests?token=${encodeURIComponent(token)}`;
+        return axios.get(API_URL).then(response => response.data);
+    }
+
+    fetchConnections(token) {
+        const API_URL = `/Network/Connections?token=${encodeURIComponent(token)}`;
+        return axios.get(API_URL).then(response => response.data);
+    }
 }
 
 export default new networkService();

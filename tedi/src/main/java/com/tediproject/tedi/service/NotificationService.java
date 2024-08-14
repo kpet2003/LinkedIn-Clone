@@ -24,21 +24,11 @@ public class NotificationService {
 
 
     public List<UserEntity> findUsers(String token) {
+        
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<Long> user_ids = requestRepo.findReceiver(user.getID());
-
-        List <UserEntity> users =  new ArrayList<UserEntity>();
+        List<Long> sender_ids = requestRepo.findSenders(user.getID());
+        List<UserEntity> senders = userRepo.findAllById(sender_ids);
+        return senders;
         
-        for (int i=0; i<user_ids.size(); i++) {
-            long user_id = user_ids.get(i);
-            UserEntity temp = userRepo.findById(user_id);
-            users.add(temp);
-        }
-    
-
-        return users;
-
-        
-
     }
 }
