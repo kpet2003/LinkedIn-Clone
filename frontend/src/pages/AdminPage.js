@@ -123,7 +123,7 @@ function UserList() {
                             <td  className='select' > <input type="checkbox" name={user.id}  checked={selectedUsers.includes(user.id)} onChange={() => {handleSelect(user.id)}}/>  </td>
                             <td>{user.firstName} {user.lastName}</td>
                             <td> {user.email}</td>
-                            <td> <a href={`/Profile/`}> Visit Profile </a></td>
+                            <td> <a href={`/VisitProfile/${user.id}`}> Visit Profile </a></td>
                         </tr>
                     ))}
                 </tbody>

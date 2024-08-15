@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/SignUp/signup").permitAll() 
                 .requestMatchers("/AdminPage").hasRole("admin")
                 .requestMatchers("/NewEmail").permitAll()
+                .requestMatchers("/VisitProfile/**").permitAll()
                 .requestMatchers("/Network/newRequest").authenticated()
                 .requestMatchers("/Profile/edubool").authenticated()
                 .anyRequest().authenticated()) 

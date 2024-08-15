@@ -10,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -256,11 +257,13 @@ public class UserControllers {
         }
     }
 
-    @GetMapping(value = "/VisitProfile", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getProfile(@RequestParam(value="id", required = false) long id) {
+    @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProfile(@PathVariable Long id) {
+
+
         try{
             UserEntity user = userService.getUserById(id);
- 
+
             if(user != null){
                 UserDto userDto = new UserDto();
                 userDto.setFirstName(user.getFirstName());
