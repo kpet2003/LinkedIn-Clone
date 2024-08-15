@@ -112,9 +112,9 @@ public class UserService{
          }
     }
 
-    public void changeUserEdu(long id, String edu){
+    public void changeUserEdu(String token, String edu){
         try {
-            UserEntity user = userRepo.findById(id);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
             user.setEducation(edu);
             userRepo.save(user);
         } catch (Exception e) {
@@ -122,9 +122,9 @@ public class UserService{
          }
     }
 
-    public void changeUserWork(long id, String work){
+    public void changeUserWork(String token, String work){
         try {
-            UserEntity user = userRepo.findById(id);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
             user.setWorkExperience(work);
             userRepo.save(user);
         } catch (Exception e) {
@@ -132,9 +132,9 @@ public class UserService{
          }
     }
 
-    public void changeUserSkills(long id, String skills){
+    public void changeUserSkills(String token, String skills){
         try {
-            UserEntity user = userRepo.findById(id);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
             user.setSkills(skills);
             userRepo.save(user);
         } catch (Exception e) {

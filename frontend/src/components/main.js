@@ -13,6 +13,7 @@ import NewEmail from '../pages/NewEmail';
 import NewPassword from '../pages/NewPassword';
 import Notifications from '../pages/NotificationPage';
 import Network from '../pages/Network';
+import VisitProfile from '../pages/VisitProfilePage';
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -50,13 +51,13 @@ const Main=()=>{
                 <Route exact path='/HomePage' Component={HomePage}></Route>
                 <Route exact path='/Network' Component={Network}></Route>
                 <Route exact path='/Notifications' Component={Notifications}></Route>
-                
+                <Route exact path='/Profile' Component={ProfilePage}></Route>
                 <Route exact path='/Settings' Component={SettingsPage}></Route>
                 <Route exact path='/NewEmail' Component={NewEmail}></Route>
                 <Route exact path='/NewPassword' Component={NewPassword}></Route>
+                <Route exact path='/VisitProfile/:id' Component={VisitProfile}></Route>
             </Route>
-            <Route exact path='/Profile' Component={ProfilePage}></Route>
-            
+                       
         </Routes>
     );
 }

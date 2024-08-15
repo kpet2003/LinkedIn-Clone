@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tediproject.tedi.dto.BoolChangeDto;
 import com.tediproject.tedi.dto.EmailChangeDto;
+import com.tediproject.tedi.dto.InfoChangeDto;
 import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.dto.UserDto;
@@ -113,7 +114,7 @@ public class UserControllers {
     }
 
 
-    @PostMapping(value= "/NewPassword")
+    @PutMapping(value= "/NewPassword")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto change){
         try {
             jwtUtil.validateToken(change.getToken());
@@ -129,6 +130,7 @@ public class UserControllers {
         @RequestParam(value="profilePicture", required = false) MultipartFile image,
         @RequestParam(value ="token", required= false) String token){
         try {
+            jwtUtil.validateToken(token);
             userService.changeUserPfp(token, image);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
@@ -136,37 +138,34 @@ public class UserControllers {
         }
     }
 
-    @PostMapping(value= "/Profile/educhange")
-    public ResponseEntity<?> changeEdu(
-        @RequestParam(value="education", required = false) String edu,
-        @RequestParam(value ="id", required= false) Long id){
+    @PutMapping(value= "/Profile/educhange")
+    public ResponseEntity<?> changeEdu(@RequestBody InfoChangeDto change){
         try {
-            userService.changeUserEdu(id, edu);
-            return ResponseEntity.ok(id);
+            jwtUtil.validateToken(change.getToken());
+            userService.changeUserEdu(change.getToken(), change.getInfo());
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @PostMapping(value= "/Profile/workchange")
-    public ResponseEntity<?> changeWork(
-        @RequestParam(value="workExperience", required = false) String work,
-        @RequestParam(value ="id", required= false) Long id){
+    @PutMapping(value= "/Profile/workchange")
+    public ResponseEntity<?> changeWork(@RequestBody InfoChangeDto change){
         try {
-            userService.changeUserWork(id, work);
-            return ResponseEntity.ok(id);
+            jwtUtil.validateToken(change.getToken());
+            userService.changeUserWork(change.getToken(), change.getInfo());
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @PostMapping(value= "/Profile/skillchange")
-    public ResponseEntity<?> changeSkill(
-        @RequestParam(value="skills", required = false) String skills,
-        @RequestParam(value ="id", required= false) Long id){
+    @PutMapping(value= "/Profile/skillchange")
+    public ResponseEntity<?> changeSkill(@RequestBody InfoChangeDto change){
         try {
-            userService.changeUserSkills(id, skills);
-            return ResponseEntity.ok(id);
+            jwtUtil.validateToken(change.getToken());
+            userService.changeUserWork(change.getToken(), change.getInfo());
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -231,7 +230,6 @@ public class UserControllers {
  
             if(user != null){
                 UserDto userDto = new UserDto();
-                userDto.setId(user.getID());
                 userDto.setFirstName(user.getFirstName());
                 userDto.setLastName(user.getLastName());
                 userDto.setEmail(user.getEmail());
@@ -257,4 +255,40 @@ public class UserControllers {
             return ResponseEntity.badRequest().body("token is required");
         }
     }
+
+    @GetMapping(value = "/VisitProfile", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProfile(@RequestParam(value="id", required = false) long id) {
+        try{
+            UserEntity user = userService.getUserById(id);
+ 
+            if(user != null){
+                UserDto userDto = new UserDto();
+                userDto.setFirstName(user.getFirstName());
+                userDto.setLastName(user.getLastName());
+                userDto.setEmail(user.getEmail());
+                userDto.setPhoneNumber(user.getPhoneNumber());
+                userDto.setResume(user.getResume());
+                userDto.setWorkExperience(user.getWorkExperience());
+                userDto.setEducation(user.getEducation());
+                userDto.setSkills(user.getSkills());
+                userDto.setPublicWork(user.getPublicWork());
+                userDto.setPublicEducation(user.getPublicEducation());
+                userDto.setPublicSkills(user.getPublicSkills());
+                if (user.getProfilePicture() != null) {
+                    String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
+                    userDto.setProfilePicture(base64Image);
+                }
+                return ResponseEntity.ok(userDto);
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body("token is required");
+        }
+    }
+
 }
+
+

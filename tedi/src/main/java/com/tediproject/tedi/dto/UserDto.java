@@ -1,14 +1,12 @@
 package com.tediproject.tedi.dto;
 
 public class UserDto {
-    protected long id;
     protected String first_name;
     protected String last_name;
     protected String email;
     protected long phone_number;
     protected String image;
     protected byte[] resume;
-    protected Boolean admin = false;
     protected String workExperience;
     protected String education;
     protected String skills;
@@ -17,10 +15,6 @@ public class UserDto {
     protected Boolean isPublicSkills;
 
     public UserDto() {}
-
-    public void setId(long id){
-        this.id = id;
-    }
 
     public void setFirstName(String name){
         this.first_name = name;
@@ -44,10 +38,6 @@ public class UserDto {
 
     public void setResume(byte[] CV){
         this.resume = CV;
-    }
-
-    public void setAdmin(){
-        this.admin = true;
     }
 
     public void setWorkExperience(String experience){
@@ -98,13 +88,6 @@ public class UserDto {
         return this.resume;
     }
 
-    public Boolean getAdmin(){
-        return this.admin;
-    }
-
-    public Long getID(){
-        return this.id;
-    }
 
     public String getWorkExperience(){
         return this.workExperience;

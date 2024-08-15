@@ -30,12 +30,12 @@ class UserService {
 
     changePassword(password) {
         const API_URL = "/NewPassword";
-        return axios.post(API_URL, password).data;
+        return axios.put(API_URL, password).data;
     }
 
     changeProfilePicture(picture) {
         const API_URL = "/Profile/pfpchange";
-        return axios.post(API_URL, picture, {
+        return axios.put(API_URL, picture, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -44,7 +44,7 @@ class UserService {
 
     changeEducation(education) {
         const API_URL = "/Profile/educhange";
-        return axios.post(API_URL, education, {
+        return axios.put(API_URL, education, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -53,7 +53,7 @@ class UserService {
 
     changeWork(work) {
         const API_URL = "/Profile/workchange";
-        return axios.post(API_URL, work, {
+        return axios.put(API_URL, work, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -62,7 +62,7 @@ class UserService {
 
     changeSkills(skills) {
         const API_URL = "/Profile/skillchange";
-        return axios.post(API_URL, skills, {
+        return axios.put(API_URL, skills, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -107,6 +107,16 @@ class UserService {
         const url = "/Profile";
         const response = await axios.get(url,{
             params: {token: token},
+            responseType: 'json'
+        });
+        console.log(response.data);
+        return response.data;
+    }
+
+    async getProfile(id){
+        const url = "/VisitProfile";
+        const response = await axios.get(url,{
+            params: {id: id},
             responseType: 'json'
         });
         console.log(response.data);

@@ -62,48 +62,46 @@ function Pfp(){
     
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        const formData = new FormData();
-
-        if(changedField === 'profilePicture'){
-            formData.append('profilePicture', selectedFile);
-        }
-        else if(changedField === 'education'){
-            formData.append('education', user.education);
-        }
-        else if(changedField === 'workExperience'){
-            formData.append('workExperience', user.workExperience);
-        }
-        else if(changedField === 'skills'){
-            formData.append('skills', user.skills);
-        }
-        else{
-            alert('No changes');
-            return;
-        }
-        
-        formData.append('id', localStorage.getItem('userID'));
-
         try {
-
             if(changedField === 'profilePicture'){
+                const formData = new FormData();
+                formData.append('profilePicture', selectedFile);
+                formData.append('token', localStorage.getItem('jwt_token'));
                 await userService.changeProfilePicture(formData);
                 alert('Profile picture changed successfully');
             }
-            else if(changedField === 'education'){
-                await userService.changeEducation(formData);
-                alert('Education info changed successfully');
-            }
-            else if(changedField === 'workExperience'){
-                await userService.changeWork(formData);
-                alert('Work experience changed successfully');
-            }
-            else if(changedField === 'skills'){
-                await userService.changeSkills(formData);
-                alert('Skills changed successfully');
+            else {
+                if(changedField === 'education'){
+                    const data = {
+                        token: localStorage.getItem('jwt_token'),
+                        info: user.education
+                    }
+                    await userService.changeEducation(data);
+                    alert('Education info changed successfully');
+                }
+                else if(changedField === 'workExperience'){
+                    const data = {
+                        token: localStorage.getItem('jwt_token'),
+                        info: user.workExperience
+                    }
+                    await userService.changeWork(data);
+                    alert('Work experience changed successfully');
+                }
+                else if(changedField === 'skills'){
+                    const data = {
+                        token: localStorage.getItem('jwt_token'),
+                        info: user.skills
+                    }
+                    await userService.changeSkills(data);
+                    alert('Skills changed successfully');
+                }
+                else{
+                    alert('Nothing was changed');
+                    return;
+                }
             }
         
-            const updatedUser = await userService.getUserData(localStorage.getItem('userID'));
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'));
             setUser((user) => ({
                 ...user,
                 ...updatedUser,
@@ -115,7 +113,7 @@ function Pfp(){
         setChangedField('');
     };
 
-    const handleEduBool = async (event) => {
+    const handleBool = async (event) => {
         event.preventDefault();
         const id = event.target.id;
         console.log('id is ', id);
@@ -184,7 +182,7 @@ function Pfp(){
                 <h2>About me</h2><br></br>
                 <div className="header-container">
                 <h3 className="title">Education</h3>
-                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
+                <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
                 </div>
                 <p>{user.education}</p>
 
@@ -213,7 +211,7 @@ function Pfp(){
                 </Popup>
                 <div className="header-container">
                 <h3 className="title">Work Experience</h3>
-                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicWork} id="work"></ToggleSwitch>
+                <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicWork} id="work"></ToggleSwitch>
                 </div>
                 <p>{user.workExperience}</p>
                 <Popup
@@ -241,7 +239,7 @@ function Pfp(){
                 </Popup>
                 <div className="header-container">
                 <h3 className="title">Skills</h3>
-                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
+                <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
                 </div>
                 <p>{user.skills}</p>
                 <Popup
