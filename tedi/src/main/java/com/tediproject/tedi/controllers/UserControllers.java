@@ -1,8 +1,6 @@
 package com.tediproject.tedi.controllers;
 import java.util.Base64;
 
-import javax.xml.ws.http.HTTPBinding;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -129,10 +127,10 @@ public class UserControllers {
     @PutMapping(value= "/Profile/pfpchange")
     public ResponseEntity<?> changePfp(
         @RequestParam(value="profilePicture", required = false) MultipartFile image,
-        @RequestParam(value ="token", required= false) Long id){
+        @RequestParam(value ="token", required= false) String token){
         try {
             userService.changeUserPfp(token, image);
-            return ResponseEntity.ok(HttpStatus.ok);
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
