@@ -1,6 +1,7 @@
 package com.tediproject.tedi.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -77,7 +78,13 @@ public class HomeController {
         // Forward to index.html
         return "forward:/index.html";
     }
-    
+
+    @RequestMapping(value = "/VisitProfile/{id}")
+    public String ViewProfile(@PathVariable Long id) {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
 
 
 }

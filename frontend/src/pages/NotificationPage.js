@@ -41,6 +41,7 @@ function Requests() {
         try {
             const response =  await networkService.declineRequest(userID,token);
             console.log(response);
+            
         }
         catch(error) {
             console.log("Error creating request",error);
@@ -55,7 +56,7 @@ function Requests() {
                 {users.map(user => (
                     <li key={user.id} className='user' >
                         <img src={`data:image/jpeg;base64,${user.profilePicture}`} alt='profile' className='profile_photo' />
-                       <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/Profile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
+                       <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
                          <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.id)}/> 
                     </li>
                 ))}

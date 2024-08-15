@@ -136,7 +136,7 @@ function SearchBar() {
                                         className='profile_photo' 
                                     />
                                     {value.firstName} {value.lastName}
-                                    <a href='/Profile'> Visit Profile </a>
+                                    <a href={`/VisitProfile/${value.id}`}> Visit Profile </a>
     
                                     {isConnected && <p>Connected</p>}
                                     {isRequested && !isConnected && <p>Pending Request</p>}
@@ -191,7 +191,7 @@ function MyNetwork() {
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
                         <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='profile_photo' />
-                       <p>{connectedUser.firstName} {connectedUser.lastName} </p> <p>{connectedUser.workExperience}</p> <a href={`/Profile/${connectedUser.id}`} className='profile'>Visit Profile</a> 
+                       <p>{connectedUser.firstName} {connectedUser.lastName} </p> <p>{connectedUser.workExperience}</p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile'>Visit Profile</a> 
                      
                     </span>
                 ))}
