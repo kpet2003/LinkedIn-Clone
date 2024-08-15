@@ -117,11 +117,22 @@ function Pfp(){
 
     const handleEduBool = async (event) => {
         event.preventDefault();
+        const id = event.target.id;
+        console.log('id is ', id);
         const data={
             token: localStorage.getItem('jwt_token'),
         };
         try{
-        await userService.changeEduState(data);
+            if(id === 'edu'){
+                console.log('changing education');
+                await userService.changeEduState(data);
+            }
+            else if(id === 'work'){
+                await userService.changeWorkState(data);
+            }
+            else{
+                await userService.changeSkillsState(data);
+            }
         } catch(error){
             console.error('Could not change bool', error);
             alert('Could not change the state of your information');
@@ -173,7 +184,7 @@ function Pfp(){
                 <h2>About me</h2><br></br>
                 <div className="header-container">
                 <h3 className="title">Education</h3>
-                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicEducation}></ToggleSwitch>
+                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
                 </div>
                 <p>{user.education}</p>
 
@@ -200,7 +211,10 @@ function Pfp(){
                     </div>
                     )}
                 </Popup>
-                <h3>Work Experience</h3>
+                <div className="header-container">
+                <h3 className="title">Work Experience</h3>
+                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicWork} id="work"></ToggleSwitch>
+                </div>
                 <p>{user.workExperience}</p>
                 <Popup
                     trigger={
@@ -225,7 +239,10 @@ function Pfp(){
                     </div>
                     )}
                 </Popup>
-                <h3>Skills</h3>
+                <div className="header-container">
+                <h3 className="title">Skills</h3>
+                <ToggleSwitch className="switch" onChange={handleEduBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
+                </div>
                 <p>{user.skills}</p>
                 <Popup
                     trigger={

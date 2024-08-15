@@ -102,9 +102,9 @@ public class UserService{
         }
     }
 
-    public void changeUserPfp(long id, MultipartFile img){
+    public void changeUserPfp(String token, MultipartFile img){
         try {
-            UserEntity user = userRepo.findById(id);
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
             user.setProfilePicture(img.getBytes());
             userRepo.save(user);
         } catch (Exception e) {

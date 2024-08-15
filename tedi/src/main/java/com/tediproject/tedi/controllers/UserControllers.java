@@ -1,6 +1,8 @@
 package com.tediproject.tedi.controllers;
 import java.util.Base64;
 
+import javax.xml.ws.http.HTTPBinding;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -124,13 +126,13 @@ public class UserControllers {
         }
     }
 
-    @PostMapping(value= "/Profile/pfpchange")
+    @PutMapping(value= "/Profile/pfpchange")
     public ResponseEntity<?> changePfp(
         @RequestParam(value="profilePicture", required = false) MultipartFile image,
-        @RequestParam(value ="id", required= false) Long id){
+        @RequestParam(value ="token", required= false) Long id){
         try {
-            userService.changeUserPfp(id, image);
-            return ResponseEntity.ok(id);
+            userService.changeUserPfp(token, image);
+            return ResponseEntity.ok(HttpStatus.ok);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -175,11 +177,8 @@ public class UserControllers {
     @PutMapping(value= "/Profile/edubool")
     public ResponseEntity<?> changeEduBool(@RequestBody BoolChangeDto change){
         try {
-            System.out.println("IN FUNC");
             jwtUtil.validateToken(change.getToken());
-            System.out.println("VALIDATION");
             userService.changeEduBool(change.getToken());
-            System.out.println("CHANGE DONE");
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

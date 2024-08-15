@@ -22,6 +22,7 @@ function ToggleSwitch(props){
           toggle.current.classList.remove('toggled');
           checkbox.current.checked = false;
       }
+      setIsPrivate(checkbox.current.checked);
   }, [props.checked]);
 
     function handleToggle(event) {
@@ -29,6 +30,7 @@ function ToggleSwitch(props){
         checkbox.current.checked = !checkbox.current.checked;
         setIsPrivate(checkbox.current.checked);
         if (props.onChange){
+          event.target.id = props.id;
            props.onChange(event);
         }
         
