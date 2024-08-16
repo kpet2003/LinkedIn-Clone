@@ -95,6 +95,8 @@ function SearchBar() {
         const token = localStorage.getItem('jwt_token');
         try {
             const response =  await networkService.newRequest(userID,token);
+            setRequestUsers(prevUsers => [...prevUsers,{ id: userID }]);
+            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
             console.log(response);
         }
         catch(error) {

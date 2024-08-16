@@ -30,6 +30,7 @@ function Requests() {
         try {
             const response =  await networkService.newConnection(userID,token);
             console.log(response);
+            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
         }
         catch(error) {
             console.log("Error creating request",error);
@@ -41,6 +42,7 @@ function Requests() {
         try {
             const response =  await networkService.declineRequest(userID,token);
             console.log(response);
+            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
             
         }
         catch(error) {
