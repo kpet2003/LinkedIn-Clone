@@ -1,5 +1,5 @@
 import NavigationBar from './HomePage.js'
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AdminService from '../service/adminService.js'; 
 import glass from "../glass.png";
 import '../Network.css';
@@ -13,6 +13,8 @@ function SearchBar() {
     const [searchTerm, setSearchTerm] = useState("");
     const [requestUsers,setRequestUsers] = useState([]);
     const [connectedUsers,setConnectedUsers] = useState([]);
+    const [isListVisible, setIsListVisible] = useState(true);
+    const searchBarRef = useRef(null);
 
     // renders the list of existing users, except for the admin 
     useEffect(() => {
@@ -68,6 +70,19 @@ function SearchBar() {
         fetchUsers();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+                setIsListVisible(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
 
     const handleFilter = (event) => {
         setSearchTerm(event.target.value);
@@ -75,6 +90,7 @@ function SearchBar() {
         
         if (searchTerm === "") {
             setSelectedUsers([]);
+            setIsListVisible(false);
         } 
         else {
             const newFilter = users.filter(user => 
@@ -82,6 +98,7 @@ function SearchBar() {
                  user.lastName?.toLowerCase().includes(searchTerm.toLowerCase())) || false
             );
             setSelectedUsers(newFilter);
+            setIsListVisible(true);
         }
     };
 
@@ -96,7 +113,6 @@ function SearchBar() {
         try {
             const response =  await networkService.newRequest(userID,token);
             setRequestUsers(prevUsers => [...prevUsers,{ id: userID }]);
-            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
             console.log(response);
         }
         catch(error) {
@@ -108,7 +124,7 @@ function SearchBar() {
 
 
     return (
-        <div className='searchBar'>
+        <div className='searchBar' ref={searchBarRef}>
             <input 
                 type='text'  
                 value={searchTerm}  
@@ -123,7 +139,7 @@ function SearchBar() {
                 onClick={handleSearchClick} 
             />
            
-            {searchTerm !== "" && selectedUsers.length > 0 && (
+            {isListVisible && searchTerm !== "" && selectedUsers.length > 0 && (
                 <ul className='list'>
                     {selectedUsers.slice(0, 15).map((value) => {
                         const isConnected = connectedUsers.some(user => user.id === value.id);
