@@ -260,8 +260,11 @@ public class UserControllers {
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 
-
         try{
+            if(id == null){
+                return ResponseEntity.badRequest().body("id is required");
+            }
+            System.out.println("id is"+id);
             UserEntity user = userService.getUserById(id);
 
             if(user != null){

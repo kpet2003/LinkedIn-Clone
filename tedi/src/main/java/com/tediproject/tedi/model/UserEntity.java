@@ -67,10 +67,20 @@ public class UserEntity {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     protected Role role;
+
+    @Column
+    protected String workplace;
+
+
+    @Column
+    protected String workTitle;
+
+    @Column
+    protected String website;
+
     public UserEntity() {}
+
     
-
-
     public void setFirstName(String name){
         this.first_name = name;
     }
@@ -195,7 +205,29 @@ public class UserEntity {
         return this.role;
     }
 
+    public String getWorkplace() {
+        return workplace;
+    }
 
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
+
+    public String getWorkTitle() {
+        return workTitle;
+    }
+
+    public void setWorkTitle(String workTitle) {
+        this.workTitle = workTitle;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 
 
 

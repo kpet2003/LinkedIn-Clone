@@ -36,7 +36,7 @@ function ToggleSwitch(props){
         
     }
   return (
-    <>
+    <div>
      <label className='label'>{isPrivate ? 'Private' : 'Public'}</label>
       <input
         ref={checkbox}
@@ -52,7 +52,7 @@ function ToggleSwitch(props){
       >
         <span className='toggle'></span>
       </span>
-    </>
+    </div>
   );
 }
 

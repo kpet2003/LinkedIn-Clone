@@ -1,0 +1,79 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+
+.split {
+    height: max-content;
+    width: 50%;
+    position: absolute;
+    overflow-x: hidden;
+    padding-bottom: 10px
+}
+
+.left {
+    left: 0;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+}
+
+.right {
+    right: 0;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info {
+    position: absolute;
+    text-align: left;
+}
+
+.contact-card {
+    padding: 10px;
+    padding-top: 2px;
+    text-align: left;
+    max-width:fit-content;
+    max-height: fit-content;
+    background-color: white;
+    border: 2px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+
+}
+
+.chat-button {
+    text-align: center;
+    background-color: royalblue;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    border-radius: 50px;
+    width: 150px;
+    margin-bottom: 10px;
+    height: 40px;
+    font-size: large;
+    cursor: pointer;
+}
+
+.chat-button:hover {
+    background-color: rgb(12, 67, 231);
+}
+
+.resume-card {
+    padding: 10px;
+    padding-top: 2px;
+    text-align: left;
+    max-width:fit-content;
+    max-height: fit-content;
+    background-color: white;
+    border: 2px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}

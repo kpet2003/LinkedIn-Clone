@@ -114,9 +114,8 @@ class UserService {
     }
 
     async getProfile(id){
-        const url = "/VisitProfile";
-        const response = await axios.get(url,{
-            params: {id: id},
+        const url = `/VisitProfile/${id}`;
+        const response = await axios.get(url, {
             responseType: 'json'
         });
         console.log(response.data);

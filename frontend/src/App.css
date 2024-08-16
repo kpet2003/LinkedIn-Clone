@@ -19,6 +19,9 @@ body {
   height:25px;
 }
 
+.LoginButton:hover{
+  background-color: rgb(12, 67, 231);;
+}
 
 .login {
   text-align: center;

@@ -53,7 +53,7 @@ function Requests() {
 
     return (
         <div>
-            <h2> Your requests: </h2> 
+            <h2 className='my-h2'> Your requests: </h2> 
             <ul className='list'>
                 {users.map(user => (
                     <li key={user.id} className='user' >

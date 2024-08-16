@@ -13,6 +13,9 @@ public class UserDto {
     protected Boolean isPublicWorkExperience;
     protected Boolean isPublicEducation;
     protected Boolean isPublicSkills;
+    protected String workTitle;
+    protected String workplace;
+    protected String website;
 
     public UserDto() {}
 
@@ -111,5 +114,29 @@ public class UserDto {
 
     public Boolean getPublicSkills(){
         return this.isPublicSkills;
+    }
+
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
+
+    public String getWorkTitle() {
+        return workTitle;
+    }
+
+    public void setWorkTitle(String workTitle) {
+        this.workTitle = workTitle;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }
