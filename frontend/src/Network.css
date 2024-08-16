@@ -98,3 +98,53 @@ body {
 .button:hover {
     background-color: #0056b3;
 }
+
+
+.net {
+    display: grid;
+    column-gap: 1%;
+    row-gap: 2%;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px;
+    padding: 2%;
+    margin: 0 auto;
+}
+
+
+.ConnectedUser {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-style: none;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	min-height: 100px;
+	margin: 0;
+    text-align: center;
+    
+}
+
+.picture{
+    border-radius: 50%; 
+    width: 80px; 
+    height: 80px; 
+    margin-top: 10px;
+}
+
+
+.title{
+    margin: auto;
+    font-weight: bold;
+}
+
+.description {
+    margin: auto;
+}
+
+
+.profile_link{
+    color: #007bff;
+    text-decoration: none;
+}
