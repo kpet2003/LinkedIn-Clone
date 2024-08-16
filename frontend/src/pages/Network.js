@@ -140,13 +140,13 @@ function SearchBar() {
             />
            
             {isListVisible && searchTerm !== "" && selectedUsers.length > 0 && (
-                <ul className='list'>
+                <ul className='dataResult'>
                     {selectedUsers.slice(0, 15).map((value) => {
                         const isConnected = connectedUsers.some(user => user.id === value.id);
                         const isRequested = requestUsers.some(user => user.id === value.id);
     
                         return (
-                            <li key={value.id} className="user">
+                            <li key={value.id} className="dataItem">
                                 <p>
                                     <img 
                                         src={`data:image/jpeg;base64,${value.profilePicture}`} 
