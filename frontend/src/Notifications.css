@@ -4,6 +4,11 @@ body {
     font-family: 'Arial';
 }
 
+h2 {
+    margin-left: 12%;
+    float: left;
+}
+
 .list {
     list-style-type: none;
     padding: 0;
@@ -20,8 +25,8 @@ body {
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%; 
-    display: block; 
     overflow: hidden; 
+    height: 100px;
 }
 
 .profile_photo {
@@ -50,6 +55,7 @@ p {
     padding: 5px 10px;
     cursor: pointer;
     margin-right: 5px;
+    margin-bottom: 10%;
 }
 
 .decline_button {
@@ -57,4 +63,5 @@ p {
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
+    margin-bottom: 10%;
 }
