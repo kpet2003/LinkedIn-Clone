@@ -208,8 +208,8 @@ function MyNetwork() {
             <div className='net'>
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
-                        <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='profile_photo' />
-                       <p>{connectedUser.firstName} {connectedUser.lastName} </p> <p>{connectedUser.workExperience}</p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile'>Visit Profile</a> 
+                        <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='picture' />
+                       <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p> <p className='description'>{connectedUser.email}</p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
                      
                     </span>
                 ))}
