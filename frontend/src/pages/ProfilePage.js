@@ -1,11 +1,11 @@
 import "../Profile.css";
-import penIcon from "../pen.png";
+import penIcon from "../icons/pen.png";
 import React, { useState, useEffect } from 'react';
 import NavigationBar from './HomePage.js'
 import userService from "../service/userService.js";
 import Popup from 'reactjs-popup';
 import ToggleSwitch from "../components/ToggleSwitch.js";
-import placeholder from '../avatar.png'
+import placeholder from '../icons/avatar.png'
 
 
 
@@ -179,7 +179,7 @@ function Pfp(){
                 </Popup>
                 </div>
                 <div>
-                    <h1 className="username">{user.firstName} {user.lastName} </h1>
+                    <h1 className="username">{user.firstName} {user.lastName}</h1>
                 </div>
             </div>
             <br></br>
@@ -189,9 +189,59 @@ function Pfp(){
                         <h2>
                             <i>Work</i>
                         </h2>
-                        <h3>Working as</h3>
+                        <div className="about-me-container">
+                        <Popup
+                            trigger={
+                            <div className="pen-icon" title="Edit Work Title">
+                                <img src={penIcon} alt="Pen" className="pen-icon" />
+                            </div>
+                            }
+                            modal
+                            closeOnDocumentClick
+                            className="modal-content"
+                        >
+                            {(close) => (
+                            <div className="modal-background">
+                                <span className="close" onClick={close}>
+                                &times;
+                                </span>
+                                <h2>Edit Work Title</h2>
+                                <form onSubmit={handleSubmit}>
+                                <input type="text" className="file-input" onChange={handleChange} id="workTitle" />
+                                <input type="submit" value="Save" className="save-button" />
+                                </form>
+                            </div>
+                            )}
+                        </Popup>
+                        <h3>Currently working as a(n)</h3>
+                        </div>
                         <p>{user.workTitle}</p>
-                        <h3>Currently working for</h3>
+                        <div className="about-me-container">
+                        <Popup
+                            trigger={
+                            <div className="pen-icon" title="Edit Workplace">
+                                <img src={penIcon} alt="Pen" className="pen-icon" />
+                            </div>
+                            }
+                            modal
+                            closeOnDocumentClick
+                            className="modal-content"
+                        >
+                            {(close) => (
+                            <div className="modal-background">
+                                <span className="close" onClick={close}>
+                                &times;
+                                </span>
+                                <h2>Edit Workplace</h2>
+                                <form onSubmit={handleSubmit}>
+                                <input type="text" className="file-input" onChange={handleChange} id="workplace" />
+                                <input type="submit" value="Save" className="save-button" />
+                                </form>
+                            </div>
+                            )}
+                        </Popup>
+                        <h3>For</h3>
+                        </div>
                         <p>{user.workplace}</p>
 
                     </div>
@@ -201,7 +251,7 @@ function Pfp(){
                         <div className="about-me-container">
                             <Popup
                                 trigger={
-                                <div className="pen-icon" title="Edit Education Info">
+                                <div className="pen-icon" title="Edit Education">
                                     <img src={penIcon} alt="Pen" className="pen-icon" />
                                 </div>
                                 }
@@ -214,7 +264,7 @@ function Pfp(){
                                     <span className="close" onClick={close}>
                                     &times;
                                     </span>
-                                    <h2>Edit Education Info</h2>
+                                    <h2>Edit Education</h2>
                                     <form onSubmit={handleSubmit}>
                                     <input type="text" className="file-input" onChange={handleChangedText}  id="education"/>
                                     <input type="submit" value="Save" className="save-button" />

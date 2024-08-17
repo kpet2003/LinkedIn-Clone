@@ -1,7 +1,7 @@
 import NavigationBar from './HomePage.js'
 import React, { useState, useEffect, useRef } from 'react';
 import AdminService from '../service/adminService.js'; 
-import glass from "../glass.png";
+import glass from "../icons/glass.png";
 import '../Network.css';
 import networkService from '../service/networkService.js'; 
 import UserService from '../service/userService.js';

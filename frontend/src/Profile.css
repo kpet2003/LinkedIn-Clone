@@ -5,11 +5,10 @@ body {
 }
 
 .banner {
-    background-color: rgb(56, 190, 235);
     align-items: center;
     display: flex;
     justify-content: center;
-    gap: 30%;
+    gap: 15%;
 }
 
 .profile-picture-container {

@@ -4,7 +4,7 @@ import userService from "../service/userService.js";
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../Visit.css'
-import placeholder from '../avatar.png'
+import placeholder from '../icons/avatar.png'
 
 function VisitProfile(){
     const initialState = {
