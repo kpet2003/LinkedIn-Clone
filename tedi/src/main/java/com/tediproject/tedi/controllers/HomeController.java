@@ -85,6 +85,12 @@ public class HomeController {
         return "forward:/index.html";
     }
 
+    @RequestMapping(value = "/ViewNetwork/{id}")
+    public String ViewNetwork(@PathVariable Long id) {
+        // Forward to index.html
+        return "forward:/index.html";
+    }
+
 
 
 }

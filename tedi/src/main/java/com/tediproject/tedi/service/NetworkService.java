@@ -83,4 +83,12 @@ public class NetworkService {
         
     }
 
+    public List<UserEntity> findConnectionsById(Long id ) {
+        
+        List<Long> connected_ids = connectionRepo.findByUser(id);
+        List<UserEntity> connections = userRepo.findAllById(connected_ids);
+        return connections;
+        
+    }
+
 }

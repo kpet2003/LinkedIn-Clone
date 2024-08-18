@@ -44,6 +44,16 @@ function VisitProfile(){
         fetchUserData();
     }, [id]);
 
+    const viewNetwork = (id) => {
+        console.log(id);
+        const link = document.createElement('a');
+        link.href =  `/ViewNetwork/${id}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    }
+
     const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
 
     return(
@@ -61,7 +71,9 @@ function VisitProfile(){
                             />
                         </div>
                         <button className="chat-button">Send Message</button>
+                        <button className="chat-button" onClick={() => viewNetwork(id)}>View Network</button>
                     </div>
+                    
                     <div>
                         <h1 className="username">{user.firstName} {user.lastName}</h1>
                     </div>

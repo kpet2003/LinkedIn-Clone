@@ -46,6 +46,11 @@ class networkService {
         const API_URL = `/Network/Connections?token=${encodeURIComponent(token)}`;
         return axios.get(API_URL).then(response => response.data);
     }
+
+    fetchConnectionsById(id) {
+        const API_URL =  `/ViewNetwork/getConnections/${id}`;
+        return axios.get(API_URL).then(response => response.data);
+    }
 }
 
 export default new networkService();
