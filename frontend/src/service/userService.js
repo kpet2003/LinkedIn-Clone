@@ -46,7 +46,7 @@ class UserService {
         const API_URL = "/Profile/educhange";
         return axios.put(API_URL, education, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'application/json'
             }
         }).data;
     }
@@ -55,7 +55,7 @@ class UserService {
         const API_URL = "/Profile/workchange";
         return axios.put(API_URL, work, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'application/json'
             }
         }).data;
     }
@@ -64,7 +64,7 @@ class UserService {
         const API_URL = "/Profile/skillchange";
         return axios.put(API_URL, skills, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                 'Content-Type': 'application/json'
             }
         }).data;
     }
