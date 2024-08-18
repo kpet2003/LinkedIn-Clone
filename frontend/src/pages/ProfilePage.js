@@ -228,7 +228,7 @@ function Pfp(){
                             </span>
                             <h2>Edit Work Title</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChange} id="workTitle" />
+                            <input type="text" className="file-input" onChange={handleChangedText} id="workTitle" />
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>
@@ -255,7 +255,7 @@ function Pfp(){
                             </span>
                             <h2>Edit Workplace</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChange} id="workplace" />
+                            <input type="text" className="file-input" onChange={handleChangedText} id="workplace" />
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>
