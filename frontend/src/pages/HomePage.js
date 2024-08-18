@@ -104,7 +104,6 @@ function Timeline() {
 
     return(
         <div>
-            articles
         </div>
     );
 }
