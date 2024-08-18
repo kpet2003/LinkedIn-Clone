@@ -1,6 +1,6 @@
 import '../HomePage.css';
 import {useNavigate,NavLink} from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserService from '../service/userService.js'; 
 import home from '../icons/home.png';
 import network from '../icons/network.png';
@@ -9,7 +9,8 @@ import message from '../icons/text-bubble.png';
 import bell from '../icons/bell.png';
 import settings from '../icons/settings.png'
 import profile from '../icons/profile.png';
-import { func } from 'prop-types';
+import ArticleService from '../service/articleService.js';
+
 
 
 
@@ -81,7 +82,32 @@ function NavigationBar() {
     );
 }
 
+function Timeline() {
 
+    const [articles, setArticles] = useState([]);
+
+    useEffect(() => {
+        const getArticles = async() => {
+            try {
+                const token = localStorage.getItem('jwt_token');
+                const response = await  ArticleService.fetchArticles(token);
+                setArticles(response);
+                console.log(response);
+            } 
+            catch (error) {
+                console.error("There was an error getting the request list", error);
+            }
+        };
+        getArticles();
+    }, []);
+
+
+    return(
+        <div>
+            articles
+        </div>
+    );
+}
 
 
 
@@ -89,7 +115,7 @@ function HomePage() {
     return (
         <div>
          <NavigationBar/>
-         {/* <Timeline/> */}
+         <Timeline/>
         </div>
       );
 }
