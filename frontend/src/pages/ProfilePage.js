@@ -99,6 +99,22 @@ function Pfp(){
                     await userService.changeSkills(data);
                     alert('Skills changed successfully');
                 }
+                else if(changedField === 'workTitle'){
+                    const data = {
+                        token: localStorage.getItem('jwt_token'),
+                        info: user.workTitle
+                    }
+                    await userService.changeWorkTitle(data);
+                    alert('Work title changed successfully');
+                }
+                else if(changedField === 'workplace'){
+                    const data = {
+                        token: localStorage.getItem('jwt_token'),
+                        info: user.workplace
+                    }
+                    await userService.changeWorkplace(data);
+                    alert('Workplace changed successfully');
+                }
                 else{
                     alert('Nothing was changed');
                     return;
@@ -135,6 +151,11 @@ function Pfp(){
             else{
                 await userService.changeSkillsState(data);
             }
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'));
+            setUser((user) => ({
+                ...user,
+                ...updatedUser,
+            }));
         } catch(error){
             console.error('Could not change bool', error);
             alert('Could not change the state of your information');
@@ -184,131 +205,104 @@ function Pfp(){
             </div>
             <br></br>
             <br></br>
-            <div className="info split left">
-                    <div className="resume-card">
-                        <h2>
-                            <i>Work</i>
-                        </h2>
-                        <div className="about-me-container">
-                        <Popup
-                            trigger={
-                            <div className="pen-icon" title="Edit Work Title">
-                                <img src={penIcon} alt="Pen" className="pen-icon" />
-                            </div>
-                            }
-                            modal
-                            closeOnDocumentClick
-                            className="modal-content"
-                        >
-                            {(close) => (
-                            <div className="modal-background">
-                                <span className="close" onClick={close}>
-                                &times;
-                                </span>
-                                <h2>Edit Work Title</h2>
-                                <form onSubmit={handleSubmit}>
-                                <input type="text" className="file-input" onChange={handleChange} id="workTitle" />
-                                <input type="submit" value="Save" className="save-button" />
-                                </form>
-                            </div>
-                            )}
-                        </Popup>
-                        <h3>Currently working as a(n)</h3>
+            <div className="cards-container">
+                <div className="card">
+                    <h2>
+                        <i>Work</i>
+                    </h2>
+                    <div className="about-me-container">
+                    <Popup
+                        trigger={
+                        <div className="pen-icon" title="Edit Work Title">
+                            <img src={penIcon} alt="Pen" className="pen-icon" />
                         </div>
-                        <p>{user.workTitle}</p>
-                        <div className="about-me-container">
-                        <Popup
-                            trigger={
-                            <div className="pen-icon" title="Edit Workplace">
-                                <img src={penIcon} alt="Pen" className="pen-icon" />
-                            </div>
-                            }
-                            modal
-                            closeOnDocumentClick
-                            className="modal-content"
-                        >
-                            {(close) => (
-                            <div className="modal-background">
-                                <span className="close" onClick={close}>
-                                &times;
-                                </span>
-                                <h2>Edit Workplace</h2>
-                                <form onSubmit={handleSubmit}>
-                                <input type="text" className="file-input" onChange={handleChange} id="workplace" />
-                                <input type="submit" value="Save" className="save-button" />
-                                </form>
-                            </div>
-                            )}
-                        </Popup>
-                        <h3>For</h3>
+                        }
+                        modal
+                        closeOnDocumentClick
+                        className="modal-content"
+                    >
+                        {(close) => (
+                        <div className="modal-background">
+                            <span className="close" onClick={close}>
+                            &times;
+                            </span>
+                            <h2>Edit Work Title</h2>
+                            <form onSubmit={handleSubmit}>
+                            <input type="text" className="file-input" onChange={handleChange} id="workTitle" />
+                            <input type="submit" value="Save" className="save-button" />
+                            </form>
                         </div>
-                        <p>{user.workplace}</p>
+                        )}
+                    </Popup>
+                    <h3>Currently working as a(n)</h3>
+                    </div>
+                    <p>{user.workTitle}</p>
+                    <div className="about-me-container">
+                    <Popup
+                        trigger={
+                        <div className="pen-icon" title="Edit Workplace">
+                            <img src={penIcon} alt="Pen" className="pen-icon" />
+                        </div>
+                        }
+                        modal
+                        closeOnDocumentClick
+                        className="modal-content"
+                    >
+                        {(close) => (
+                        <div className="modal-background">
+                            <span className="close" onClick={close}>
+                            &times;
+                            </span>
+                            <h2>Edit Workplace</h2>
+                            <form onSubmit={handleSubmit}>
+                            <input type="text" className="file-input" onChange={handleChange} id="workplace" />
+                            <input type="submit" value="Save" className="save-button" />
+                            </form>
+                        </div>
+                        )}
+                    </Popup>
+                    <h3>For</h3>
+                    </div>
+                    <p>{user.workplace}</p>
 
+                </div>
+                <br></br>
+                <div className="card">
+                    <div className="about-me-container">
+                        <Popup
+                            trigger={
+                            <div className="pen-icon" title="Edit Education">
+                                <img src={penIcon} alt="Pen" className="pen-icon" />
+                            </div>
+                            }
+                            modal
+                            closeOnDocumentClick
+                            className="modal-content"
+                        >
+                            {(close) => (
+                            <div className="modal-background">
+                                <span className="close" onClick={close}>
+                                &times;
+                                </span>
+                                <h2>Edit Education</h2>
+                                <form onSubmit={handleSubmit}>
+                                <input type="text" className="file-input" onChange={handleChangedText}  id="education"/>
+                                <input type="submit" value="Save" className="save-button" />
+                                </form>
+                            </div>
+                            )}
+                        </Popup>
+                        <h2><i>Education</i></h2>
+                        <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
+                    </div>
+                    <p>{user.education}</p>
                     </div>
                     <br></br>
-                    <div className="contact-card">
-                        <h2><i>About Me</i></h2>
-                        <div className="about-me-container">
-                            <Popup
-                                trigger={
-                                <div className="pen-icon" title="Edit Education">
-                                    <img src={penIcon} alt="Pen" className="pen-icon" />
-                                </div>
-                                }
-                                modal
-                                closeOnDocumentClick
-                                className="modal-content"
-                            >
-                                {(close) => (
-                                <div className="modal-background">
-                                    <span className="close" onClick={close}>
-                                    &times;
-                                    </span>
-                                    <h2>Edit Education</h2>
-                                    <form onSubmit={handleSubmit}>
-                                    <input type="text" className="file-input" onChange={handleChangedText}  id="education"/>
-                                    <input type="submit" value="Save" className="save-button" />
-                                    </form>
-                                </div>
-                                )}
-                            </Popup>
-                            <h3>Education</h3>
-                            <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
-                        </div>
-                        <p>{user.education}</p>
-                        <div className="about-me-container">
-                            <Popup
-                                trigger={
-                                <div className="pen-icon" title="Edit Work Experience">
-                                    <img src={penIcon} alt="Pen" className="pen-icon" />
-                                </div>
-                                }
-                                modal
-                                closeOnDocumentClick
-                                className="modal-content"
-                            >
-                                {(close) => (
-                                <div className="modal-background">
-                                    <span className="close" onClick={close}>
-                                    &times;
-                                    </span>
-                                    <h2>Edit Work Experience</h2>
-                                    <form onSubmit={handleSubmit}>
-                                    <input type="text" className="file-input" onChange={handleChangedText} id="workExperience" />
-                                    <input type="submit" value="Save" className="save-button" />
-                                    </form>
-                                </div>
-                                )}
-                            </Popup>
-                            <h3>Work Experience</h3>
-                            <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicWork} id="work"></ToggleSwitch>
-                            </div>
-                        <p>{user.workExperience}</p>
-                            
-                        <div className="about-me-container">
+                    <div className="card">
+                    <div className="about-me-container">
                         <Popup
                             trigger={
-                            <div className="pen-icon" title="Edit Skills">
+                            <div className="pen-icon" title="Edit Work Experience">
                                 <img src={penIcon} alt="Pen" className="pen-icon" />
                             </div>
                             }
@@ -321,36 +315,61 @@ function Pfp(){
                                 <span className="close" onClick={close}>
                                 &times;
                                 </span>
-                                <h2>Edit Skills</h2>
+                                <h2>Edit Work Experience</h2>
                                 <form onSubmit={handleSubmit}>
-                                <input type="text" className="file-input" onChange={handleChangedText} id="skills"/>
+                                <input type="text" className="file-input" onChange={handleChangedText} id="workExperience" />
                                 <input type="submit" value="Save" className="save-button" />
                                 </form>
                             </div>
                             )}
                         </Popup>
-                        <h3>Skills</h3>
-                        <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
+                        <h2><i>Work Experience</i></h2>
+                        <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicWork} id="work"></ToggleSwitch>
                         </div>
-
-                        <p>{user.skills}</p>
-                        
-                        
-
+                    <p>{user.workExperience}</p>
                     </div>
-                    
-                </div>
-
-                <div className="split right ">
-                    
-                    <div className="contact-card">
-                        <h2><i>Contact Info</i></h2>
-                        <p><b>Email:</b> {user.email}</p>
-                        <p><b>Phone Number:</b> {user.phoneNumber}</p>
-                        <p><b>Website:</b> <a href={user.website}>{user.website}</a> </p>
+                    <br></br>
+                    <div className="card">
+                    <div className="about-me-container">
+                    <Popup
+                        trigger={
+                        <div className="pen-icon" title="Edit Skills">
+                            <img src={penIcon} alt="Pen" className="pen-icon" />
+                        </div>
+                        }
+                        modal
+                        closeOnDocumentClick
+                        className="modal-content"
+                    >
+                        {(close) => (
+                        <div className="modal-background">
+                            <span className="close" onClick={close}>
+                            &times;
+                            </span>
+                            <h2>Edit Skills</h2>
+                            <form onSubmit={handleSubmit}>
+                            <input type="text" className="file-input" onChange={handleChangedText} id="skills"/>
+                            <input type="submit" value="Save" className="save-button" />
+                            </form>
+                        </div>
+                        )}
+                    </Popup>
+                    <h2><i>Skills</i></h2>
+                    <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
                     </div>
 
+                    <p>{user.skills}</p>
+                        
+
                 </div>
+                <br></br>
+                <div className="card">
+                    <h2><i>Contact Info</i></h2>
+                    <p><b>Email:</b> {user.email}</p>
+                    <p><b>Phone Number:</b> {user.phoneNumber}</p>
+                    <p><b>Website:</b> <a href={user.website}>{user.website}</a> </p>
+                </div>
+            </div>
         </div>
     );
 }

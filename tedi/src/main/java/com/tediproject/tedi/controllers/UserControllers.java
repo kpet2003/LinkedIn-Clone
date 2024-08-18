@@ -204,6 +204,17 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PutMapping(value= "/Profile/worktitle")
+    public ResponseEntity<?> changeWorkTitle(@RequestBody InfoChangeDto change){
+        try {
+            jwtUtil.validateToken(change.getToken());
+            userService.changeSkillsBool(change.getToken());
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
     @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {

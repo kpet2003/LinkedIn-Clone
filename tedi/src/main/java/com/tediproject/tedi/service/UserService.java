@@ -172,6 +172,26 @@ public class UserService{
         }
     }
 
+    public void changeWorkTitle(String token, String title){
+        try{
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+            user.setWorkTitle(title);
+            userRepo.save(user);
+        } catch(Exception e){
+            throw new RuntimeException("Error changing bool");
+        }
+    }
+
+    public void changeWorkplace(String token, String place){
+        try{
+            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+            user.setWorkplace(place);
+            userRepo.save(user);
+        } catch(Exception e){
+            throw new RuntimeException("Error changing bool");
+        }
+    }
+
     @PostConstruct
     public void init() {
         // set admin role

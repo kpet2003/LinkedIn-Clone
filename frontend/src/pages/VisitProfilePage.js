@@ -52,58 +52,80 @@ function VisitProfile(){
             <br></br>
             <div>
                 <div className="banner">
-                    <div className="profile-picture-container add-margin">
-                        <img
-                        src={base64Image}
-                        alt="Profile"
-                        className="profile-picture"
-                        />
+                    <div className="start-chat-container">
+                        <div className="profile-picture-container">
+                            <img
+                            src={base64Image}
+                            alt="Profile"
+                            className="profile-picture"
+                            />
+                        </div>
+                        <button className="chat-button">Send Message</button>
                     </div>
                     <div>
-                        <h1 className="username">{user.firstName} {user.lastName} </h1>
+                        <h1 className="username">{user.firstName} {user.lastName}</h1>
                     </div>
                 </div>
                 <br></br>
                 <br></br>
-                <div className="info split left">
-                    <div className="resume-card">
+                <div className="cards-container">
+                    <div className="card">
                         <h2>
                             <i>Work</i>
                         </h2>
-                        <h3>Working as</h3>
+                        <div className="about-me-container">
+                        <h3>Currently working as a(n)</h3>
+                        </div>
                         <p>{user.workTitle}</p>
-                        <h3>Currently working for</h3>
+                        <div className="about-me-container">
+                        <h3>For</h3>
+                        </div>
                         <p>{user.workplace}</p>
 
                     </div>
+                    {user.publicEducation ? (
+                    <>
                     <br></br>
-                    <div className="contact-card">
-                        <h2><i>About Me</i></h2>
-                        <h3>Education</h3>
-
+                    <div className="card">
+                        <div className="about-me-container">
+                            <h2><i>Education</i></h2>
+                        </div>
                         <p>{user.education}</p>
-                        
-                        <h3>Work Experience</h3>
-                        
+                        </div>
+                        </>
+                    ) : null}
+                    {user.publicWork ? (
+                    <>
+                        <br></br>
+                        <div className="card">
+                        <div className="about-me-container">
+                            <h2><i>Work Experience</i></h2>
+                            </div>
                         <p>{user.workExperience}</p>
-                        
-                        <h3>Skills</h3>
-                        
-                        <p>{user.skills}</p>
-                    </div>
-                    
-                </div>
+                        </div>
+                    </>
+                    ) : null}
+                    {user.publicSkills ? (
+                    <>
+                        <br></br>
+                        <div className="card">
+                        <div className="about-me-container">
+                        <h2><i>Skills</i></h2>
+                        </div>
 
-                <div className="split right ">
-                    <button className="chat-button">Send Message</button><br></br>
+                        <p>{user.skills}</p>
+                            
+
+                    </div>
+                    </>
+                    ) : null }
                     <br></br>
-                    <div className="contact-card">
+                    <div className="card">
                         <h2><i>Contact Info</i></h2>
                         <p><b>Email:</b> {user.email}</p>
                         <p><b>Phone Number:</b> {user.phoneNumber}</p>
                         <p><b>Website:</b> <a href={user.website}>{user.website}</a> </p>
                     </div>
-
                 </div>
             </div>
         </div>

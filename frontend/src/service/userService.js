@@ -84,6 +84,16 @@ class UserService {
         return axios.put(API_URL,state);
     }
 
+    changeWorkTitle(title){
+        const API_URL= "/Profile/worktitle"
+        return axios.put(API_URL,title);
+    }
+
+    changeWorkplace(place){
+        const API_URL= "/Profile/workplace"
+        return axios.put(API_URL,place);
+    }
+
     async getUserEmail(ID) {
         if (!ID) {
             console.error("Invalid ID");
