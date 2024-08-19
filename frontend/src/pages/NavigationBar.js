@@ -6,7 +6,7 @@ import bell from '../icons/bell.png';
 import settings from '../icons/settings.png'
 import profile from '../icons/profile.png';
 import {useNavigate,NavLink} from "react-router-dom";
-import "../NavigationBar.css"
+import "../styling/NavigationBar.css"
 
 function NavigationBar() {
     const navigate = useNavigate();

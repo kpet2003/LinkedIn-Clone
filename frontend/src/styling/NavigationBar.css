@@ -10,7 +10,6 @@ body {
     width: 100%;
     text-align: center;
     background-color: rgb(149, 229, 255);
-    gap: 5%;
     justify-content: center;
     align-items: center;
 }
@@ -27,6 +26,11 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction:column;
+    width: 10%;
+}
+
+.link-container:hover {
+    background-color: rgb(104, 217, 255);
 }
 
 .icons{
