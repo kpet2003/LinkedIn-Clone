@@ -60,11 +60,8 @@ public class ArticleService {
         new_article.setTitle(article.getTitle());
         new_article.setDate_posted();
         new_article.setPicture(article.getImage());
-
-
+        new_article.setVideo(article.getVideo());
         articleRepo.save(new_article);
-
-
     }
 
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationBar from './HomePage';
+import NavigationBar from './NavigationBar';
 import avatar from '../icons/avatar.png'
 import '../styling/Messages.css';
 

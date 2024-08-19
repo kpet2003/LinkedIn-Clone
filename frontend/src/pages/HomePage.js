@@ -31,8 +31,10 @@ function NewPost() {
         formData.append('author_token', article.author_token);
         formData.append('title', article.title);
         formData.append('article_content', article.article_content);
-        formData.append('image', article.image);
-
+        formData.append('image', article.image || null);
+        formData.append('video', article.video || null);
+        
+        
         try {
             const response =  await ArticleService.newArticle(formData);
             console.log(response.data); 
@@ -56,12 +58,12 @@ function NewPost() {
         const { id, files } = event.target;
         setArticle(prevState => ({
             ...prevState,
-            [id]: files[0]
+            [id === 'input_image' ? 'image' : 'video']: files[0]
         }));
     };
 
-    const triggerFileInput = () => {
-        document.getElementById('fileInput').click();
+    const triggerFileInput = (input_id) => {
+        document.getElementById(input_id).click();
     };
     
 
@@ -77,16 +79,16 @@ function NewPost() {
                     
                     <div className='article_buttons'>
 
-                        <div className='image_container' onClick={triggerFileInput}>
+                        <div className='image_container'onClick={() => triggerFileInput('input_image')}>
                             <img src={image_upload} alt='upload image' className='upload'  />
                             <p>Upload image </p>
-                            <input type='file' onChange={handleFiles} className='article-image ' id='fileInput'/> 
+                            <input type='file' onChange={handleFiles} className='article-image ' id='input_image'/> 
                         </div>
 
-                        <div className='video_container' onClick={triggerFileInput}>
+                        <div className='video_container' onClick={() => triggerFileInput('input_video')}>
                             <img src={video_upload} alt='upload video' className='upload'  /> 
                             <p>Upload video </p>
-                            <input type='file' onChange={handleFiles} className='article-image ' id='fileInput'/> 
+                            <input type='file' onChange={handleFiles} className='article-image ' id='input_video'/> 
                         </div>
 
                         <div>

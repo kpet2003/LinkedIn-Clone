@@ -34,7 +34,8 @@ public class HomepageController {
     public ResponseEntity<?> newArticle(  @RequestParam("author_token") String authorToken,
             @RequestParam("title") String title,
             @RequestParam("article_content") String articleContent,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart(value = "video", required = false) MultipartFile video) {
 
 
         try {
@@ -42,6 +43,18 @@ public class HomepageController {
             article.setAuthor_token(authorToken);
             article.setTitle(title);
             article.setArticle_content(articleContent);
+            
+            if(image!=null) {
+                article.setImage(image.getBytes());
+            }
+
+            if(video!=null) {
+                article.setVideo(video.getBytes());
+            }
+
+
+           
+           
             articleService.newArticle(article);
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
