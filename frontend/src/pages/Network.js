@@ -1,4 +1,4 @@
-import NavigationBar from './HomePage.js'
+import NavigationBar from './NavigationBar.js';
 import React, { useState, useEffect, useRef } from 'react';
 import AdminService from '../service/adminService.js'; 
 import glass from "../icons/glass.png";

@@ -1,85 +1,105 @@
 import '../HomePage.css';
-import {useNavigate,NavLink} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import UserService from '../service/userService.js'; 
-import home from '../icons/home.png';
-import network from '../icons/network.png';
-import jobs from '../icons/jobs.png';
-import message from '../icons/text-bubble.png';
-import bell from '../icons/bell.png';
-import settings from '../icons/settings.png'
-import profile from '../icons/profile.png';
+import image_upload from '../icons/image_upload.png';
+import video_upload from '../icons/video_upload.png';
 import ArticleService from '../service/articleService.js';
+import NavigationBar from './NavigationBar.js';
 
 
 
 
-function NavigationBar() {
-    const navigate = useNavigate();
+function NewPost() {
 
-    const handleClick = async(event) => {
+    const token = localStorage.getItem('jwt_token');
+    
+    const initialState = {
+        author_token:token,
+        title:'',
+        article_content:'',
+        image: null,
+        video:null
+    };
+
+
+    const [article,setArticle] = useState(initialState);
+
+    const handlePost = async(event) => {
+
         event.preventDefault();
-        
+        const formData = new FormData();
+        formData.append('author_token', article.author_token);
+        formData.append('title', article.title);
+        formData.append('article_content', article.article_content);
+        formData.append('image', article.image);
 
-        const icon = event.target.id;
-        if(icon === 'home'){
-            navigate('/HomePage');
+        try {
+            const response =  await ArticleService.newArticle(formData);
+            console.log(response.data); 
+        } 
+        
+        catch (error) {
+            console.error("There was an error creating the article:", error);
         }
-        else if(icon === 'net'){
-            navigate('/Network');
-        }
-        else if(icon === 'job'){
-            navigate('/Jobs');
-        }
-        else if(icon === 'message'){
-            navigate('/Messages');
-        }
-        else if(icon === 'notifs'){
-            navigate('/Notifications');
-        }
-        else if(icon === 'profile'){
-            navigate('/Profile');
-        }
-        else if(icon === 'settings'){
-            navigate('/Settings')
-        }
+
+
     }
 
-    return(
-        <div >
-            <nav className='navigation'>
-                <div className='link-container'>
-                    <img src={home} alt='' className='home-icon' id='home' onClick={handleClick}></img>
-                    <a href='/HomePage' className='link'>Home</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={network} alt='' className='net-icon' id='net' onClick={handleClick}></img>
-                    <a href='/Network' className='link'>Network</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={jobs} alt='' className='icons' id='job' onClick={handleClick}></img>
-                    <a href='/Jobs' className='link'>Jobs</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={message} alt='' className='text-icon' id='message' onClick={handleClick}></img>
-                    <a href='/Messages' className='link'>Messages</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={bell} alt='' className='icons' id='notifs' onClick={handleClick}></img>
-                    <a href='/Notifications' className='link'>Notifications</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={profile} alt='' className='profile-icon' id='profile' onClick={handleClick}></img>
-                    <a href='/Profile' className='link'>Profile</a> 
-                </div>
-                <div className='link-container'>
-                    <img src={settings} alt='' className='icons' id='settings' onClick={handleClick}></img>
-                    <a href='/Settings' className='link'>Settings</a> 
-                </div>
-            </nav>
+    const handleChange = (event) => {
+        setArticle({
+            ...article,
+            [event.target.id]: event.target.value,
+        });
+    };
+
+    const handleFiles = (event) => {
+        const { id, files } = event.target;
+        setArticle(prevState => ({
+            ...prevState,
+            [id]: files[0]
+        }));
+    };
+
+    const triggerFileInput = () => {
+        document.getElementById('fileInput').click();
+    };
+    
+
+    return (
+        <div>
+            <div className='new_post'>
+                <form onSubmit={handlePost}>
+
+                    <div className='text-input'>
+                        <textarea required value = {article.title} placeholder='Article Title' className='article_title' onChange={handleChange} id='title' rows={1}/>
+                        <textarea required value = {article.article_content} placeholder= "What's on your mind? " onChange={handleChange} id='article_content' className='content' rows={1}/>
+                    </div>
+                    
+                    <div className='article_buttons'>
+
+                        <div className='image_container' onClick={triggerFileInput}>
+                            <img src={image_upload} alt='upload image' className='upload'  />
+                            <p>Upload image </p>
+                            <input type='file' onChange={handleFiles} className='article-image ' id='fileInput'/> 
+                        </div>
+
+                        <div className='video_container' onClick={triggerFileInput}>
+                            <img src={video_upload} alt='upload video' className='upload'  /> 
+                            <p>Upload video </p>
+                            <input type='file' onChange={handleFiles} className='article-image ' id='fileInput'/> 
+                        </div>
+
+                        <div>
+                            <input type='submit' className='submitbutton' value='Post' />
+                        </div>
+                        
+                        
+                    </div>
+
+                </form>
+            </div>
         </div>
-        
-    );
+    );  
 }
 
 function Timeline() {
@@ -114,6 +134,7 @@ function HomePage() {
     return (
         <div>
          <NavigationBar/>
+         <NewPost/>
          <Timeline/>
         </div>
       );

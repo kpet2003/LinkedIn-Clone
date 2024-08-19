@@ -27,6 +27,13 @@ public class Article {
     @Column(length=100000)
     private byte[] picture;
 
+    @Lob
+    @Column(length=100000)
+    private byte[] video;
+
+    
+
+
     @Column(name = "date_posted")
     private LocalDateTime date_posted;
 
@@ -69,14 +76,23 @@ public class Article {
         this.picture = picture;
     }
 
+    public byte[] getVideo() {
+        return video;
+    }
+
+
+    public void setVideo(byte[] video) {
+        this.video = video;
+    }
+
 
     public LocalDateTime getDate_posted() {
         return date_posted;
     }
 
 
-    public void setDate_posted(LocalDateTime date_posted) {
-        this.date_posted = date_posted;
+    public void setDate_posted() {
+        this.date_posted = LocalDateTime.now();
     }
 
 

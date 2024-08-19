@@ -1,7 +1,7 @@
 import "../Profile.css";
 import penIcon from "../icons/pen.png";
 import React, { useState, useEffect } from 'react';
-import NavigationBar from './HomePage.js'
+import NavigationBar from './NavigationBar.js';
 import userService from "../service/userService.js";
 import Popup from 'reactjs-popup';
 import ToggleSwitch from "../components/ToggleSwitch.js";

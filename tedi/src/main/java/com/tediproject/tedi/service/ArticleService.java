@@ -2,9 +2,11 @@ package com.tediproject.tedi.service;
 
 import java.util.Comparator;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
@@ -49,8 +51,20 @@ public class ArticleService {
     }
 
 
-    public void newArticle() {
-        
+    public void newArticle(NewArticleDto article) {
+        UserEntity author = userRepo.findByEmail(jwtUtil.getEmailFromJWT(article.getAuthor_token()));
+        Article new_article = new Article();
+
+        new_article.setAuthor(author);
+        new_article.setContent(article.getArticle_content());
+        new_article.setTitle(article.getTitle());
+        new_article.setDate_posted();
+        new_article.setPicture(article.getImage());
+
+
+        articleRepo.save(new_article);
+
+
     }
 
 }

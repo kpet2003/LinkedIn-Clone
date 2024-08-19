@@ -1,0 +1,74 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.navigation {
+    display: flex;
+    height: fit-content;
+    width: 100%;
+    text-align: center;
+    background-color: rgb(149, 229, 255);
+    gap: 5%;
+    justify-content: center;
+    align-items: center;
+}
+
+.link {
+    color: rgb(62, 62, 62);
+    text-align: center;
+    font-size: small;
+    text-decoration: none;
+}
+
+.link-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+}
+
+.icons{
+    width: 40px;
+    height: 40px;
+    opacity: 70%;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+.home-icon {
+    width: 50px;
+    height: 50px;
+    opacity: 70%;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    opacity: 70%;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.net-icon {
+    width: 35px;
+    height: 35px;
+    opacity: 70%;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.text-icon {
+    width: 35px;
+    height: 35px;
+    opacity: 70%;
+    padding-top: 12px;
+    padding-bottom: 2px;
+    cursor: pointer;
+}
+
+
