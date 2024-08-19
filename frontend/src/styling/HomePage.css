@@ -4,74 +4,99 @@ body {
     font-family: 'Arial';
 }
 
-.navigation {
+
+.new_post {
     display: flex;
-    height: fit-content;
-    width: 100%;
-    text-align: center;
-    background-color: rgb(149, 229, 255);
-    gap: 0;
-    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    justify-items: center;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-input {
+    margin: auto;  
+    display: flex;
+    flex-direction: column;
+}
+
+.image_container,
+.video_container {
+    display: flex;
     align-items: center;
 }
 
-.link {
-    color: rgb(62, 62, 62);
-    text-align: center;
-    font-size: small;
-    text-decoration: none;
+
+.article_title{
+    border-style: none;
+    padding: 10px;
+    resize: none;
+    font-family: 'Arial';
+    border-bottom: 1px solid grey;
 }
 
-.link-container {
+.content {
+
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    border-style: none;
+    padding: 10px;
+    resize: none;
+    font-family: 'Arial';
+    scroll-behavior: smooth;
+}
+
+.article_title:focus{
+    outline: none;
+}
+
+
+.content:focus{
+    outline: none;
+}
+
+.image_container p,
+.video_container p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+
+.article_buttons {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction:column;
-    width: 10%;
+    flex-direction: row;
+    margin-top: 0.3%;
+    border-top: 1px solid grey;
+    justify-content: space-between;
+    padding: 10px; 
 }
 
-.link-container:hover {
-    background-color: rgb(104, 217, 255);
-}
 
-.icons{
-    width: 40px;
-    height: 40px;
-    opacity: 70%;
-    padding-top: 10px;
+.upload {
+    height:50px;
+    width:50px;
     cursor: pointer;
 }
 
-.home-icon {
-    width: 50px;
-    height: 50px;
-    opacity: 70%;
+.article-image {
+    display: none;
     cursor: pointer;
 }
 
-.profile-icon {
-    width: 30px;
-    height: 30px;
-    opacity: 70%;
-    padding-top: 15px;
-    padding-bottom: 5px;
+.submitbutton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-}
-
-.net-icon {
-    width: 35px;
+    font-size: 14px;
     height: 35px;
-    opacity: 70%;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    cursor: pointer;
-}
-
-.text-icon {
-    width: 35px;
-    height: 35px;
-    opacity: 70%;
-    padding-top: 12px;
-    padding-bottom: 2px;
-    cursor: pointer;
+    width: 80px;
+    margin-top: 15px;
 }

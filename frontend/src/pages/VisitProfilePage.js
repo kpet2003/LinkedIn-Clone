@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationBar from './HomePage.js';
+import NavigationBar from './NavigationBar.js';
 import userService from "../service/userService.js";
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
