@@ -1,4 +1,5 @@
-import "../Profile.css";
+import "../styling/Profile.css";
+import "../styling/Visit.css";
 import penIcon from "../icons/pen.png";
 import React, { useState, useEffect } from 'react';
 import NavigationBar from './HomePage.js'

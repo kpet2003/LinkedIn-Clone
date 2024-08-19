@@ -1,4 +1,4 @@
-import '../Network.css';
+import '../styling/Network.css';
 import React, { useState, useEffect, useRef } from 'react';
 import networkService from '../service/networkService.js'; 
 import UserService from '../service/userService.js';

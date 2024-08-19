@@ -1,4 +1,4 @@
-import "../Settings.css";
+import "../styling/Settings.css";
 import React from "react";
 
 function SettingsPage() {

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import '../ToggleSwitch.css'
+import '../styling/ToggleSwitch.css'
 
 ToggleSwitch.propTypes={
     onChange: PropTypes.func,

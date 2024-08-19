@@ -1,0 +1,151 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.chatbox {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 10%;
+    width: 80%;
+    height: 80vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    
+}
+
+.texts-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.text-bubble-me {
+    display: flex;
+    border: 1px solid gray;
+    border-radius: 10px;
+    height: fit-content;
+    width: max-content;
+    flex-direction: column;
+    justify-content: left;
+    background-color: rgb(236, 236, 236);
+    
+}
+
+.text-bubble-other {
+    display: flex;
+    border: 1px solid gray;
+    border-radius: 10px;
+    height: fit-content;
+    width: max-content;
+    flex-direction: column;
+    justify-content: right;
+}
+
+.chat-pfp-me {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5%;
+}
+
+.chat-pfp-other {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 5%;
+}
+
+.time-and-date-me {
+    font-size: small;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.time-and-date-other {
+    font-size: small;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.users-chats {
+    margin-left: 1.5%;
+    width: 20%;
+    border: 3px solid rgb(236, 236, 236);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.button-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.user-button {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    border-radius: 10px;
+    width: 90%;
+    gap: 10%;
+    cursor: pointer;
+}
+
+.user-button:hover{
+    background-color: rgb(186, 186, 186);
+}
+
+.text-left{
+    display: flex;
+    justify-content: right;
+    margin-right: 2%;
+}
+
+.text-right{
+    display: flex;
+    justify-content: left;
+    margin-left: 2%;
+}
+
+.enter-text{
+    border-radius: 20px;
+    width: 50%;
+}
+
+.right-side-box{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    border: 3px solid rgb(236, 236, 236);
+    border-radius: 10px;
+    margin-left: 1.25%;
+    width: 75%;
+}
+
+.send-button{
+    text-align: center;
+    background-color: royalblue;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: smaller;
+    cursor: pointer;
+    width: 50px;
+    height: 20px;
+}
+
+.send-button:hover {
+    background-color: rgb(12, 67, 231);
+}
+
+.write-bar{
+    margin-top: auto;
+    padding-bottom: 10px;
+}

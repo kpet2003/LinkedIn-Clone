@@ -1,4 +1,4 @@
-import '../Settings.css';
+import '../styling/Settings.css';
 import UserService from '../service/userService.js';
 import React, { useState } from 'react';
 

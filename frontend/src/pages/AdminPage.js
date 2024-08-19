@@ -1,4 +1,4 @@
-import '../Admin.css';
+import '../styling/Admin.css';
 import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
 

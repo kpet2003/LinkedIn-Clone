@@ -1,4 +1,4 @@
-import './App.css';
+import './styling/App.css';
 import Main from './components/main';
 import React, { useState } from 'react'
 

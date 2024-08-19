@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavigationBar from './HomePage.js'
 import notificationService from "../service/notificationService.js";
 import networkService  from '../service/networkService.js';
-import "../Notifications.css"
+import "../styling/Notifications.css"
 
 
 

@@ -1,4 +1,4 @@
-import '../SignUp.css';
+import '../styling/SignUp.css';
 import React, { useState } from 'react'
 import UserService from '../service/userService.js';
 import {useNavigate} from "react-router-dom";

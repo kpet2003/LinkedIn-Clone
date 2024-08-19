@@ -1,4 +1,4 @@
-import '../HomePage.css';
+import '../styling/HomePage.css';
 import {useNavigate,NavLink} from "react-router-dom";
 import React, { useState } from 'react';
 import UserService from '../service/userService.js'; 

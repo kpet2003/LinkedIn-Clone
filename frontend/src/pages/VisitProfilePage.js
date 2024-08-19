@@ -1,10 +1,11 @@
 import React from "react";
-import NavigationBar from './HomePage.js'
+import NavigationBar from './HomePage.js';
 import userService from "../service/userService.js";
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import '../Visit.css'
-import placeholder from '../icons/avatar.png'
+import '../styling/Visit.css';
+import '../styling/Profile.css';
+import placeholder from '../icons/avatar.png';
 
 function VisitProfile(){
     const initialState = {
