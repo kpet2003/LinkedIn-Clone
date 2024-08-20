@@ -1,11 +1,11 @@
 import '../styling/HomePage.css';
 import React, { useEffect, useState } from 'react';
-import UserService from '../service/userService.js'; 
+import userService from "../service/userService.js";
 import image_upload from '../icons/image_upload.png';
 import video_upload from '../icons/video_upload.png';
 import ArticleService from '../service/articleService.js';
 import NavigationBar from './NavigationBar.js';
-
+import {useNavigate,NavLink} from "react-router-dom";
 
 
 
@@ -65,7 +65,9 @@ function NewPost() {
     const triggerFileInput = (input_id) => {
         document.getElementById(input_id).click();
     };
-    
+   
+
+
 
     return (
         <div>
@@ -104,6 +106,49 @@ function NewPost() {
     );  
 }
 
+function Profile() {
+    
+    const navigate = useNavigate();
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const data = await userService.getUserData(localStorage.getItem('jwt_token'));
+                console.log("Fetched data: ",data);
+                setUser(data);
+                console.log(user);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const handleClick = (event) => {
+        const {id} = event.target;
+
+        if(id === "visit_profile") {
+            navigate("/Profile");
+        }
+        else {
+            navigate("/Network");
+        }
+    };
+
+
+    return (
+        <div className='user_profile'>
+            <img src={`data:image/jpeg;base64,${user.profilePicture}`} alt='profile' className='user_pic' />
+            <h3 className='user_name'>{user.firstName} {user.lastName}</h3>
+            <input type='button' className='profile_button' id="visit_profile" onClick={handleClick} value="View Profile"/> 
+            <input type='button' className='network_button' id="view_network" value="View Network"onClick={handleClick}/>
+        </div>
+    );
+
+}
+
 function Timeline() {
 
     const [articles, setArticles] = useState([]);
@@ -124,6 +169,9 @@ function Timeline() {
     }, []);
 
 
+    
+
+
     return(
         <div>
         </div>
@@ -134,10 +182,17 @@ function Timeline() {
 
 function HomePage() {
     return (
-        <div>
-         <NavigationBar/>
-         <NewPost/>
-         <Timeline/>
+        <div  >
+            <NavigationBar/>
+            <div className='homepage'>
+                <Profile/>
+                <div className='main_content'>
+                    <NewPost/>
+                    <Timeline/>
+                </div>
+                
+            </div>
+            
         </div>
       );
 }

@@ -4,12 +4,30 @@ body {
     font-family: 'Arial';
 }
 
+.homepage {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; 
+    gap: 0px; 
+}
+
+.main_content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 2px; 
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+}
 
 .new_post {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    margin-left: auto;
+    margin-left: 300px;
     margin-right: auto;
     width: 40%;
     justify-items: center;
@@ -26,7 +44,7 @@ body {
 .image_container,
 .video_container {
     display: flex;
-    align-items: center;
+    align-items: center;  
 }
 
 
@@ -42,6 +60,8 @@ body {
 
     border-bottom: 1px solid grey;
     border-top: 1px solid grey;
+    border-left: 0cap;
+    border-right: 0cap;
     border-style: none;
     padding: 10px;
     resize: none;
@@ -99,4 +119,52 @@ body {
     height: 35px;
     width: 80px;
     margin-top: 15px;
+}
+
+.submitbutton:hover {
+    background-color: rgb(12, 67, 231);
+}
+
+.user_profile {
+    float: left;
+    max-width: 150px; 
+    margin-left: 120px;
+    padding: 20px; 
+    background-color: white; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 15px; 
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+
+.user_pic{
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%; 
+    margin-bottom: 10px; 
+    object-fit: cover; 
+}
+
+.user_name {
+    font-weight: bold; 
+    margin-bottom: 10px;
+}
+
+.user_profile .profile_button,
+.user_profile .network_button {
+    background-color: #007bff; 
+    color: white;
+    border: none; 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-size: 12px; 
+    margin-bottom: 10px; 
+    width: 80%; 
+}
+
+.user_profile .profile_button:hover,
+.user_profile .network_button:hover {
+    background-color: rgb(12, 67, 231);
 }
