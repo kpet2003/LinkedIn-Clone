@@ -5,7 +5,8 @@ import image_upload from '../icons/image_upload.png';
 import video_upload from '../icons/video_upload.png';
 import ArticleService from '../service/articleService.js';
 import NavigationBar from './NavigationBar.js';
-import {useNavigate,NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import articleService from '../service/articleService.js';
 
 
 
@@ -152,6 +153,7 @@ function Profile() {
 function Timeline() {
 
     const [articles, setArticles] = useState([]);
+    const [likes, setLikes] = useState({});
 
     useEffect(() => {
         const getArticles = async() => {
@@ -168,12 +170,68 @@ function Timeline() {
         getArticles();
     }, []);
 
-
     
+    const getLikes = async(article_id) => {
+        try {
+            const likeCount  =  await articleService.fetchLikes(article_id);
+            setLikes(prevLikes => ({...prevLikes,[article_id]: likeCount}));
+            console.log(`Likes for article ${article_id}: `, likeCount);        
+        }
+        catch(error) {
+            console.log("Error fetching likes",error);
+        }
+    } 
+    
+
+    useEffect(() => {
+        articles.forEach(article => {
+            getLikes(article.id);
+        });
+    }, [articles]);
+    
+    const gotoProfile = (user_id) => {
+        console.log(user_id);
+        const link = document.createElement('a');
+        link.href =  `/VisitProfile/${user_id}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
 
     return(
         <div>
+            <div className='articles_container'>
+            {articles.map(article => (
+                    <span key={article.id} className='article' >
+                        <div className='intro'>
+                            <p className='title'>{article.title} by    </p> 
+                            <img src={`data:image/jpeg;base64,${article.author.profilePicture}` } alt = 'author'className='author_pfp'/>
+                            <p className='author_name'  onClick={() => gotoProfile(article.author.id)}> {article.author.firstName} {article.author.lastName}  </p>
+                            
+                        </div>
+
+                        <div className='article_content'>
+                            <p className='description'>{article.content}</p> 
+                        </div>
+
+                        <div className='article_media'>
+                           {article.picture &&(<img src={`data:image/jpeg;base64,${article.picture}`} alt='profile' className='article_picture' />) }
+                           {article.video &&(<video src={`data:image/jpeg;base64,${article.video}`} alt='profile' className='article_video' controls />) }
+                        </div>
+
+                        <div className='likes_display'>
+                            <p>{likes[article.id] } likes</p>
+                        </div>
+
+                        <div className='add'>
+
+                        </div>
+                      
+                     
+                    </span>
+                ))}
+            </div>
         </div>
     );
 }

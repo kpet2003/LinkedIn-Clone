@@ -11,6 +11,6 @@ public interface ArticleRepo extends JpaRepository<Article, Long> {
     
     List<Article> findByAuthor(UserEntity author);
     List<Article> findByAuthorIn(List<UserEntity> connections);
-
+    Article findById(long id);
 
 }

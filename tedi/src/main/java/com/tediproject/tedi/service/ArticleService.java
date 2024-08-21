@@ -2,6 +2,7 @@ package com.tediproject.tedi.service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.ConnectionRepo;
+import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 
@@ -27,6 +29,11 @@ public class ArticleService {
 
     @Autowired 
     ConnectionRepo connectionRepo;
+
+    @Autowired 
+    LikeRepo likeRepo;
+
+
 
 
     public List<Article> findArticles(String token) {
@@ -62,6 +69,15 @@ public class ArticleService {
         new_article.setPicture(article.getImage());
         new_article.setVideo(article.getVideo());
         articleRepo.save(new_article);
+    }
+
+    public long findAmountofLikes(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+
+        return likeRepo.countByArticle(article);  
+
+
+      
     }
 
 }

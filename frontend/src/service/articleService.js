@@ -19,6 +19,11 @@ class ArticleService {
         });
     }
 
+    fetchLikes(article_id) {
+        const API_URL = `/HomePage/LikesPerArticle/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
+    
 }
 
 export default new ArticleService();
