@@ -7,8 +7,8 @@ import ArticleService from '../service/articleService.js';
 import NavigationBar from './NavigationBar.js';
 import {useNavigate} from "react-router-dom";
 import articleService from '../service/articleService.js';
-
-
+import white_like from '../icons/white_like.jpg';
+import blue_like from '../icons/blue_like.jpg';
 
 function NewPost() {
 
@@ -150,10 +150,30 @@ function Profile() {
 
 }
 
+
+function Comments(article_id) {
+    return (
+        <div>
+            hello
+        </div>
+    );
+}
+
+
 function Timeline() {
 
     const [articles, setArticles] = useState([]);
+    
+    // amount of likes per article
     const [likes, setLikes] = useState({});
+
+    // list of users who have liked a specific article
+    const [likedUsers, setLikedUsers] = useState({});
+
+    // store whether the user has liked each article
+    const [isLiked, setIsLiked] = useState({});
+
+    const [newComment,setNewComment] = useState([]);
 
     useEffect(() => {
         const getArticles = async() => {
@@ -175,19 +195,39 @@ function Timeline() {
         try {
             const likeCount  =  await articleService.fetchLikes(article_id);
             setLikes(prevLikes => ({...prevLikes,[article_id]: likeCount}));
-            console.log(`Likes for article ${article_id}: `, likeCount);        
+            console.log(`Likes for article ${article_id}: `, likeCount);      
         }
         catch(error) {
             console.log("Error fetching likes",error);
         }
-    } 
+    }
+    
+    const getLikedUsers = async(article_id) => {
+        try {
+            const response  =  await articleService.fetchUserLikes(article_id);
+            setLikedUsers(prevLikes => ({...prevLikes,[article_id]: response}));
+            console.log(`Likes for article ${article_id}: `, response);
+            const token = localStorage.getItem('jwt_token');
+            
+            const user = await userService.getUserData(token);
+            
+            const hasUserLiked = response.some(likedUser => likedUser.id === user.id);
+            setIsLiked(prevIsLiked => ({ ...prevIsLiked, [article_id]: hasUserLiked }));
+            
+        }
+        catch(error) {
+            console.log("Error fetching likes",error);
+        }
+    }
     
 
     useEffect(() => {
         articles.forEach(article => {
             getLikes(article.id);
+            getLikedUsers(article.id);
         });
-    }, [articles]);
+        }, [articles]
+    );
     
     const gotoProfile = (user_id) => {
         console.log(user_id);
@@ -196,6 +236,41 @@ function Timeline() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    const handleChange = (event) => {
+        setNewComment({
+            ...newComment,
+            [event.target.id]: event.target.value,
+        });
+    };
+
+    const postComment = async() => {
+        try {
+            console.log(newComment);
+        }
+        catch(error) {
+            console.error("There was an error posting the comment: ",error);
+        }
+    }
+
+    const AddLike = async(article_id) => {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await articleService.addLike(token,article_id);
+            const previous_state = isLiked[article_id];
+            setIsLiked((prevIsLiked) => ({ ...prevIsLiked, [article_id]: !previous_state }));
+            if(previous_state === false) {
+                setLikes((prevLikes) => ({ ...prevLikes, [article_id]: prevLikes[article_id] + 1 }));
+            }
+            else {
+                setLikes((prevLikes) => ({ ...prevLikes, [article_id]: prevLikes[article_id] - 1 }));
+            }
+            
+        }
+        catch(error) {
+            console.log("There was an error adding the like:",error)
+        }
     }
 
 
@@ -222,13 +297,19 @@ function Timeline() {
 
                         <div className='likes_display'>
                             <p>{likes[article.id] } likes</p>
+                            <p onClick={()=>Comments(article.id)}> comments</p>
                         </div>
 
                         <div className='add'>
-
+                            <div >
+                                {isLiked[article.id] && (<img src={blue_like} onClick={() => AddLike(article.id)}  alt='blue' className='like_button'/>  ) }
+                                {!isLiked[article.id] && (<img src={white_like} onClick={() => AddLike(article.id)}  alt='white' className='like_button'/>  ) }
+                            </div>
+                            <div className='add_comment'>
+                                <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}/>
+                                <input type='button' value="Post comment" className='post_button' onClick={postComment} />
+                            </div>
                         </div>
-                      
-                     
                     </span>
                 ))}
             </div>

@@ -23,7 +23,36 @@ class ArticleService {
         const API_URL = `/HomePage/LikesPerArticle/${article_id}`;
         return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
     }
+
+    fetchUserLikes(article_id) {
+        const API_URL = `/HomePage/Likes/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
+    addLike(token, article_id) {
+        const API_URL = "/HomePage/AddLike";
+        return axios.post(API_URL, null, {
+            params: {
+                token: token,
+                article_id: article_id
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded' // Use application/x-www-form-urlencoded for query parameters
+            }
+        })
+        .then(response => {
+            console.log('Like added successfully:', response.data);
+        })
+        .catch(error => {
+            console.error('Error adding like:', error.response ? error.response.data : error.message);
+        });
+    }
     
 }
+
+    
+    
+    
+    
+
 
 export default new ArticleService();

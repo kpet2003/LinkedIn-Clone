@@ -2,13 +2,13 @@ package com.tediproject.tedi.service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.Likes;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.ConnectionRepo;
@@ -73,11 +73,30 @@ public class ArticleService {
 
     public long findAmountofLikes(Long article_id) {
         Article article = articleRepo.findById(article_id).get();
-
         return likeRepo.countByArticle(article);  
+    }
 
+    public List<UserEntity> findLikeUsersArticle(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        return likeRepo.findUserEntityByArticle(article);
+    }
 
-      
+    public void AddLike(String token,Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        List <Likes> likes_found = likeRepo.findLikes(user, article);
+
+        if(likes_found.size() == 0 ) {
+            Likes like = new Likes();
+            like.setArticle(article);
+            like.setUser(user);
+            likeRepo.save(like);
+            return;
+        }
+
+        likeRepo.deleteAll(likes_found);
+
     }
 
 }

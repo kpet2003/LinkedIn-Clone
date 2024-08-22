@@ -1,5 +1,6 @@
 package com.tediproject.tedi.controllers;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.NewArticleDto;
+import com.tediproject.tedi.dto.NewLikeDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.service.ArticleService;
 
 
@@ -70,6 +74,22 @@ public class HomepageController {
         return articleService.findAmountofLikes(article_id);
     }
 
+    @GetMapping(value="/HomePage/Likes/{article_id}")
+    public List<UserEntity> UserLikes(@PathVariable Long article_id) {
+        return articleService.findLikeUsersArticle(article_id);
+    }
 
+    @PostMapping("/HomePage/AddLike")
+public ResponseEntity<?> newLike(
+        @RequestParam("token") String token,
+        @RequestParam("article_id") Long article_id) {
+
+    try {
+        articleService.AddLike(token, article_id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+}
 
 }
