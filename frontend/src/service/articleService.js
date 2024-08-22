@@ -36,14 +36,8 @@ class ArticleService {
                 article_id: article_id
             },
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded' // Use application/x-www-form-urlencoded for query parameters
+                'Content-Type': 'application/json' 
             }
-        })
-        .then(response => {
-            console.log('Like added successfully:', response.data);
-        })
-        .catch(error => {
-            console.error('Error adding like:', error.response ? error.response.data : error.message);
         });
     }
     

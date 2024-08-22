@@ -16,6 +16,8 @@ import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ArticleService {
     @Autowired
@@ -81,13 +83,13 @@ public class ArticleService {
         return likeRepo.findUserEntityByArticle(article);
     }
 
+    @Transactional
     public void AddLike(String token,Long article_id) {
         Article article = articleRepo.findById(article_id).get();
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
 
         List <Likes> likes_found = likeRepo.findLikes(user, article);
-
-        if(likes_found.size() == 0 ) {
+        if(likes_found.isEmpty()) {
             Likes like = new Likes();
             like.setArticle(article);
             like.setUser(user);
@@ -97,6 +99,8 @@ public class ArticleService {
 
         likeRepo.deleteAll(likes_found);
 
+
+       
     }
 
 }

@@ -256,6 +256,7 @@ public class UserControllers {
                 userDto.setWorkTitle(user.getWorkTitle());
                 userDto.setWorkplace(user.getWorkplace());
                 userDto.setWebsite(user.getWebsite());
+                userDto.setId(user.getID());
                 if (user.getProfilePicture() != null) {
                     String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
                     userDto.setProfilePicture(base64Image);

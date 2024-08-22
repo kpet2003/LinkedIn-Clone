@@ -41,11 +41,11 @@ public class Article {
     @Column(name = "date_posted")
     private LocalDateTime date_posted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author") 
     private UserEntity author;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "article",  orphanRemoval = true,fetch = FetchType.EAGER)
     List <Likes> likes;
 
     public Article() {}

@@ -207,10 +207,16 @@ function Timeline() {
             const response  =  await articleService.fetchUserLikes(article_id);
             setLikedUsers(prevLikes => ({...prevLikes,[article_id]: response}));
             console.log(`Likes for article ${article_id}: `, response);
+            
+
+            response.forEach(likedUser => {
+                console.log(`Liked User ID: ${likedUser.id}`);
+            })
+            
             const token = localStorage.getItem('jwt_token');
             
             const user = await userService.getUserData(token);
-            
+            console.log("user id: ",user.id)
             const hasUserLiked = response.some(likedUser => likedUser.id === user.id);
             setIsLiked(prevIsLiked => ({ ...prevIsLiked, [article_id]: hasUserLiked }));
             

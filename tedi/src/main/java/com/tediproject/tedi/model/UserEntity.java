@@ -82,10 +82,10 @@ public class UserEntity {
     @Column
     protected String website;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Article> articles_written;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Likes> likes_posted;
 
     public UserEntity() {}

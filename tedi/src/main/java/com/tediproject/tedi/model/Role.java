@@ -19,7 +19,7 @@ public class Role {
     @Column
     protected String role;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<UserEntity> users;
     
     public void setRole(String role) {
