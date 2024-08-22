@@ -7,11 +7,13 @@ body {
 .chatbox {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     margin-left: 10%;
+    margin-right: 10%;
     width: 80%;
     height: 80vh;
     padding: 10px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
     background-color: white;
     
 }
@@ -32,7 +34,7 @@ body {
     flex-direction: column;
     justify-content: left;
     background-color: rgb(236, 236, 236);
-    
+    padding-left: 5px;
 }
 
 .text-bubble-other {
@@ -43,6 +45,7 @@ body {
     width: max-content;
     flex-direction: column;
     justify-content: right;
+    padding-left: 5px;
 }
 
 .chat-pfp-me {
@@ -68,11 +71,10 @@ body {
 .time-and-date-other {
     font-size: small;
     text-align: left;
-    padding-left: 5px;
 }
 
 .users-chats {
-    margin-left: 1.5%;
+    /* margin-left: 1.5%; */
     width: 20%;
     border: 3px solid rgb(236, 236, 236);
     border-radius: 10px;
@@ -96,6 +98,8 @@ body {
     width: 90%;
     gap: 10%;
     cursor: pointer;
+    border: 1px solid;
+    margin-bottom: 5px;
 }
 
 .user-button:hover{
@@ -117,6 +121,12 @@ body {
 .enter-text{
     border-radius: 20px;
     width: 50%;
+    height: 20px;
+    resize: none;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-top: 5px;
+    vertical-align: middle;
 }
 
 .right-side-box{
@@ -131,21 +141,41 @@ body {
 
 .send-button{
     text-align: center;
-    background-color: royalblue;
-    color: white;
+    background-color: white;
+    color: rgb(0, 123, 255);
     border: none;
     border-radius: 20px;
-    font-size: smaller;
+    font-size: medium;
     cursor: pointer;
-    width: 50px;
-    height: 20px;
+    width: 60px;
+    height: 25px;
+    outline: none;
 }
 
 .send-button:hover {
-    background-color: rgb(12, 67, 231);
+    background-color: rgb(236, 236, 236);
 }
 
 .write-bar{
     margin-top: auto;
     padding-bottom: 10px;
+}
+
+.button-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.unordered-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    width: 100%;
 }

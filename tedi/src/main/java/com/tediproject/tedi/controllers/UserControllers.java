@@ -208,9 +208,28 @@ public class UserControllers {
     @PutMapping(value= "/Profile/worktitle")
     public ResponseEntity<?> changeWorkTitle(@RequestBody InfoChangeDto change){
         try {
-            jwtUtil.validateToken(change.getToken());
-            userService.changeSkillsBool(change.getToken());
+            if(jwtUtil.validateToken(change.getToken())){
+            userService.changeWorkTitle(change.getToken(), change.getInfo());
             return ResponseEntity.ok(HttpStatus.OK);
+            }
+            else{
+                return ResponseEntity.badRequest().body("Invalid Token");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value= "/Profile/workplace")
+    public ResponseEntity<?> changeWorkplace(@RequestBody InfoChangeDto change){
+        try {
+            if(jwtUtil.validateToken(change.getToken())){
+            userService.changeWorkplace(change.getToken(), change.getInfo());
+            return ResponseEntity.ok(HttpStatus.OK);
+            }
+            else{
+                return ResponseEntity.badRequest().body("Invalid Token");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -311,6 +330,7 @@ public class UserControllers {
             return ResponseEntity.badRequest().body("token is required");
         }
     }
+
 
 }
 

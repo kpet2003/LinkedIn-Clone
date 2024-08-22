@@ -4,8 +4,8 @@ import java.util.Date;
 
 
 public class Message {
-    private String senderName;
-    private String receiverName;
+    private long senderName;
+    private long receiverName;
     private String message;
     private Date date;
     private Status status;
@@ -13,19 +13,19 @@ public class Message {
     public Message() {
     }
 
-    public String getSenderName() {
+    public long getSenderName() {
         return senderName;
     }
 
-    public void setSenderName(String senderName) {
+    public void setSenderName(long senderName) {
         this.senderName = senderName;
     }
 
-    public String getReceiverName() {
+    public long getReceiverName() {
         return receiverName;
     }
 
-    public void setReceiverName(String receiverName) {
+    public void setReceiverName(long receiverName) {
         this.receiverName = receiverName;
     }
 
@@ -51,6 +51,17 @@ public class Message {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "senderName='" + senderName + '\'' +
+                ", receiverName='" + receiverName + '\'' +
+                ", message='" + message + '\'' +
+                ", date=" + date +
+                ", status=" + status +
+                '}';
     }
 
     

@@ -131,6 +131,15 @@ class UserService {
         console.log(response.data);
         return response.data;
     }
+
+    async getUserChatData(token){
+        const url = '/Messages';
+        const response = await axios.get(url, {
+            params: {token: token},
+            responseType: 'json'
+        });
+        return response.data;
+    }
     
 }
 
