@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.Comments;
 import com.tediproject.tedi.model.Likes;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
+import com.tediproject.tedi.repo.CommentRepo;
 import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -35,6 +37,8 @@ public class ArticleService {
     @Autowired 
     LikeRepo likeRepo;
 
+    @Autowired 
+    CommentRepo commentRepo;
 
 
 
@@ -98,9 +102,27 @@ public class ArticleService {
         }
 
         likeRepo.deleteAll(likes_found);
+    }
 
+    @Transactional
+    public void AddComment(String token,Long article_id,String Comment) {
+        
+        Article article = articleRepo.findById(article_id).get();
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        Comments new_comment = new Comments();
 
-       
+        new_comment.setArticle(article);
+        new_comment.setPoster(user);
+        new_comment.setComment(Comment);
+
+        
+        commentRepo.save(new_comment);
+        
+    }
+
+    public long findAmountofComments(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        return commentRepo.countByArticle(article); 
     }
 
 }

@@ -87,4 +87,20 @@ public class HomepageController {
         }
     }
 
+    @GetMapping(value="/HomePage/CommentsPerPost/{article_id}")
+    public long AmountOfComments(@PathVariable Long article_id) {
+        return articleService.findAmountofComments(article_id);
+    }
+
+    @PostMapping("/HomePage/AddComment")
+    public ResponseEntity<?> newComment(@RequestParam("token") String token, @RequestParam("article_id") Long article_id,@RequestParam("comment") String comment) {
+        try {
+            articleService.AddComment(token, article_id, comment);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
 }

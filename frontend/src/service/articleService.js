@@ -40,6 +40,24 @@ class ArticleService {
             }
         });
     }
+
+    fetchCommentCount(article_id) {
+        const API_URL = `/HomePage/CommentsPerPost/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
+    addComment(token, article_id,comment) {
+        const API_URL = "/HomePage/AddComment";
+        return axios.post(API_URL, null, {
+            params: {
+                token: token,
+                article_id: article_id,
+                comment:comment
+            },
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+    }
     
 }
 
