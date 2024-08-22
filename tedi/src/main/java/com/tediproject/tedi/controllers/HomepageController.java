@@ -1,19 +1,22 @@
 package com.tediproject.tedi.controllers;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.service.ArticleService;
 
 
@@ -34,7 +37,8 @@ public class HomepageController {
     public ResponseEntity<?> newArticle(  @RequestParam("author_token") String authorToken,
             @RequestParam("title") String title,
             @RequestParam("article_content") String articleContent,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart(value = "video", required = false) MultipartFile video) {
 
 
         try {
@@ -42,17 +46,45 @@ public class HomepageController {
             article.setAuthor_token(authorToken);
             article.setTitle(title);
             article.setArticle_content(articleContent);
+            
+            if(image!=null) {
+                article.setImage(image.getBytes());
+            }
+
+            if(video!=null) {
+                article.setVideo(video.getBytes());
+            }
+
+
+           
+           
             articleService.newArticle(article);
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
     
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-            
-        
+        }   
     }
 
+    @GetMapping(value="/HomePage/LikesPerArticle/{article_id}")
+    public long AmountOfLikes(@PathVariable Long article_id) {
+        return articleService.findAmountofLikes(article_id);
+    }
 
+    @GetMapping(value="/HomePage/Likes/{article_id}")
+    public List<UserEntity> UserLikes(@PathVariable Long article_id) {
+        return articleService.findLikeUsersArticle(article_id);
+    }
+
+    @PostMapping("/HomePage/AddLike")
+    public ResponseEntity<?> newLike(@RequestParam("token") String token, @RequestParam("article_id") Long article_id) {
+        try {
+            articleService.AddLike(token, article_id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
 }

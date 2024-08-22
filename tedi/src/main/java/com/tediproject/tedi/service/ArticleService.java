@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service;
 
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.Likes;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.ConnectionRepo;
+import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ArticleService {
@@ -27,6 +31,11 @@ public class ArticleService {
 
     @Autowired 
     ConnectionRepo connectionRepo;
+
+    @Autowired 
+    LikeRepo likeRepo;
+
+
 
 
     public List<Article> findArticles(String token) {
@@ -60,11 +69,38 @@ public class ArticleService {
         new_article.setTitle(article.getTitle());
         new_article.setDate_posted();
         new_article.setPicture(article.getImage());
-
-
+        new_article.setVideo(article.getVideo());
         articleRepo.save(new_article);
+    }
+
+    public long findAmountofLikes(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        return likeRepo.countByArticle(article);  
+    }
+
+    public List<UserEntity> findLikeUsersArticle(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        return likeRepo.findUserEntityByArticle(article);
+    }
+
+    @Transactional
+    public void AddLike(String token,Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        List <Likes> likes_found = likeRepo.findLikes(user, article);
+        if(likes_found.isEmpty()) {
+            Likes like = new Likes();
+            like.setArticle(article);
+            like.setUser(user);
+            likeRepo.save(like);
+            return;
+        }
+
+        likeRepo.deleteAll(likes_found);
 
 
+       
     }
 
 }

@@ -19,6 +19,34 @@ class ArticleService {
         });
     }
 
+    fetchLikes(article_id) {
+        const API_URL = `/HomePage/LikesPerArticle/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
+
+    fetchUserLikes(article_id) {
+        const API_URL = `/HomePage/Likes/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
+    addLike(token, article_id) {
+        const API_URL = "/HomePage/AddLike";
+        return axios.post(API_URL, null, {
+            params: {
+                token: token,
+                article_id: article_id
+            },
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+    }
+    
 }
+
+    
+    
+    
+    
+
 
 export default new ArticleService();

@@ -4,12 +4,31 @@ body {
     font-family: 'Arial';
 }
 
+.homepage {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; 
+    gap: 0px; 
+}
+
+.main_content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 2px; 
+}
+
+/* New post settings*/
+.content {
+    display: flex;
+    flex-direction: row;
+}
 
 .new_post {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    margin-left: auto;
+    margin-left: 300px;
     margin-right: auto;
     width: 40%;
     justify-items: center;
@@ -26,7 +45,7 @@ body {
 .image_container,
 .video_container {
     display: flex;
-    align-items: center;
+    align-items: center;  
 }
 
 
@@ -42,6 +61,8 @@ body {
 
     border-bottom: 1px solid grey;
     border-top: 1px solid grey;
+    border-left: 0cap;
+    border-right: 0cap;
     border-style: none;
     padding: 10px;
     resize: none;
@@ -83,6 +104,8 @@ body {
     cursor: pointer;
 }
 
+
+
 .article-image {
     display: none;
     cursor: pointer;
@@ -99,4 +122,201 @@ body {
     height: 35px;
     width: 80px;
     margin-top: 15px;
+}
+
+.submitbutton:hover {
+    background-color: rgb(12, 67, 231);
+}
+
+/* Profile settings*/
+.user_profile {
+    float: left;
+    max-width: 150px; 
+    margin-left: 120px;
+    padding: 20px; 
+    background-color: white; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 15px; 
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+
+.user_pic{
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%; 
+    margin-bottom: 10px; 
+    object-fit: cover; 
+}
+
+.user_name {
+    font-weight: bold; 
+    margin-bottom: 10px;
+}
+
+.user_profile .profile_button,
+.user_profile .network_button {
+    background-color: #007bff; 
+    color: white;
+    border: none; 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-size: 12px; 
+    margin-bottom: 10px; 
+    width: 80%; 
+}
+
+.user_profile .profile_button:hover,
+.user_profile .network_button:hover {
+    background-color: rgb(12, 67, 231);
+}
+
+/* Timeline settings*/
+
+.articles_container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    justify-content: space-between;
+    
+}
+
+.article {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-style: none;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    margin-left: 300px;
+    margin-right: auto;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 40%;
+}
+
+.article:last-child {
+    margin-bottom: 30px; 
+}
+
+.intro {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    height: 10%;
+    align-self: flex-start;
+    justify-content: space-between;
+    margin-left: 10px;
+}
+
+
+.title {
+    font-weight: bold;
+    flex: 1;
+    align-self: flex-start;
+    
+}
+
+.author_pfp {
+    width: 30px; 
+    height: 30px;
+    border-radius: 50%; 
+    object-fit: cover;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 2px solid #ddd;
+
+}
+
+.author_name {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.author_name:hover {
+    text-decoration: underline;
+}
+
+.article_content {
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    text-align-last: left;
+}
+
+.likes_display {
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+}
+
+
+
+.article_media {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 15px;
+}
+
+.article_picture, .article_video {
+    width:300px;
+    height:300px;
+    border-radius: 8px; 
+    object-fit: cover; 
+}
+.article_video {
+   
+    max-height: 400px; 
+}
+
+.add {
+    display: flex;
+    flex-direction: row;
+}
+
+.like_button {
+    cursor: pointer;
+    width: 80px;
+    height:70px;
+    margin-bottom: 0px;
+    margin-top:40px;
+}
+
+.add_comment {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    margin-top: 60px;
+    justify-content: space-between;
+}
+
+.new_comment {
+    border-style: none;
+    padding: 10px;
+    resize: none;
+    font-family: 'Arial';
+}
+
+.new_comment:focus {
+    outline: none;
+}
+
+.post_button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    height: 35px;
+    width: auto;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.post_button:hover {
+    background-color: rgb(12, 67, 231);
 }

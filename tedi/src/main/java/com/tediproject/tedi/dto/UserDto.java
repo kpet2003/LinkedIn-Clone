@@ -16,6 +16,15 @@ public class UserDto {
     protected String workTitle;
     protected String workplace;
     protected String website;
+    protected Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public UserDto() {}
 
