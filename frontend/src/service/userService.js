@@ -140,6 +140,18 @@ class UserService {
         });
         return response.data;
     }
+
+    async getChatHistory(user1,user2){
+        const url = `/chathistory/${user1}/${user2}`
+        const response = await axios.get(url);
+        return response.data;
+    }
+
+    async getImage(user){
+        const url = `/image/${user}`;
+        const response = await axios.get(url);
+        return response.data;
+    }
     
 }
 

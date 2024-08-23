@@ -1,8 +1,11 @@
 package com.tediproject.tedi.controllers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+
+import javax.annotation.processing.Messager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,14 +15,18 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tediproject.tedi.dto.InChatUserDto;
 import com.tediproject.tedi.model.Message;
 import com.tediproject.tedi.model.UserEntity;
+import com.tediproject.tedi.repo.MessageRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
+import com.tediproject.tedi.service.MessageService;
 import com.tediproject.tedi.service.NetworkService;
+import com.tediproject.tedi.service.UserService;
 
 @Controller
 public class MessageController {
@@ -36,9 +43,23 @@ public class MessageController {
     @Autowired
     private NetworkService netService;
 
+    @Autowired
+    private MessageRepo messRepo;
+
+    @Autowired
+    private MessageService messService;
+
     @MessageMapping(value="/chat")
     public Message receiveMessage(@Payload Message message){
-        simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverName()),"/chat",message);
+
+        Message mess = new Message();
+        mess.setSenderId(message.getSenderId());
+        mess.setReceiverId(message.getReceiverId());
+        mess.setMessage(message.getMessage());
+        mess.setDate(LocalDateTime.now());
+        messRepo.save(mess);
+        
+        simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()),"/chat",message);
         System.out.println(message.toString());
         return message;
     }
@@ -90,6 +111,28 @@ public class MessageController {
         }
         catch(Exception e){
             return ResponseEntity.badRequest().body("token is required");
+        }
+    }
+
+    @GetMapping(value="/chathistory/{user1}/{user2}")
+    public ResponseEntity<?> getChatHistory(@PathVariable long user1, @PathVariable long user2){
+        try {
+            List<Message> history = messService.getChatHistory(user1, user2);
+            return ResponseEntity.ok(history);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value="/image/{userId}")
+    public ResponseEntity<?> getReceiverPfp(@PathVariable long userId){
+        try {
+            System.out.println("USER ID IS "+userId);
+            UserEntity user = userRepo.findById(userId);
+            String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
+            return ResponseEntity.ok(base64Image);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

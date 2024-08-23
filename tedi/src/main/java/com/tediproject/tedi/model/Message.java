@@ -1,6 +1,6 @@
 package com.tediproject.tedi.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,33 +14,33 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     protected long id;
     @Column
-    private long senderName;
+    private long senderId;
     @Column
-    private long receiverName;
+    private long receiverId;
     @Column
     private String message;
     @Column
-    private Date date;
+    private LocalDateTime date;
     @Column
     private Status status;
     
     public Message() {
     }
 
-    public long getSenderName() {
-        return senderName;
+    public long getSenderId() {
+        return this.senderId;
     }
 
-    public void setSenderName(long senderName) {
-        this.senderName = senderName;
+    public void setSenderId(long senderId) {
+        this.senderId = senderId;
     }
 
-    public long getReceiverName() {
-        return receiverName;
+    public long getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiverName(long receiverName) {
-        this.receiverName = receiverName;
+    public void setReceiverId(long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getMessage() {
@@ -51,11 +51,11 @@ public class Message {
         this.message = message;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -70,8 +70,8 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "senderName='" + senderName + '\'' +
-                ", receiverName='" + receiverName + '\'' +
+                "senderId='" + senderId + '\'' +
+                ", receiverId='" + receiverId + '\'' +
                 ", message='" + message + '\'' +
                 ", date=" + date +
                 ", status=" + status +

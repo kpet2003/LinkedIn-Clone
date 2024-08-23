@@ -23,6 +23,16 @@ body {
     justify-content: center;
     flex-direction: column;
     padding-top: 10px;
+    overflow-y: auto;
+}
+
+.texts-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.texts-container::-webkit-scrollbar-thumb {
+    background: rgb(151, 151, 151);
+    border-radius: 4px;
 }
 
 .text-bubble-me {

@@ -11,6 +11,7 @@ import userService from "../service/userService";
 function Chat(){
     const [privateChats, setPrivateChats] = useState(new Map());
     const [tab, setTab] = useState("");
+    const [receiverImage, setReceiverImage] = useState("");
     const [userData, setUserData] = useState({
         id: '',
         receivername: '',
@@ -94,10 +95,10 @@ function Chat(){
         console.log("Received message: ", payloadData);
         setPrivateChats(prev => {
             const newChats = new Map(prev);
-            if (!newChats.has(payloadData.senderName)) {
-                newChats.set(payloadData.senderName, []);
+            if (!newChats.has(payloadData.senderId)) {
+                newChats.set(payloadData.senderId, []);
             }
-            newChats.get(payloadData.senderName).push(payloadData);
+            newChats.get(payloadData.senderId).push(payloadData);
             return newChats;
         });
     };
@@ -119,8 +120,8 @@ function Chat(){
         console.log('SENDING TO ',tab);
         if (stompClientRef.current && tab) {
             const chatMessage = {
-                senderName: userData.id,
-                receiverName: tab,
+                senderId: userData.id,
+                receiverId: tab,
                 message: userData.message,
                 status: "MESSAGE"
             };
@@ -157,6 +158,24 @@ function Chat(){
     };
 
 
+    const fetchChatHistory = async (id) => {
+        try {
+            setTab(id);
+            const messages = await userService.getChatHistory(userData.id, id);
+            setPrivateChats(new Map([[id, messages]]));
+            const image = await userService.getImage(id);
+            if (image && image !== "undefined") {
+                console.log('got image');
+                setReceiverImage(`data:image/jpeg;base64,${image}`);
+            } else {
+                console.error("Invalid image data", image);
+            }
+            
+        } catch (error) {
+            console.error('Error fetching chat history:', error);
+        }
+    };
+
     const base64Image = userData.image? `data:image/jpeg;base64,${userData.image}`: `${avatar}`;
 
     return(
@@ -168,7 +187,7 @@ function Chat(){
                 <ul className="unordered-list">
                     {userData.connections.map((connection) => (
                         <li key={connection.id} className="button-list">
-                            <button className="user-button" onClick={()=>{setTab(connection.id)}}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image"></img> {connection.first_name} {connection.last_name}</button>
+                            <button className="user-button" onClick={() => fetchChatHistory(connection.id)}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image"></img> {connection.first_name} {connection.last_name}</button>
                         </li>
                     ))}
                 </ul>
@@ -176,22 +195,27 @@ function Chat(){
                 </div>
                 <div className="right-side-box">
                 <div className="texts-container">
-                    {privateChats.get(tab)?.map((chatMessage, index) => (
-                        <div key={index} className={chatMessage.senderName === userData.id ? "text-left" : "text-right"}>
-                            {chatMessage.senderName !== userData.id && (
-                                <img src={chatMessage.senderImage || avatar} alt="profile" className="chat-pfp-other" />
-                            )}
-                            <div className={chatMessage.senderName === userData.id ? "text-bubble-me" : "text-bubble-other"}>
-                                <p>{chatMessage.message}</p>
-                                <span className={chatMessage.senderName === userData.id ? "time-and-date-me" : "time-and-date-other"}>
-                                    {new Date(chatMessage.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+                    {tab && privateChats.get(tab)?.length > 0 ? (
+                        privateChats.get(tab)?.map((chatMessage, index) => (
+                            <div key={index} className={chatMessage.senderId === userData.id ? "text-left" : "text-right"}>
+                                {chatMessage.senderId !== userData.id && (
+                                    <img src={receiverImage? `${receiverImage}`: `${avatar}`} alt="profile" className="chat-pfp-other" />
+                                )}
+                                <div className={chatMessage.senderId === userData.id ? "text-bubble-me" : "text-bubble-other"}>
+                                    <p>{chatMessage.message}</p>
+                                    <span className={chatMessage.senderId === userData.id ? "time-and-date-me" : "time-and-date-other"}>
+                                        {new Date(chatMessage.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                </div>
+                                {chatMessage.senderId === userData.id && (
+                                    <img src={base64Image || avatar} alt="profile" className="chat-pfp-me" />
+                                )}
                             </div>
-                            {chatMessage.senderName === userData.id && (
-                                <img src={base64Image || avatar} alt="profile" className="chat-pfp-me" />
-                            )}
-                        </div>
-                    ))}
+                        ))
+                        ):(
+                            <p>Select a chat</p>
+                        )
+                    }
                 </div>
 
                     <br></br>
