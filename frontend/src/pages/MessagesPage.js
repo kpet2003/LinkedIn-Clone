@@ -28,13 +28,13 @@ function Chat(){
 
 
     const onConnected = useCallback(() => {
-        setUserData(prevState => ({ ...prevState, connected: true }));
-        alert(userData.id);
-        stompClientRef.current.subscribe(`/user/${userData.id}/chat`, onPrivateMessage,
-            {
-            Authorization: `Bearer ${localStorage.getItem('jwt_token')}` // Include the token in the headers
-        });
-    },[userData.id]);
+        if (stompClientRef.current) {
+            stompClientRef.current.subscribe(`/user/${userData.id}/chat`, onPrivateMessage, {
+                Authorization: `Bearer ${localStorage.getItem('jwt_token')}`
+            });
+            console.log("WebSocket connected");
+        }
+    }, [userData.id]);
 
     const connect = useCallback(() => {
         const token = localStorage.getItem('jwt_token'); // Retrieve the JWT token from localStorage
@@ -67,8 +67,8 @@ function Chat(){
                 setUserData(userData => ({
                     ...userData,
                     id: user.id,
-                    firstName: user.first_name,
-                    lastName: user.last_name,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
                     email: user.email,
                     image: user.image,
                     connections: user.connections
@@ -81,11 +81,17 @@ function Chat(){
         };
 
         fetchUserData();
+        return () => {
+            if (stompClientRef.current) {
+                stompClientRef.current.deactivate();
+            }
+        };
     }, [navigate, connect]);
 
 
     const onPrivateMessage = (payload) => {
         const payloadData = JSON.parse(payload.body);
+        console.log("Received message: ", payloadData);
         setPrivateChats(prev => {
             const newChats = new Map(prev);
             if (!newChats.has(payloadData.senderName)) {
@@ -110,6 +116,7 @@ function Chat(){
     };
 
     const sendPrivateValue = () => {
+        console.log('SENDING TO ',tab);
         if (stompClientRef.current && tab) {
             const chatMessage = {
                 senderName: userData.id,
@@ -117,18 +124,32 @@ function Chat(){
                 message: userData.message,
                 status: "MESSAGE"
             };
+    
             setPrivateChats(prev => {
                 const newChats = new Map(prev);
+    
+                // Check if the tab (receiver's ID) exists in the map
+                if (!newChats.has(tab)) {
+                    newChats.set(tab, []); // Initialize an empty array if it doesn't exist
+                }
+    
+                // Now we are sure that newChats.get(tab) will return an array
                 newChats.get(tab).push(chatMessage);
+    
                 return newChats;
             });
+    
+            // Send the message through the WebSocket
             stompClientRef.current.publish({
-                destination: "/app/Messages",
+                destination: "/app/chat",
                 body: JSON.stringify(chatMessage)
             });
+    
+            // Clear the message input after sending
             setUserData(prevState => ({ ...prevState, message: "" }));
         }
     };
+    
 
     const handleUsername = (event) => {
         const { value } = event.target;
@@ -147,7 +168,7 @@ function Chat(){
                 <ul className="unordered-list">
                     {userData.connections.map((connection) => (
                         <li key={connection.id} className="button-list">
-                            <button className="user-button"><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image"></img> {connection.first_name} {connection.last_name}</button>
+                            <button className="user-button" onClick={()=>{setTab(connection.id)}}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image"></img> {connection.first_name} {connection.last_name}</button>
                         </li>
                     ))}
                 </ul>
@@ -156,18 +177,18 @@ function Chat(){
                 <div className="right-side-box">
                 <div className="texts-container">
                     {privateChats.get(tab)?.map((chatMessage, index) => (
-                        <div key={index} className={chatMessage.senderName === userData.username ? "text-left" : "text-right"}>
-                            {chatMessage.senderName !== userData.username && (
+                        <div key={index} className={chatMessage.senderName === userData.id ? "text-left" : "text-right"}>
+                            {chatMessage.senderName !== userData.id && (
                                 <img src={chatMessage.senderImage || avatar} alt="profile" className="chat-pfp-other" />
                             )}
-                            <div className={chatMessage.senderName === userData.username ? "text-bubble-me" : "text-bubble-other"}>
+                            <div className={chatMessage.senderName === userData.id ? "text-bubble-me" : "text-bubble-other"}>
                                 <p>{chatMessage.message}</p>
-                                <span className={chatMessage.senderName === userData.username ? "time-and-date-me" : "time-and-date-other"}>
+                                <span className={chatMessage.senderName === userData.id ? "time-and-date-me" : "time-and-date-other"}>
                                     {new Date(chatMessage.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
-                            {chatMessage.senderName === userData.username && (
-                                <img src={chatMessage.senderImage || avatar} alt="profile" className="chat-pfp-me" />
+                            {chatMessage.senderName === userData.id && (
+                                <img src={base64Image || avatar} alt="profile" className="chat-pfp-me" />
                             )}
                         </div>
                     ))}

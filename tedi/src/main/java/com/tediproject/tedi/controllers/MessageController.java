@@ -36,10 +36,9 @@ public class MessageController {
     @Autowired
     private NetworkService netService;
 
-    @MessageMapping(value="/Messages")
+    @MessageMapping(value="/chat")
     public Message receiveMessage(@Payload Message message){
-        String receiverName = userRepo.findById(message.getReceiverName()).getEmail();
-        simpMessagingTemplate.convertAndSendToUser(receiverName,"/chat",message);
+        simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverName()),"/chat",message);
         System.out.println(message.toString());
         return message;
     }
