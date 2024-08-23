@@ -151,10 +151,10 @@ function Profile() {
 }
 
 
-function Comments(article_id) {
+function Comments({article_id}) {
     return (
         <div>
-            hello
+            Comments for article ID: {article_id}
         </div>
     );
 }
@@ -173,8 +173,16 @@ function Timeline() {
     // store whether the user has liked each article
     const [isLiked, setIsLiked] = useState({});
 
-    const [newComment,setNewComment] = useState([]);
+    // store newComment
+    const [newComment, setNewComment] = useState({});
 
+    // store whether the comments of the article should be visible
+    const [areCommentsVisible,setVisible] =  useState({});
+
+    // save comment count per article
+    const [commentCount,setCommentCount] = useState({});
+
+    // fetch the articles in the feed
     useEffect(() => {
         const getArticles = async() => {
             try {
@@ -191,6 +199,7 @@ function Timeline() {
     }, []);
 
     
+    // fetch the amount of likes per article
     const getLikes = async(article_id) => {
         try {
             const likeCount  =  await articleService.fetchLikes(article_id);
@@ -202,6 +211,7 @@ function Timeline() {
         }
     }
     
+    // fetch the users who have liked each article
     const getLikedUsers = async(article_id) => {
         try {
             const response  =  await articleService.fetchUserLikes(article_id);
@@ -226,15 +236,29 @@ function Timeline() {
         }
     }
     
+    // fetch the amount of comments per article
+    const getCommentCount = async(article_id) => {
+        try {
+            const commentCount  =  await articleService.fetchCommentCount(article_id);
+            setCommentCount(prevComments => ({...prevComments,[article_id]: commentCount}));
+            console.log(`Comments for article ${article_id}: `, commentCount);      
+        }
+        catch(error) {
+            console.log("Error fetching comment count",error);
+        }
+    }
 
+    // load the likes,comments for the articles
     useEffect(() => {
         articles.forEach(article => {
             getLikes(article.id);
             getLikedUsers(article.id);
+            getCommentCount(article.id);
         });
         }, [articles]
     );
     
+    // link to profile
     const gotoProfile = (user_id) => {
         console.log(user_id);
         const link = document.createElement('a');
@@ -244,22 +268,8 @@ function Timeline() {
         document.body.removeChild(link);
     }
 
-    const handleChange = (event) => {
-        setNewComment({
-            ...newComment,
-            [event.target.id]: event.target.value,
-        });
-    };
-
-    const postComment = async() => {
-        try {
-            console.log(newComment);
-        }
-        catch(error) {
-            console.error("There was an error posting the comment: ",error);
-        }
-    }
-
+    
+    // like an article
     const AddLike = async(article_id) => {
         try {
             const token = localStorage.getItem('jwt_token');
@@ -276,6 +286,37 @@ function Timeline() {
         }
         catch(error) {
             console.log("There was an error adding the like:",error)
+        }
+    }
+
+
+    const toggleVisibility = (article_id) => {
+        setVisible(prevShowComments => ({
+            ...prevShowComments,
+            [article_id]: !prevShowComments[article_id]
+        }));
+    }
+
+    // handle the text input for new comment
+    const handleChange = (event, article_id) => {
+        setNewComment(prevComments => ({
+            ...prevComments,
+            [article_id]: event.target.value
+        }));
+    };
+
+
+    // post the new comment
+    const postComment = async(article_id) => {
+
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const response = await articleService.addComment(token,article_id,newComment[article_id]);
+            setCommentCount((prevComments) => ({ ...prevComments, [article_id]: prevComments[article_id] + 1 }));
+
+        }
+        catch(error) {
+            console.error("There was an error posting the comment: ",error);
         }
     }
 
@@ -303,7 +344,7 @@ function Timeline() {
 
                         <div className='likes_display'>
                             <p>{likes[article.id] } likes</p>
-                            <p onClick={()=>Comments(article.id)}> comments</p>
+                            <p onClick={()=>toggleVisibility(article.id) }className='display_comments'> {commentCount[article.id]} comments</p>
                         </div>
 
                         <div className='add'>
@@ -312,10 +353,12 @@ function Timeline() {
                                 {!isLiked[article.id] && (<img src={white_like} onClick={() => AddLike(article.id)}  alt='white' className='like_button'/>  ) }
                             </div>
                             <div className='add_comment'>
-                                <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}/>
-                                <input type='button' value="Post comment" className='post_button' onClick={postComment} />
+                                <textarea className='new_comment' placeholder='Add your comment' onChange={(event) => handleChange(event, article.id)} id='new_comment' rows={1}/>
+                                <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.id)} />
                             </div>
                         </div>
+
+                        {areCommentsVisible[article.id] && <Comments article_id={article.id} />}
                     </span>
                 ))}
             </div>

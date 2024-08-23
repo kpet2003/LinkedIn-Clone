@@ -88,6 +88,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Likes> likes_posted;
 
+    @OneToMany(mappedBy = "poster", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Comments> comments_posted;
+
+
     public UserEntity() {}
 
     

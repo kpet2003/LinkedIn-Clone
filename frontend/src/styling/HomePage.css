@@ -251,6 +251,13 @@ body {
     align-self: flex-end;
 }
 
+.display_comments {
+    cursor: pointer;
+}
+
+.display_comments:hover {
+    text-decoration: underline;
+}
 
 
 .article_media {

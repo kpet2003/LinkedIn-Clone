@@ -24,7 +24,8 @@ public class Article {
     @Column 
     private String title;
 
-    @Column
+ 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Lob
@@ -47,6 +48,9 @@ public class Article {
 
     @OneToMany(mappedBy = "article",  orphanRemoval = true,fetch = FetchType.EAGER)
     List <Likes> likes;
+
+    @OneToMany(mappedBy = "article",  orphanRemoval = true,fetch = FetchType.EAGER)
+    List <Comments> comments;
 
     public Article() {}
 
