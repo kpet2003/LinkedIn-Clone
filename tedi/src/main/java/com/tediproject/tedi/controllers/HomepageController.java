@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
+import com.tediproject.tedi.model.Comments;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.service.ArticleService;
 
@@ -102,5 +103,9 @@ public class HomepageController {
         }
     }
 
+    @GetMapping(value="/HomePage/GetComments/{article_id}")
+    public List<Comments> GetComments(@PathVariable Long article_id) {
+        return articleService.findComments(article_id);
+    }
 
 }

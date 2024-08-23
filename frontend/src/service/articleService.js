@@ -58,6 +58,11 @@ class ArticleService {
             }
         });
     }
+
+    getComments(article_id) {
+        const API_URL = `/HomePage/GetComments/${article_id}`;
+        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+    }
     
 }
 

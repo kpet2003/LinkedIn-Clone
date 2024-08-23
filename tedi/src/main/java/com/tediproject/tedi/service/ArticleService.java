@@ -125,4 +125,9 @@ public class ArticleService {
         return commentRepo.countByArticle(article); 
     }
 
+    public List<Comments> findComments(Long article_id) {
+        Article article = articleRepo.findById(article_id).get();
+        return commentRepo.findCommentsByArticle(article);
+    }
+
 }

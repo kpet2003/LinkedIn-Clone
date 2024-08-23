@@ -152,9 +152,50 @@ function Profile() {
 
 
 function Comments({article_id}) {
+
+
+    const [comments,Setcomments] = useState([]);
+
+    useEffect( () => {
+        const fetchComments = async() =>{
+            try {
+                const response = await  ArticleService.getComments(article_id);
+                Setcomments(response);
+                console.log(response);
+            } 
+            catch (error) {
+                console.error("There was an error getting the request list", error);
+            }
+        }
+        fetchComments();
+    },[]);
+
+    // link to profile
+    const gotoProfile = (user_id) => {
+        console.log(user_id);
+        const link = document.createElement('a');
+        link.href =  `/VisitProfile/${user_id}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     return (
-        <div>
-            Comments for article ID: {article_id}
+        <div className='comments_section'>
+            {comments.length ? (
+                    comments.map(comment => (
+                        <span key={comment.id} className='comment' >
+                            <div className='comment_intro'>
+                            <img src={`data:image/jpeg;base64,${comment.poster.profilePicture}` } alt = 'author'className='author_pfp'/>
+                            <p  className='comment_author' onClick={() => gotoProfile(comment.poster.id)}> {comment.poster.firstName} {comment.poster.lastName}  </p>
+                            </div>
+                            <div className='comment_content'>
+                                <p> {comment.comment}</p>
+                            </div>
+
+                        </span>))) : (
+                <p>No comments yet</p>)}
+            
         </div>
     );
 }
