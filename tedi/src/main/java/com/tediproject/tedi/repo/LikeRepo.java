@@ -17,4 +17,8 @@ public interface LikeRepo extends JpaRepository<Likes, Long>{
 
     @Query("SELECT l FROM Likes l WHERE l.article = ?2 AND l.user=?1")
     List <Likes> findLikes(UserEntity user,Article article);
+
+    @Query("SELECT l.article FROM Likes l WHERE l.user IN ?1")
+    List<Article> findLikedArticles( List<UserEntity> connections);
 }
+
