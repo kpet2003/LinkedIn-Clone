@@ -8,7 +8,14 @@ class ArticleService {
             responseType: 'json'
         }).then(response => response.data);
     }
-
+    
+    fetchArticleData(token) {
+        const API_URL = "/HomePage/ArticleData";
+        return axios.get(API_URL,{
+            params: {token : token},
+            responseType: 'json'
+        }).then(response => response.data);
+    }
 
     newArticle(article) {
         const API_URL = "/HomePage/newArticle";

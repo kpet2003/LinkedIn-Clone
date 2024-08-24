@@ -1,11 +1,13 @@
 package com.tediproject.tedi.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tediproject.tedi.dto.ArticleDto;
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Comments;
@@ -129,5 +131,44 @@ public class ArticleService {
         Article article = articleRepo.findById(article_id).get();
         return commentRepo.findCommentsByArticle(article);
     }
+
+    public List<ArticleDto> fetchArticles(String token) {
+        
+        List<Article> articles = findArticles(token);
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        List<ArticleDto> articles_data = new ArrayList<>();
+        for(int i=0; i<articles.size(); i++) {
+            
+            ArticleDto article_data = new ArticleDto();
+            article_data.setArticle(articles.get(i));
+
+            Long article_id = articles.get(i).getId();
+            
+            article_data.setComments(findComments(article_id));
+            article_data.setComments_count(findAmountofComments(article_id));
+            article_data.setLikes_count(findAmountofLikes(article_id));
+
+            List<UserEntity> users_who_liked = findLikeUsersArticle(article_id);
+
+
+            Boolean hasLiked = users_who_liked.stream().anyMatch(likedUser -> likedUser.getID() == user.getID());
+
+
+
+            article_data.setIsLikedByUser(hasLiked);
+            article_data.setShowComments(false);
+            articles_data.addLast(article_data);
+
+        }
+
+        
+
+
+
+        return articles_data;
+    }
+
+    
 
 }

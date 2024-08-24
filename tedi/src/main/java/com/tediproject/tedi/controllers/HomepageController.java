@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.tediproject.tedi.dto.ArticleDto;
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Comments;
@@ -31,6 +31,11 @@ public class HomepageController {
     @GetMapping(value="/HomePage/Articles")
     public List<Article> getRequests(@RequestParam(value="token", required = false)String token) {
         return articleService.findArticles(token);
+    }
+
+    @GetMapping(value="/HomePage/ArticleData")
+    public List<ArticleDto> getArticles(@RequestParam(value="token", required = false)String token) {
+        return articleService.fetchArticles(token);
     }
 
 

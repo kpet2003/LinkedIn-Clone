@@ -1,5 +1,5 @@
 import '../styling/HomePage.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,Suspense } from 'react';
 import userService from "../service/userService.js";
 import image_upload from '../icons/image_upload.png';
 import video_upload from '../icons/video_upload.png';
@@ -116,7 +116,7 @@ function Profile() {
         const fetchUserData = async () => {
             try {
                 const data = await userService.getUserData(localStorage.getItem('jwt_token'));
-                console.log("Fetched data: ",data);
+                console.log("Fetched user data: ",data);
                 setUser(data);
                 console.log(user);
             } catch (error) {
@@ -151,24 +151,8 @@ function Profile() {
 }
 
 
-function Comments({article_id}) {
+function Comments({comments}) {
 
-
-    const [comments,Setcomments] = useState([]);
-
-    useEffect( () => {
-        const fetchComments = async() =>{
-            try {
-                const response = await  ArticleService.getComments(article_id);
-                Setcomments(response);
-                console.log(response);
-            } 
-            catch (error) {
-                console.error("There was an error getting the request list", error);
-            }
-        }
-        fetchComments();
-    },[]);
 
     // link to profile
     const gotoProfile = (user_id) => {
@@ -201,128 +185,58 @@ function Comments({article_id}) {
 }
 
 
+
 function Timeline() {
 
-    const [articles, setArticles] = useState([]);
-    
-    // amount of likes per article
-    const [likes, setLikes] = useState({});
+    const [articleData, setArticleData] = useState([]);
+    const [NewComment,setNewComment] = useState([]);
+ 
 
-    // list of users who have liked a specific article
-    const [likedUsers, setLikedUsers] = useState({});
-
-    // store whether the user has liked each article
-    const [isLiked, setIsLiked] = useState({});
-
-    // store newComment
-    const [newComment, setNewComment] = useState({});
-
-    // store whether the comments of the article should be visible
-    const [areCommentsVisible,setVisible] =  useState({});
-
-    // save comment count per article
-    const [commentCount,setCommentCount] = useState({});
-
-    // fetch the articles in the feed
     useEffect(() => {
-        const getArticles = async() => {
+        const getArticles = async () => {
             try {
                 const token = localStorage.getItem('jwt_token');
-                const response = await  ArticleService.fetchArticles(token);
-                setArticles(response);
-                console.log(response);
-            } 
-            catch (error) {
-                console.error("There was an error getting the request list", error);
+                
+                //fetch articles and their data
+                const articleDataArray = await ArticleService.fetchArticleData(token);
+                setArticleData(articleDataArray);
+            } catch (error) {
+                console.error("There was an error getting the article list", error);
             }
         };
+
         getArticles();
     }, []);
 
-    
-    // fetch the amount of likes per article
-    const getLikes = async(article_id) => {
-        try {
-            const likeCount  =  await articleService.fetchLikes(article_id);
-            setLikes(prevLikes => ({...prevLikes,[article_id]: likeCount}));
-            console.log(`Likes for article ${article_id}: `, likeCount);      
-        }
-        catch(error) {
-            console.log("Error fetching likes",error);
-        }
-    }
-    
-    // fetch the users who have liked each article
-    const getLikedUsers = async(article_id) => {
-        try {
-            const response  =  await articleService.fetchUserLikes(article_id);
-            setLikedUsers(prevLikes => ({...prevLikes,[article_id]: response}));
-            console.log(`Likes for article ${article_id}: `, response);
-            
-
-            response.forEach(likedUser => {
-                console.log(`Liked User ID: ${likedUser.id}`);
-            })
-            
-            const token = localStorage.getItem('jwt_token');
-            
-            const user = await userService.getUserData(token);
-            console.log("user id: ",user.id)
-            const hasUserLiked = response.some(likedUser => likedUser.id === user.id);
-            setIsLiked(prevIsLiked => ({ ...prevIsLiked, [article_id]: hasUserLiked }));
-            
-        }
-        catch(error) {
-            console.log("Error fetching likes",error);
-        }
-    }
-    
-    // fetch the amount of comments per article
-    const getCommentCount = async(article_id) => {
-        try {
-            const commentCount  =  await articleService.fetchCommentCount(article_id);
-            setCommentCount(prevComments => ({...prevComments,[article_id]: commentCount}));
-            console.log(`Comments for article ${article_id}: `, commentCount);      
-        }
-        catch(error) {
-            console.log("Error fetching comment count",error);
-        }
-    }
-
-    // load the likes,comments for the articles
-    useEffect(() => {
-        articles.forEach(article => {
-            getLikes(article.id);
-            getLikedUsers(article.id);
-            getCommentCount(article.id);
-        });
-        }, [articles]
-    );
-    
-    // link to profile
     const gotoProfile = (user_id) => {
         console.log(user_id);
         const link = document.createElement('a');
-        link.href =  `/VisitProfile/${user_id}`;
+        link.href = `/VisitProfile/${user_id}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
+    };
 
-    
-    // like an article
-    const AddLike = async(article_id) => {
+
+
+     // like an article
+     const AddLike = async(article_id,previous_state) => {
         try {
             const token = localStorage.getItem('jwt_token');
             const response = await articleService.addLike(token,article_id);
-            const previous_state = isLiked[article_id];
-            setIsLiked((prevIsLiked) => ({ ...prevIsLiked, [article_id]: !previous_state }));
-            if(previous_state === false) {
-                setLikes((prevLikes) => ({ ...prevLikes, [article_id]: prevLikes[article_id] + 1 }));
-            }
-            else {
-                setLikes((prevLikes) => ({ ...prevLikes, [article_id]: prevLikes[article_id] - 1 }));
-            }
+            
+            setArticleData((prevArticleData) =>
+                prevArticleData.map((article) => {
+                    if (article.article.id === article_id) {
+                        return {
+                            ...article,
+                            isLikedByUser: !previous_state,
+                            likes_count: previous_state ? article.likes_count - 1 : article.likes_count + 1,
+                        };
+                    }
+                    return article;
+                })
+            );
             
         }
         catch(error) {
@@ -331,81 +245,100 @@ function Timeline() {
     }
 
 
-    const toggleVisibility = (article_id) => {
-        setVisible(prevShowComments => ({
-            ...prevShowComments,
-            [article_id]: !prevShowComments[article_id]
-        }));
-    }
 
-    // handle the text input for new comment
-    const handleChange = (event, article_id) => {
-        setNewComment(prevComments => ({
-            ...prevComments,
-            [article_id]: event.target.value
-        }));
+    const handleChange = (event) => {
+        setNewComment(event.target.value);
     };
 
-
-    // post the new comment
     const postComment = async(article_id) => {
 
         try {
             const token = localStorage.getItem('jwt_token');
-            const response = await articleService.addComment(token,article_id,newComment[article_id]);
-            setCommentCount((prevComments) => ({ ...prevComments, [article_id]: prevComments[article_id] + 1 }));
-
+            const response = await articleService.addComment(token,article_id,NewComment);
+            setArticleData((prevArticleData) =>
+                prevArticleData.map((article) => {
+                    if (article.article.id === article_id) {
+                        return {
+                            ...article,
+                            comments_count: article.comments_count + 1
+                        };
+                    }
+                    setNewComment('');
+                    return article;
+                })
+            );
+           
         }
         catch(error) {
             console.error("There was an error posting the comment: ",error);
         }
+       
     }
 
+    const toggleVisibility = (article_id,previous_state) => {
+        setArticleData((prevArticleData) =>
+            prevArticleData.map((article) => {
+                if (article.article.id === article_id) {
+                    return {
+                        ...article,
+                        showComments: !previous_state,
 
-    return(
-        <div>
-            <div className='articles_container'>
-            {articles.map(article => (
-                    <span key={article.id} className='article' >
-                        <div className='intro'>
-                            <p className='title'>{article.title} by    </p> 
-                            <img src={`data:image/jpeg;base64,${article.author.profilePicture}` } alt = 'author'className='author_pfp'/>
-                            <p className='author_name'  onClick={() => gotoProfile(article.author.id)}> {article.author.firstName} {article.author.lastName}  </p>
-                            
-                        </div>
+                    };
+                }
+                return article;
+            })
+        );
+    }
 
-                        <div className='article_content'>
-                            <p className='description'>{article.content}</p> 
-                        </div>
+    return (
+        articleData.map(article=>(
+            <span  key = {article.article.id} className='article'>
+                {console.log('article data = ',article)}
+                <div className='intro'>
+                            <p className='title'>{article.article.title} by    </p> 
+                            <img src={`data:image/jpeg;base64,${article.article.author.profilePicture}` } alt = 'author'className='author_pfp'/>
+                            <p className='author_name'  onClick={() => gotoProfile(article.article.author.id)}> {article.article.author.firstName} {article.article.author.lastName}  </p>
+                </div>
 
-                        <div className='article_media'>
-                           {article.picture &&(<img src={`data:image/jpeg;base64,${article.picture}`} alt='profile' className='article_picture' />) }
-                           {article.video &&(<video src={`data:image/jpeg;base64,${article.video}`} alt='profile' className='article_video' controls />) }
-                        </div>
+                <div className='article_content'>
+                    <p className='description'>{article.article.content}</p> 
+                </div>
 
-                        <div className='likes_display'>
-                            <p>{likes[article.id] } likes</p>
-                            <p onClick={()=>toggleVisibility(article.id) }className='display_comments'> {commentCount[article.id]} comments</p>
-                        </div>
+                <div className='article_media'>
+                    {article.article.picture &&(<img src={`data:image/jpeg;base64,${article.article.picture}`} alt='profile' className='article_picture' />) }
+                    {article.article.video &&(<video src={`data:image/jpeg;base64,${article.article.video}`} alt='profile' className='article_video' controls />) }
+                </div>
 
-                        <div className='add'>
-                            <div >
-                                {isLiked[article.id] && (<img src={blue_like} onClick={() => AddLike(article.id)}  alt='blue' className='like_button'/>  ) }
-                                {!isLiked[article.id] && (<img src={white_like} onClick={() => AddLike(article.id)}  alt='white' className='like_button'/>  ) }
-                            </div>
-                            <div className='add_comment'>
-                                <textarea className='new_comment' placeholder='Add your comment' onChange={(event) => handleChange(event, article.id)} id='new_comment' rows={1}/>
-                                <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.id)} />
-                            </div>
-                        </div>
+                <div className='likes_display'>
+                            <p>{article.likes_count} likes</p>
+                            <p className='display_comments' onClick={()=>toggleVisibility(article.article.id,article.showComments)}> {article.comments_count} comments</p>
+                </div>
 
-                        {areCommentsVisible[article.id] && <Comments article_id={article.id} />}
-                    </span>
-                ))}
-            </div>
-        </div>
+                <div className='add'>
+                    <div >
+                        {article.isLikedByUser && (<img src={blue_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='blue' className='like_button'/>  ) }
+                        {!article.isLikedByUser && (<img src={white_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='white' className='like_button'/>  ) }
+                    </div>
+                    <div className='add_comment'>
+                        <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}/>
+                        <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.article.id)} />
+                    </div>
+                </div>
+                <Suspense fallback={<div>Loading comments...</div>}>
+                    {article.showComments && <Comments comments={article.comments} />}
+                </Suspense>
+               
+            </span>
+        )
+
+        )
     );
+
+    
+    
 }
+
+
 
 
 
