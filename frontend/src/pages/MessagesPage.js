@@ -150,16 +150,11 @@ function Chat(){
             setUserData(prevState => ({ ...prevState, message: "" }));
         }
     };
-    
-
-    const handleUsername = (event) => {
-        const { value } = event.target;
-        setUserData(prevState => ({ ...prevState, username: value }));
-    };
 
 
     const fetchChatHistory = async (id) => {
         try {
+            setReceiverImage("")
             setTab(id);
             const messages = await userService.getChatHistory(userData.id, id);
             setPrivateChats(new Map([[id, messages]]));
@@ -176,7 +171,20 @@ function Chat(){
         }
     };
 
+    const groupMessagesByDate = (messages) => {
+        return messages.reduce((acc, message) => {
+            const dateKey = new Date(message.date).toDateString(); // Group by day
+            if (!acc[dateKey]) {
+                acc[dateKey] = [];
+            }
+            acc[dateKey].push(message);
+            return acc;
+        }, {});
+    };
+    
+
     const base64Image = userData.image? `data:image/jpeg;base64,${userData.image}`: `${avatar}`;
+    const messagesByDate = tab ? groupMessagesByDate(privateChats.get(tab) || []) : {};
 
     return(
         <div>
@@ -187,7 +195,7 @@ function Chat(){
                 <ul className="unordered-list">
                     {userData.connections.map((connection) => (
                         <li key={connection.id} className="button-list">
-                            <button className="user-button" onClick={() => fetchChatHistory(connection.id)}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image"></img> {connection.first_name} {connection.last_name}</button>
+                            <button className={`user-button ${tab === connection.id ? 'active' : ''}`} onClick={() => fetchChatHistory(connection.id)}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image profile-picture"></img> {connection.first_name} {connection.last_name}</button>
                         </li>
                     ))}
                 </ul>
@@ -195,27 +203,38 @@ function Chat(){
                 </div>
                 <div className="right-side-box">
                 <div className="texts-container">
-                    {tab && privateChats.get(tab)?.length > 0 ? (
-                        privateChats.get(tab)?.map((chatMessage, index) => (
-                            <div key={index} className={chatMessage.senderId === userData.id ? "text-left" : "text-right"}>
-                                {chatMessage.senderId !== userData.id && (
-                                    <img src={receiverImage? `${receiverImage}`: `${avatar}`} alt="profile" className="chat-pfp-other" />
-                                )}
-                                <div className={chatMessage.senderId === userData.id ? "text-bubble-me" : "text-bubble-other"}>
-                                    <p>{chatMessage.message}</p>
-                                    <span className={chatMessage.senderId === userData.id ? "time-and-date-me" : "time-and-date-other"}>
-                                        {new Date(chatMessage.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                </div>
-                                {chatMessage.senderId === userData.id && (
-                                    <img src={base64Image || avatar} alt="profile" className="chat-pfp-me" />
-                                )}
+                    {Object.entries(messagesByDate).map(([date, messages], index) => (
+                        <div key={index}>
+                            <div className="date-separator">
+                                <span>{new Date(date).toLocaleDateString()}</span>
                             </div>
-                        ))
-                        ):(
-                            <p>Select a chat</p>
-                        )
-                    }
+                            {messages.map((chatMessage, i) => (
+                                <div key={i} className={chatMessage.senderId === userData.id ? "text-left" : "text-right"}>
+                                    {chatMessage.senderId !== userData.id && (
+                                        <img
+                                            src={receiverImage ? `${receiverImage}` : avatar}
+                                            alt="profile"
+                                            className="chat-pfp-other profile-picture"
+                                        />
+                                    )}
+                                    <div className={chatMessage.senderId === userData.id ? "text-bubble-me" : "text-bubble-other"}>
+                                        <p>{chatMessage.message}</p>
+                                        <span className={chatMessage.senderId === userData.id ? "time-and-date-me" : "time-and-date-other"}>
+                                            {new Date(chatMessage.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    {chatMessage.senderId === userData.id && (
+                                        <img
+                                            src={base64Image || avatar}
+                                            alt="profile"
+                                            className="chat-pfp-me profile-picture"
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                    {!tab && <p>Select a chat</p>}
                 </div>
 
                     <br></br>

@@ -20,10 +20,10 @@ body {
 
 .texts-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     padding-top: 10px;
     overflow-y: auto;
+    height: 100%;
 }
 
 .texts-container::-webkit-scrollbar {
@@ -31,8 +31,12 @@ body {
 }
 
 .texts-container::-webkit-scrollbar-thumb {
-    background: rgb(151, 151, 151);
+    background: rgb(187, 187, 187);
     border-radius: 4px;
+}
+
+.texts-container::-webkit-scrollbar-thumb:hover {
+    background: rgb(145, 145, 145);
 }
 
 .text-bubble-me {
@@ -45,6 +49,7 @@ body {
     justify-content: left;
     background-color: rgb(236, 236, 236);
     padding-left: 5px;
+    margin-bottom: 5px;
 }
 
 .text-bubble-other {
@@ -56,6 +61,15 @@ body {
     flex-direction: column;
     justify-content: right;
     padding-left: 5px;
+    margin-bottom: 5px;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    position: relative;
 }
 
 .chat-pfp-me {
@@ -92,6 +106,16 @@ body {
     flex-direction: column;
     align-items: center;
     padding-top: 10px;
+    overflow-y: auto;
+}
+
+.users-chats::-webkit-scrollbar-thumb {
+    background: rgb(187, 187, 187);
+    border-radius: 4px;
+}
+
+.users-chats::-webkit-scrollbar-thumb:hover {
+    background: rgb(145, 145, 145);
 }
 
 .button-image {
@@ -113,6 +137,10 @@ body {
 }
 
 .user-button:hover{
+    background-color: rgb(186, 186, 186);
+}
+
+.user-button.active{
     background-color: rgb(186, 186, 186);
 }
 
@@ -188,4 +216,11 @@ body {
     align-items: center;
     margin: 0;
     width: 100%;
+}
+
+.date-separator{
+    font-size: small;
+    text-align: center;
+    color: gray;
+    padding: 5px;
 }
