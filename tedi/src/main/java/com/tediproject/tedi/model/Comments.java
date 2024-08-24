@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -15,7 +16,8 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private long id;
 
-    @Column
+    @Lob 
+    @Column(length = 16777216)
     private String comment;
 
 

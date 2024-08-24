@@ -10,7 +10,7 @@ import articleService from '../service/articleService.js';
 import white_like from '../icons/white_like.jpg';
 import blue_like from '../icons/blue_like.jpg';
 
-function NewPost() {
+function NewPost({ onNewPost }) {
 
     const token = localStorage.getItem('jwt_token');
     
@@ -34,11 +34,13 @@ function NewPost() {
         formData.append('article_content', article.article_content);
         formData.append('image', article.image || null);
         formData.append('video', article.video || null);
-        
+       
         
         try {
             const response =  await ArticleService.newArticle(formData);
             console.log(response.data); 
+            onNewPost(response.data);
+            setArticle(initialState);
         } 
         
         catch (error) {
@@ -255,15 +257,23 @@ function Timeline() {
         try {
             const token = localStorage.getItem('jwt_token');
             const response = await articleService.addComment(token,article_id,NewComment);
+            const comment_response =  await  ArticleService.getComments(article_id);
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
                     if (article.article.id === article_id) {
+
+                        console.log('comments are: ',comment_response);
                         return {
                             ...article,
-                            comments_count: article.comments_count + 1
+                            comments_count: article.comments_count + 1,
+                            comments:comment_response
+        
                         };
                     }
                     setNewComment('');
+                    
+                    
+
                     return article;
                 })
             );
@@ -290,7 +300,25 @@ function Timeline() {
         );
     }
 
+    const handleNewPost = (newPost) => {
+        const getArticles = async () => {
+            try {
+                const token = localStorage.getItem('jwt_token');
+                
+                //fetch articles and their data
+                const articleDataArray = await ArticleService.fetchArticleData(token);
+                setArticleData(articleDataArray);
+            } catch (error) {
+                console.error("There was an error getting the article list", error);
+            }
+        };
+        getArticles();
+    };
+
     return (
+        <div>
+        <NewPost onNewPost={handleNewPost} />
+       {
         articleData.map(article=>(
             <span  key = {article.article.id} className='article'>
                 {console.log('article data = ',article)}
@@ -320,18 +348,19 @@ function Timeline() {
                         {!article.isLikedByUser && (<img src={white_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='white' className='like_button'/>  ) }
                     </div>
                     <div className='add_comment'>
-                        <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}/>
+                        <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}  value={NewComment}/>
                         <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.article.id)} />
                     </div>
                 </div>
                 <Suspense fallback={<div>Loading comments...</div>}>
-                    {article.showComments && <Comments comments={article.comments} />}
+                    {article.showComments && <Comments  comments={article.comments} />}
                 </Suspense>
                
             </span>
         )
 
-        )
+        )}
+        </div>
     );
 
     
@@ -349,7 +378,6 @@ function HomePage() {
             <div className='homepage'>
                 <Profile/>
                 <div className='main_content'>
-                    <NewPost/>
                     <Timeline/>
                 </div>
                 

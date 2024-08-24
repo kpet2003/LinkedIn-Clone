@@ -243,6 +243,7 @@ body {
     flex-direction: column;
     text-align: justify;
     text-align-last: left;
+    padding: 20px;
 }
 
 .likes_display {
@@ -290,6 +291,7 @@ body {
     height:70px;
     margin-bottom: 0px;
     margin-top:40px;
+    background-color: #f9f9f9;
 }
 
 .add_comment {
@@ -298,6 +300,7 @@ body {
     flex: 1;
     margin-top: 60px;
     justify-content: space-between;
+    background-color: #f9f9f9;
 }
 
 .new_comment {
@@ -306,6 +309,7 @@ body {
     resize: none;
     font-family: 'Arial';
     flex:1;
+    background-color: #f9f9f9;
 }
 
 .new_comment:focus {

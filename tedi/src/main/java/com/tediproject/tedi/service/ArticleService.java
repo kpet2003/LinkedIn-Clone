@@ -2,7 +2,9 @@ package com.tediproject.tedi.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,22 +49,30 @@ public class ArticleService {
     public List<Article> findArticles(String token) {
         
         UserEntity author = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        Set<Article> articles = new HashSet<>();
         
         // find articles written by user
         List <Long> network = connectionRepo.findByUser(author.getID());
-        List <Article> articles = articleRepo.findByAuthor(author);
+        articles.addAll(articleRepo.findByAuthor(author));
         
         // find articles that the user's connections have written
         List<UserEntity> connections = userRepo.findAllById(network);
         articles.addAll(articleRepo.findByAuthorIn(connections));
 
+        // find articles that the user's connections have liked
+        articles.addAll(likeRepo.findLikedArticles(connections));
+
+        // find articles that the user's connections have liked
+        articles.addAll(commentRepo.findCommentedArticles(connections));
 
 
         // sort the articles from newest to oldest
-        articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
+        List<Article> final_articles = new ArrayList<>(articles);
+        final_articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
 
 
-        return articles;
+        return final_articles;
     }
 
 
