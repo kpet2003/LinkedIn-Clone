@@ -38,10 +38,10 @@ const WelcomePage = ({ onLoginSuccess }) => {
           onLoginSuccess();
           
           if(token_data.sub === 'admin@gmail.com'){
-            navigate('/AdminPage');
+            onLoginSuccess(true);
           }
           else{
-            navigate('/HomePage');
+            onLoginSuccess(false);
           }
       } 
       catch (error) {

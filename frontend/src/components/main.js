@@ -28,7 +28,7 @@ const authenticate = (token) => {
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -59,13 +59,17 @@ const Main=()=>{
     useEffect(() => {
         if (location.pathname !== '/SignUp' && location.pathname !== '/') {
             checkAuthentication();
-        } else {
-            setIsLoading(false); // Loading complete
-        }
+        } 
     }, []);
 
-    const handleLoginSuccess = () => {
-        checkAuthentication();
+    const handleLoginSuccess = (isAdmin) => {
+        setIsAuthenticated(true);
+        if(isAdmin) {
+            navigate('/AdminPage')
+        }
+        else{
+            navigate('/HomePage');
+        }
     };
 
     if (isLoading) {
