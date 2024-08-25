@@ -45,6 +45,16 @@ public class Notification {
 
 
 
+    public Article getArticle() {
+        return article;
+    }
+
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+
     public Notification() {
         this.date_sent = LocalDateTime.now();
     }

@@ -3,7 +3,7 @@ import NavigationBar from './NavigationBar.js';
 import notificationService from "../service/notificationService.js";
 import networkService  from '../service/networkService.js';
 import "../styling/Notifications.css"
-
+import avatar from "../icons/avatar.png"
 
 
 function Requests() {
@@ -90,12 +90,39 @@ function PostNotifications() {
         fetchNotifications();
     }, []);
 
+    const gotoProfile = (user_id) => {
+        console.log(user_id);
+        const link = document.createElement('a');
+        link.href = `/VisitProfile/${user_id}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    return(
+        <div>
+            <h2 className='my-h2'> Your Post Notifications: </h2> 
+                <ul className='list'>
+                    {Notifications.map(Notification => (
+                        <li key={Notifications.id} className='notification' >
+                            { Notification.sender.profilePicture && <img src={`data:image/jpeg;base64,${Notification.sender.profilePicture}`} alt='profile' className='profile_photo' />}
+                            { !Notification.sender.profilePicture && <img src={`data:image/jpeg;base64,${avatar}`} alt='profile' className='profile_photo' />}  
+                            <p className='notification_username' onClick={() => gotoProfile(Notification.sender.id)}>{Notification.sender.firstName} {Notification.sender.lastName} </p>
+                            {Notification.isComment && (<p> commented {Notification.message} on your article: {Notification.article.title} </p>)}
+                            {!Notification.isComment && (<p> liked your article: {Notification.article.title} </p>)}
+                        </li>
+                    ))}
+                </ul>
+        </div>
+    );
+
+
 }
 
 
 function Notifications(){
     return(
-        <div>
+        <div className='notifications'>
             <NavigationBar></NavigationBar>
             <Requests></Requests>
             <PostNotifications></PostNotifications>

@@ -4,6 +4,11 @@ body {
     font-family: 'Arial';
 }
 
+.notifications {
+    display: flex;
+    flex-direction: column;
+}
+
 .my-h2 {
     margin-left: 12%;
     float: left;
@@ -64,4 +69,27 @@ p {
     padding: 5px 10px;
     cursor: pointer;
     margin-bottom: 10%;
+}
+
+.notification {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px; 
+    margin-bottom: 0px; 
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    overflow: hidden; 
+    height: 100px;
+}
+
+.notification_username {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.notification_username:hover {
+    text-decoration: underline;
 }

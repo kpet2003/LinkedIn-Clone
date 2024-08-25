@@ -120,6 +120,7 @@ public class ArticleService {
             notification.setIsComment(false);
             notification.setReceiver(article.getAuthor());
             notification.setSender(user);
+            notification.setArticle(article);
             notificationRepo.save(notification);
 
 
@@ -147,6 +148,7 @@ public class ArticleService {
         notification.setReceiver(article.getAuthor());
         notification.setSender(user);
         notification.setMessage(Comment);
+        notification.setArticle(article);
         notificationRepo.save(notification);
 
         
