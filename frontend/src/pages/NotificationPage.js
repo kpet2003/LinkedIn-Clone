@@ -72,11 +72,33 @@ function Requests() {
 
 }
 
+function PostNotifications() {
+    const [Notifications,setNotifications] = useState([])
+
+    useEffect(() => {
+        const fetchNotifications = async() => {
+            try {
+                const token = localStorage.getItem('jwt_token');
+                const response = await  notificationService.getNotifications(token);
+                setNotifications(response);
+                console.log(response);
+            } 
+            catch (error) {
+                console.error("There was an error getting the notification list", error);
+            }
+        };
+        fetchNotifications();
+    }, []);
+
+}
+
+
 function Notifications(){
     return(
         <div>
             <NavigationBar></NavigationBar>
             <Requests></Requests>
+            <PostNotifications></PostNotifications>
         </div>
     );
 }

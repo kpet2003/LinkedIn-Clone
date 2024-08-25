@@ -91,6 +91,13 @@ public class UserEntity {
     @OneToMany(mappedBy = "poster", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Comments> comments_posted;
 
+    @OneToMany(mappedBy = "receiver", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Notification> notifications_received;
+
+
+    @OneToMany(mappedBy = "sender", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Notification> notifications_sent;
+
 
     public UserEntity() {}
 

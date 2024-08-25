@@ -14,11 +14,13 @@ import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Comments;
 import com.tediproject.tedi.model.Likes;
+import com.tediproject.tedi.model.Notification;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.CommentRepo;
 import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.LikeRepo;
+import com.tediproject.tedi.repo.NotificationRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 
@@ -43,6 +45,9 @@ public class ArticleService {
 
     @Autowired 
     CommentRepo commentRepo;
+
+    @Autowired 
+    NotificationRepo notificationRepo;
 
 
 
@@ -110,6 +115,14 @@ public class ArticleService {
             like.setArticle(article);
             like.setUser(user);
             likeRepo.save(like);
+            
+            Notification notification = new Notification();
+            notification.setIsComment(false);
+            notification.setReceiver(article.getAuthor());
+            notification.setSender(user);
+            notificationRepo.save(notification);
+
+
             return;
         }
 
@@ -126,9 +139,18 @@ public class ArticleService {
         new_comment.setArticle(article);
         new_comment.setPoster(user);
         new_comment.setComment(Comment);
+        commentRepo.save(new_comment);
+
+
+        Notification notification = new Notification();
+        notification.setIsComment(true);
+        notification.setReceiver(article.getAuthor());
+        notification.setSender(user);
+        notification.setMessage(Comment);
+        notificationRepo.save(notification);
 
         
-        commentRepo.save(new_comment);
+        
         
     }
 

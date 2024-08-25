@@ -51,6 +51,9 @@ public class Article {
     @OneToMany(mappedBy = "article",  orphanRemoval = true,fetch = FetchType.EAGER)
     List <Comments> comments;
 
+    @OneToMany(mappedBy = "article", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Notification> article_notifications;
+
     public Article() {}
 
 
