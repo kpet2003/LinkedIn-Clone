@@ -22,6 +22,10 @@ body {
     justify-content: space-between;
 }
 
+.signUp :focus {
+    outline: none;
+}
+
 .profile {
     display: flex;
     flex-direction: row;
