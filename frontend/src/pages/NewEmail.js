@@ -34,7 +34,9 @@ function NewEmail(){
           
             const token_data = UserService.decodeToken(localStorage.getItem('jwt_token'));
 
-            alert("E-mail changed successfully to: ", token_data.sub);
+            alert(`E-mail changed successfully to: ${token_data.sub}`);
+
+            console.log(localStorage.getItem('jwt_token'));
             setIsPopupOpen(false);
         } 
         catch (error) {

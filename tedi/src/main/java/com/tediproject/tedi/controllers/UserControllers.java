@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +52,19 @@ public class UserControllers {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    @GetMapping(value="/auth/")
+    public ResponseEntity<?> authenticate(@RequestParam(value="token", required = false)String token) {
+        try {
+            jwtUtil.validateToken(token);
+            return ResponseEntity.ok().body("Token is valid");
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
+
     @PostMapping(value = "/SignUp/signup")
     public ResponseEntity<?> createUser(
         @RequestParam(value="email", required = false) String email,
@@ -64,7 +78,6 @@ public class UserControllers {
             userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -78,6 +91,7 @@ public class UserControllers {
             );
         } 
         catch (BadCredentialsException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         
@@ -100,16 +114,24 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             Authentication auth;
             try {
-                auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(jwtUtil.getEmailFromJWT(change.getToken()), change.getPassword())
-                );
+
                 userService.changeUserEmail(change);
-            } 
+
+                auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(change.getNewEmail(), change.getPassword())
+                );
+                
+                String token = jwtUtil.generateToken(auth);
+                
+                return ResponseEntity.ok(token);
+            }
+            catch (AuthenticationCredentialsNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            }
             catch (BadCredentialsException e) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }
-            String token = jwtUtil.generateToken(auth);
-            return ResponseEntity.ok(token);
+            
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -122,7 +144,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeUserPassword(change);
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        } 
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -135,7 +161,12 @@ public class UserControllers {
             jwtUtil.validateToken(token);
             userService.changeUserPfp(token, image);
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } 
+        
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -146,7 +177,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeUserEdu(change.getToken(), change.getInfo());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } 
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -157,7 +192,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeUserWork(change.getToken(), change.getInfo());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        } 
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -168,7 +207,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeUserWork(change.getToken(), change.getInfo());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } 
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -179,7 +222,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeEduBool(change.getToken());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } 
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -190,7 +237,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeWorkBool(change.getToken());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        } 
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -201,7 +252,11 @@ public class UserControllers {
             jwtUtil.validateToken(change.getToken());
             userService.changeSkillsBool(change.getToken());
             return ResponseEntity.ok(HttpStatus.OK);
-        } catch (Exception e) {
+        } 
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }        
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -216,7 +271,11 @@ public class UserControllers {
             else{
                 return ResponseEntity.badRequest().body("Invalid Token");
             }
-        } catch (Exception e) {
+        }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } 
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -231,7 +290,11 @@ public class UserControllers {
             else{
                 return ResponseEntity.badRequest().body("Invalid Token");
             }
-        } catch (Exception e) {
+        } 
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -287,6 +350,9 @@ public class UserControllers {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
+        catch (AuthenticationCredentialsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
         catch(Exception e){
             return ResponseEntity.badRequest().body("token is required");
         }
@@ -328,6 +394,8 @@ public class UserControllers {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
+        
+       
         catch(Exception e){
             return ResponseEntity.badRequest().body("token is required");
         }

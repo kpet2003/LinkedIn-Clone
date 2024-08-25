@@ -1,5 +1,5 @@
 import React from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route,useLocation,useNavigate} from 'react-router-dom';
 import { useState,useEffect } from 'react';
 
 import ProtectedRoute from './ProtectedRoute';
@@ -16,24 +16,52 @@ import Network from '../pages/Network';
 import VisitProfile from '../pages/VisitProfilePage';
 import ViewNetwork from '../pages/ViewNetwork';
 import Messages from '../pages/MessagesPage';
+import axios from 'axios';
+
+const authenticate = (token) => {
+    const API_URL = "/auth/";
+    return axios.get(API_URL,{
+        params: {token : token},
+        responseType: 'json'
+    }).then(response => response.data);
+}
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const checkAuthentication = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const checkAuthentication = async () => {
         const token = localStorage.getItem('jwt_token');
         if (token !== null) {
-        setIsAuthenticated(true);
-        } else {
-        console.log('User not authenticated');
-        setIsAuthenticated(false);
+
+            try {
+                const response = await authenticate(token);
+                setIsAuthenticated(true);
+            }
+            catch(error) {
+                console.error('Token validation failed:', error.response);
+                setIsAuthenticated(false);
+                navigate('/');
+            }
+            
+        } 
+        else {
+            console.log('User not authenticated');
+            setIsAuthenticated(false);
+            navigate('/');
         }
         setIsLoading(false); // Loading complete
     };
 
     useEffect(() => {
-        checkAuthentication();
+        if (location.pathname !== '/SignUp' && location.pathname !== '/') {
+            checkAuthentication();
+        } else {
+            setIsLoading(false); // Loading complete
+        }
     }, []);
 
     const handleLoginSuccess = () => {
@@ -59,9 +87,9 @@ const Main=()=>{
                 <Route exact path='/NewPassword' Component={NewPassword}></Route>
                 <Route exact path='/VisitProfile/:id' Component={VisitProfile}></Route>
                 <Route exact path='/ViewNetwork/:id' Component={ViewNetwork}></Route>
-                
+                <Route exact path='/Messages' Component={Messages}></Route>
             </Route>
-            <Route exact path='/Messages' Component={Messages}></Route>
+           
              
         </Routes>
     );

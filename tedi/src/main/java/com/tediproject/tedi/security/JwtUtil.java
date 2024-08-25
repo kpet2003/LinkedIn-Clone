@@ -42,19 +42,6 @@ public class JwtUtil {
 		return token;
     }
 
-    // private String createToken(Map<String, Object> claims, String subject) {
-    //     return Jwts.builder()
-    //             .setClaims(claims)
-    //             .setSubject(subject)
-    //             .setIssuedAt(new Date(System.currentTimeMillis()))
-    //             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-    //             .signWith(SignatureAlgorithm.HS256, SECRET)
-    //             .compact();
-    // }
-
-    // public boolean isTokenExpired(String token) {
-    //     return extractExpiration(token).before(new Date());
-    // }
 
     public boolean validateToken(String token) {
 		try {
