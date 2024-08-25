@@ -43,8 +43,10 @@ function SignUpPage(){
             console.log(response.data);
             navigate(-1);  
         } catch (error) {
-            console.error("There was an error registering the user:", error);
-            alert("There was an error registering the user.");
+            console.error("There was an error registering the user:", error.response.data);
+            const errorMessage = `There was an error registering the user: ${error.response.data}`;
+            alert(errorMessage);
+            setUser(initialState);
         }
     }
     const handleChange = (event) => {

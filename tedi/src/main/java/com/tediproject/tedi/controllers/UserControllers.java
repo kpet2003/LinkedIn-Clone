@@ -64,6 +64,7 @@ public class UserControllers {
             userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
