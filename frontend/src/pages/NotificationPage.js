@@ -105,8 +105,9 @@ function PostNotifications() {
                 <ul className='list'>
                     {Notifications.map(Notification => (
                         <li key={Notifications.id} className='notification' >
-                            { Notification.sender.profilePicture && <img src={`data:image/jpeg;base64,${Notification.sender.profilePicture}`} alt='profile' className='profile_photo' />}
-                            { !Notification.sender.profilePicture && <img src={`data:image/jpeg;base64,${avatar}`} alt='profile' className='profile_photo' />}  
+                            
+                            { Notification.sender.profilePicture ? (<img src={`data:image/jpeg;base64,${Notification.sender.profilePicture}`} alt='profile' className='profile_photo' />)
+                             :( <img src={`data:image/jpeg;base64,${avatar}`} alt='profile' className='profile_photo' />)}  
                             <p className='notification_username' onClick={() => gotoProfile(Notification.sender.id)}>{Notification.sender.firstName} {Notification.sender.lastName} </p>
                             {Notification.isComment && (<p> commented {Notification.message} on your article: {Notification.article.title} </p>)}
                             {!Notification.isComment && (<p> liked your article: {Notification.article.title} </p>)}

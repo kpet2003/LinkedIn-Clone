@@ -95,7 +95,7 @@ public class UserService{
     public void changeUserPassword(PasswordChangeDto change){
         try {
             UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(change.getToken()));
-            user.setPassword(change.getNewPassword());
+            user.setPassword(passwordEncoder.encode(change.getNewPassword()));
             userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("User not found");

@@ -126,7 +126,8 @@ public class UserEntity {
     }
 
     public void setPassword(String word){
-        this.password = word;
+
+        this.password =  word ;
     }
 
     public void setPhoneNumber(Long num){
