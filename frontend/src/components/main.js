@@ -18,6 +18,7 @@ import ViewNetwork from '../pages/ViewNetwork';
 import Messages from '../pages/MessagesPage';
 import axios from 'axios';
 import JobPage from '../pages/JobsPage';
+import userService from '../service/userService';
 
 const authenticate = (token) => {
     const API_URL = "/auth/";
@@ -62,6 +63,10 @@ const Main=()=>{
     useEffect(() => {
         if (location.pathname !== '/SignUp' && location.pathname !== '/') {
             checkAuthentication();
+            const token = userService.decodeToken(localStorage.getItem('jwt_token'));
+            if(location.pathname === '/HomePage' && token.sub === 'admin@gmail.com') {
+                navigate(-1);
+            }
         }
         else {
             setIsLoading(false);
