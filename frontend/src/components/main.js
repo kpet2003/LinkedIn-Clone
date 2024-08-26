@@ -28,7 +28,7 @@ const authenticate = (token) => {
 
 const Main=()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -44,12 +44,14 @@ const Main=()=>{
             catch(error) {
                 console.error('Token validation failed:', error.response);
                 setIsAuthenticated(false);
+                alert('token validation failed')
                 navigate('/');
             }
             
         } 
         else {
             console.log('User not authenticated');
+            alert('User not authenticated')
             setIsAuthenticated(false);
             navigate('/');
         }
@@ -59,8 +61,12 @@ const Main=()=>{
     useEffect(() => {
         if (location.pathname !== '/SignUp' && location.pathname !== '/') {
             checkAuthentication();
-        } 
-    }, []);
+        }
+        else {
+            setIsLoading(false);
+        }
+
+    },  [location.pathname]);
 
     const handleLoginSuccess = (isAdmin) => {
         setIsAuthenticated(true);
