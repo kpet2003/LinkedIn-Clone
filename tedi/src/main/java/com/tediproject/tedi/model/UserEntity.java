@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -97,6 +98,13 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "sender", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> notifications_sent;
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Job> jobs_posted;
+
+
+    @ManyToMany(mappedBy = "applicants", fetch = FetchType.LAZY)
+    protected List<Job> jobs_applied;
 
 
     public UserEntity() {}
