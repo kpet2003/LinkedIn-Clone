@@ -1,8 +1,9 @@
 import '../styling/Settings.css';
 import UserService from '../service/userService.js';
 import React, { useState } from 'react';
+import NavigationBar from './NavigationBar.js';
 
-function NewPassword(){
+function ChangePassword(){
     const [pass, setPass] = useState('');
     const [passrep, setPassRep] = useState('');
 
@@ -53,4 +54,13 @@ function NewPassword(){
     );
 }
 
+
+function NewPassword() {
+    return(
+        <div>
+            <NavigationBar></NavigationBar>
+            <ChangePassword></ChangePassword>
+        </div>
+    );
+}
 export default NewPassword;

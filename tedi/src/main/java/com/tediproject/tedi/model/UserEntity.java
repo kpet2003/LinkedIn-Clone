@@ -106,6 +106,9 @@ public class UserEntity {
     @ManyToMany(mappedBy = "applicants", fetch = FetchType.LAZY)
     protected List<Job> jobs_applied;
 
+    @ManyToMany(mappedBy = "skilled_users", fetch = FetchType.LAZY)
+    private List <Skills> user_skills;
+
 
     public UserEntity() {}
 

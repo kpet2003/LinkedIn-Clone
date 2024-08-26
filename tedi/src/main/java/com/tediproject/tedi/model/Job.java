@@ -41,7 +41,10 @@ public class Job {
     @JoinTable(name = "job_applicants",joinColumns = @JoinColumn(name = "job_id"),inverseJoinColumns = @JoinColumn(name = "applicant"))
     private List <UserEntity> applicants;
 
+    @ManyToMany(mappedBy = "jobs_related", fetch = FetchType.LAZY)
+    private List <Skills> relevant_skills;
 
+    
 
     public Job() {
         this.date_posted = LocalDateTime.now();

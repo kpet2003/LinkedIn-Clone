@@ -28,6 +28,7 @@ function VisitProfile(){
 
     const [user, setUser] = useState(initialState);
     const { id } = useParams();
+    const [isAdmin,setAdmin] = useState(false);
     console.log('userId is',id);
 
     useEffect(() => {
@@ -38,6 +39,11 @@ function VisitProfile(){
                     ...user,
                     ...data
                 }));
+                const token =  userService.decodeToken(localStorage.getItem('jwt_token'));
+
+                if(token.sub === 'admin@gmail.com') {
+                    setAdmin(true);
+                }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -57,9 +63,12 @@ function VisitProfile(){
 
     const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
 
+    
+ 
+
     return(
         <div>
-            <NavigationBar></NavigationBar>
+            {!isAdmin && (<NavigationBar></NavigationBar>)}
             <br></br>
             <div>
                 <div className="banner">

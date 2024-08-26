@@ -3,14 +3,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import networkService from '../service/networkService.js'; 
 import UserService from '../service/userService.js';
 import { useParams } from 'react-router-dom';
+import NavigationBar from './NavigationBar.js';
 
 
 function Network() {
 
     const [connectedUsers,setConnectedUsers] = useState([]);
     const { id }  = useParams();
-
+    const [isAdmin,setAdmin] = useState(false);
+    
     useEffect(() => {
+        const token =  UserService.decodeToken(localStorage.getItem('jwt_token'));
+
+        if(token.sub === 'admin@gmail.com') {
+            setAdmin(true);
+        }
+
         const getConnections = async () => {
             try {
                 console.log(id);
@@ -30,6 +38,7 @@ function Network() {
 
     return(
         <div >
+            {!isAdmin && (<NavigationBar></NavigationBar>)}
             <div className='net'>
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >

@@ -17,6 +17,7 @@ import VisitProfile from '../pages/VisitProfilePage';
 import ViewNetwork from '../pages/ViewNetwork';
 import Messages from '../pages/MessagesPage';
 import axios from 'axios';
+import JobPage from '../pages/JobsPage';
 
 const authenticate = (token) => {
     const API_URL = "/auth/";
@@ -98,6 +99,7 @@ const Main=()=>{
                 <Route exact path='/VisitProfile/:id' Component={VisitProfile}></Route>
                 <Route exact path='/ViewNetwork/:id' Component={ViewNetwork}></Route>
                 <Route exact path='/Messages' Component={Messages}></Route>
+                <Route exact path='/Jobs' Component={JobPage}></Route>
             </Route>
            
              

@@ -1,7 +1,9 @@
 import "../styling/Settings.css";
-import React from "react";
+import React, { useState } from "react";
+import NavigationBar from "./NavigationBar";
+import userService from "../service/userService";
 
-function SettingsPage() {
+function Settings() {
     return(
         <div className="table">
             <h1><b>Settings</b></h1><br></br>
@@ -13,5 +15,17 @@ function SettingsPage() {
     );
 }
 
+
+function SettingsPage() {
+
+
+    return (
+        <div>
+            <NavigationBar></NavigationBar>
+            <Settings></Settings>
+        </div>
+    )
+    
+}
 
 export default SettingsPage;

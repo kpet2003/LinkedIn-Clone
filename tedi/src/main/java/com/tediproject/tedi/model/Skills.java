@@ -26,4 +26,8 @@ public class Skills {
     @JoinTable(name = "job_skills",joinColumns = @JoinColumn(name = "skill_id"),inverseJoinColumns = @JoinColumn(name = "job_id"))
     private List <Job> jobs_related;
 
+    @ManyToMany
+    @JoinTable(name = "user_skills",joinColumns = @JoinColumn(name = "skill_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List <UserEntity> skilled_users;
+
 }
