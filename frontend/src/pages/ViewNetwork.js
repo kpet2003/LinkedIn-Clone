@@ -4,6 +4,8 @@ import networkService from '../service/networkService.js';
 import UserService from '../service/userService.js';
 import { useParams } from 'react-router-dom';
 import NavigationBar from './NavigationBar.js';
+import placeholder from '../icons/avatar.png';
+
 
 
 function Network() {
@@ -42,7 +44,7 @@ function Network() {
             <div className='net'>
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
-                        <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='picture' />
+                         <img src={connectedUser.profilePicture?`data:image/jpeg;base64,${connectedUser.profilePicture}`:placeholder } alt = 'profile'className='picture'/>
                        <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p> <p className='description'>{connectedUser.workTitle} at </p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
                      
                     </span>

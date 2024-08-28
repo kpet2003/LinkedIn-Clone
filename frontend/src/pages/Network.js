@@ -5,6 +5,7 @@ import glass from "../icons/glass.png";
 import '../styling/Network.css';
 import networkService from '../service/networkService.js'; 
 import UserService from '../service/userService.js';
+import placeholder from '../icons/avatar.png';
 
 function SearchBar() {
 
@@ -148,11 +149,7 @@ function SearchBar() {
                         return (
                             <li key={value.id} className="dataItem">
                                 <p>
-                                    <img 
-                                        src={`data:image/jpeg;base64,${value.profilePicture}`} 
-                                        alt='profile' 
-                                        className='profile_photo' 
-                                    />
+                                <img src={value.profilePicture?`data:image/jpeg;base64,${value.profilePicture}`:placeholder } alt = 'profile'className='picture'/>
                                     {value.firstName} {value.lastName}
                                     <a href={`/VisitProfile/${value.id}`}> Visit Profile </a>
     
@@ -208,9 +205,9 @@ function MyNetwork() {
             <div className='net'>
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
-                        <img src={`data:image/jpeg;base64,${connectedUser.profilePicture}`} alt='profile' className='picture' />
-                       <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p> <p className='description'>{connectedUser.email}</p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
-                     
+                        <img src={connectedUser.profilePicture?`data:image/jpeg;base64,${connectedUser.profilePicture}`:placeholder } alt = 'profile'className='picture'/>
+                       <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p> 
+                       <p className='description'>{connectedUser.email}</p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
                     </span>
                 ))}
             </div>

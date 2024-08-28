@@ -3,7 +3,7 @@ import NavigationBar from './NavigationBar.js';
 import notificationService from "../service/notificationService.js";
 import networkService  from '../service/networkService.js';
 import "../styling/Notifications.css"
-import avatar from "../icons/avatar.png"
+import placeholder from '../icons/avatar.png';
 
 
 function Requests() {
@@ -57,7 +57,7 @@ function Requests() {
             <ul className='list'>
                 {users.map(user => (
                     <li key={user.id} className='user' >
-                        <img src={`data:image/jpeg;base64,${user.profilePicture}`} alt='profile' className='profile_photo' />
+                        <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder} alt='profile' className='profile_photo' />
                        <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
                          <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.id)}/> 
                     </li>
@@ -105,9 +105,7 @@ function PostNotifications() {
                 <ul className='list'>
                     {Notifications.map(Notification => (
                         <li key={Notifications.id} className='notification' >
-                            
-                            { Notification.sender.profilePicture ? (<img src={`data:image/jpeg;base64,${Notification.sender.profilePicture}`} alt='profile' className='profile_photo' />)
-                             :( <img src={`data:image/jpeg;base64,${avatar}`} alt='profile' className='profile_photo' />)}  
+                             <img src={Notification.sender.profilePicture?`data:image/jpeg;base64,${Notification.sender.profilePicture}`:placeholder} alt='profile' className='profile_photo' /> 
                             <p className='notification_username' onClick={() => gotoProfile(Notification.sender.id)}>{Notification.sender.firstName} {Notification.sender.lastName} </p>
                             {Notification.isComment && (<p> commented {Notification.message} on your article: {Notification.article.title} </p>)}
                             {!Notification.isComment && (<p> liked your article: {Notification.article.title} </p>)}
