@@ -9,6 +9,8 @@ import {useNavigate} from "react-router-dom";
 import articleService from '../service/articleService.js';
 import white_like from '../icons/white_like.jpg';
 import blue_like from '../icons/blue_like.jpg';
+import placeholder from '../icons/avatar.png';
+
 
 function NewPost({ onNewPost }) {
 
@@ -140,10 +142,10 @@ function Profile() {
         }
     };
 
-
+    const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
     return (
         <div className='user_profile'>
-            <img src={`data:image/jpeg;base64,${user.profilePicture}`} alt='profile' className='user_pic' />
+            <img src={base64Image} alt='profile' className='user_pic' />
             <h3 className='user_name'>{user.firstName} {user.lastName}</h3>
             <input type='button' className='profile_button' id="visit_profile" onClick={handleClick} value="View Profile"/> 
             <input type='button' className='network_button' id="view_network" value="View Network"onClick={handleClick}/>
@@ -191,7 +193,7 @@ function Comments({comments}) {
 function Timeline() {
 
     const [articleData, setArticleData] = useState([]);
-    const [NewComment,setNewComment] = useState([]);
+    const [NewComment,setNewComment] = useState({});
  
 
     useEffect(() => {
@@ -248,15 +250,19 @@ function Timeline() {
 
 
 
-    const handleChange = (event) => {
-        setNewComment(event.target.value);
+    const handleChange = (event,article_id) => {
+        setNewComment({
+            ...NewComment,
+            [article_id]: event.target.value, 
+        });
+      
     };
 
     const postComment = async(article_id) => {
 
         try {
             const token = localStorage.getItem('jwt_token');
-            const response = await articleService.addComment(token,article_id,NewComment);
+            const response = await articleService.addComment(token,article_id,NewComment[article_id]);
             const comment_response =  await  ArticleService.getComments(article_id);
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
@@ -270,7 +276,7 @@ function Timeline() {
         
                         };
                     }
-                    setNewComment('');
+                    setNewComment({ ...NewComment, [article_id]: '' }); 
                     
                     
 
@@ -284,6 +290,7 @@ function Timeline() {
         }
        
     }
+
 
     const toggleVisibility = (article_id,previous_state) => {
         setArticleData((prevArticleData) =>
@@ -300,7 +307,7 @@ function Timeline() {
         );
     }
 
-    const handleNewPost = (newPost) => {
+    const handleNewPost = () => {
         const getArticles = async () => {
             try {
                 const token = localStorage.getItem('jwt_token');
@@ -348,7 +355,7 @@ function Timeline() {
                         {!article.isLikedByUser && (<img src={white_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='white' className='like_button'/>  ) }
                     </div>
                     <div className='add_comment'>
-                        <textarea className='new_comment' placeholder='Add your comment' onChange={handleChange} id='new_comment' rows={1}  value={NewComment}/>
+                        <textarea className='new_comment' placeholder='Add your comment' onChange={(event)=>handleChange(event,article.article.id)} id='new_comment' rows={1}  value={NewComment[article.article.id]}/>
                         <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.article.id)} />
                     </div>
                 </div>
