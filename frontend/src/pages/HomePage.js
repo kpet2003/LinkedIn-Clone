@@ -174,7 +174,8 @@ function Comments({comments}) {
                     comments.map(comment => (
                         <span key={comment.id} className='comment' >
                             <div className='comment_intro'>
-                            <img src={`data:image/jpeg;base64,${comment.poster.profilePicture}` } alt = 'author'className='author_pfp'/>
+                            <img src={comment.poster.profilePicture? `data:image/jpeg;base64,${comment.poster.profilePicture}`: placeholder }
+                                alt={comment.poster.profilePicture ? 'author' : 'default'}className='author_pfp'/>
                             <p  className='comment_author' onClick={() => gotoProfile(comment.poster.id)}> {comment.poster.firstName} {comment.poster.lastName}  </p>
                             </div>
                             <div className='comment_content'>
@@ -331,7 +332,7 @@ function Timeline() {
                 {console.log('article data = ',article)}
                 <div className='intro'>
                             <p className='title'>{article.article.title} by    </p> 
-                            <img src={`data:image/jpeg;base64,${article.article.author.profilePicture}` } alt = 'author'className='author_pfp'/>
+                            <img src={article.article.author.profilePicture?`data:image/jpeg;base64,${article.article.author.profilePicture}`:placeholder } alt = 'author'className='author_pfp'/>
                             <p className='author_name'  onClick={() => gotoProfile(article.article.author.id)}> {article.article.author.firstName} {article.article.author.lastName}  </p>
                 </div>
 
