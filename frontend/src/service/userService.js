@@ -23,6 +23,17 @@ class UserService {
 
     }
 
+    checkConnection(token, id) {
+        const API_URL = "/ViewProfile";
+        return axios.get(API_URL, {
+            params: {
+                user_id: id,
+                token:token
+            }
+        }).then(response => response.data);
+    }
+    
+
     changeEmail(data) {
         const API_URL = "/NewEmail";
         return axios.put(API_URL, data);

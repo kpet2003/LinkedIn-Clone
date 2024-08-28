@@ -1,5 +1,7 @@
 package com.tediproject.tedi.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,10 @@ import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.exceptions.UserAlreadyExists;
 import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
+import com.tediproject.tedi.model.Connection;
 import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.UserEntity;
+import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
@@ -32,6 +36,8 @@ public class UserService{
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired ConnectionRepo connectionRepo;
 
 
     public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
@@ -80,6 +86,16 @@ public class UserService{
 
     public UserEntity getUserById(long id) {
         return userRepo.findById(id);
+    }
+
+
+    public Boolean checkIfConnected(long id,String token) {
+        UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        UserEntity user_b = getUserById(id);
+
+        List <Connection> connection = connectionRepo.findByUsers(user_a.getID(), user_b.getID());
+        return !connection.isEmpty();
+
     }
 
     public void changeUserEmail(EmailChangeDto change){

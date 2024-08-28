@@ -358,6 +358,11 @@ public class UserControllers {
         }
     }
 
+    @GetMapping(value = "/ViewProfile")
+    public Boolean checkConnection(@RequestParam(value="user_id", required = false)Long id,@RequestParam(value="token", required = false)String token) {
+        return userService.checkIfConnected(id,token);
+    }
+
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 

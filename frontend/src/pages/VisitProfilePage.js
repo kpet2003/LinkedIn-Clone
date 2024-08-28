@@ -29,6 +29,7 @@ function VisitProfile(){
     const [user, setUser] = useState(initialState);
     const { id } = useParams();
     const [isAdmin,setAdmin] = useState(false);
+    const [isConnected,setIsConnected] = useState(false);
     console.log('userId is',id);
 
     useEffect(() => {
@@ -48,7 +49,21 @@ function VisitProfile(){
                 console.error('Error fetching user data:', error);
             }
         };
+
+        const checkIfConnected = async() => {
+            try {
+                const token = localStorage.getItem('jwt_token');
+                const response = await userService.checkConnection(token,id);
+                console.log('is user connected: ',response);
+                setIsConnected(response)
+            }   
+            catch(error) {
+                console.error("Error checking for connections: ",error);
+            }
+        }
+
         fetchUserData();
+        checkIfConnected();
     }, [id]);
 
     const viewNetwork = (id) => {
@@ -80,8 +95,8 @@ function VisitProfile(){
                             className="profile-picture"
                             />
                         </div>
-                        <button className="chat-button">Send Message</button>
-                        <button className="chat-button" onClick={() => viewNetwork(id)}>View Network</button>
+                       { isConnected && (<button className="chat-button">Send Message</button>)}
+                       { (isConnected || isAdmin) && (<button className="chat-button" onClick={() => viewNetwork(id)}>View Network</button>)}
                     </div>
                     
                     <div>
@@ -105,7 +120,7 @@ function VisitProfile(){
                         <p>{user.workplace}</p>
 
                     </div>
-                    {user.publicEducation ? (
+                    {((user.publicEducation && (!isConnected)) || isAdmin || isConnected) ? (
                     <>
                     <br></br>
                     <div className="card">
@@ -116,7 +131,7 @@ function VisitProfile(){
                         </div>
                         </>
                     ) : null}
-                    {user.publicWork ? (
+                    {((user.publicWork && (!isConnected)) || isAdmin || isConnected) ? (
                     <>
                         <br></br>
                         <div className="card">
@@ -127,7 +142,7 @@ function VisitProfile(){
                         </div>
                     </>
                     ) : null}
-                    {user.publicSkills ? (
+                    {((user.publicSkills && (!isConnected)) || isAdmin || isConnected)? (
                     <>
                         <br></br>
                         <div className="card">
