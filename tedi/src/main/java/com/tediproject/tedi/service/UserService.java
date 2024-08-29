@@ -242,6 +242,18 @@ public class UserService{
         return user.getUser_skills();
     }
 
+    public void deleteSkill(Long skill_id,String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        Skills skill = skillRepo.findById(skill_id).get();
+        user.getUser_skills().remove(skill);
+
+        skill.getSkilled_users().remove(user);
+        skillRepo.save(skill);
+        userRepo.save(user);
+
+    }
+
     @PostConstruct
     public void init() {
         // set admin role
@@ -278,6 +290,8 @@ public class UserService{
         }
         
     }
+
+
 
     
 }

@@ -88,6 +88,11 @@ class UserService {
         }).then(response => response.data);
     }
 
+    removeSkill(skill_id,token) {
+        const API_URL = "/Profile/DeleteSkill";
+        return axios.delete(API_URL, {params: {skill_id: skill_id,token: token}});
+    }
+
     changeEduState(state){
         const API_URL = "/Profile/edubool";
         return axios.put(API_URL,state);

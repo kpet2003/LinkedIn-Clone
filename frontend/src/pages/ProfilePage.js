@@ -7,7 +7,25 @@ import userService from "../service/userService.js";
 import Popup from 'reactjs-popup';
 import ToggleSwitch from "../components/ToggleSwitch.js";
 import placeholder from '../icons/avatar.png'
+import trash from '../icons/trash.png';
 
+
+function Skills({skills,deleteSkill}) {
+
+    
+
+    return (
+        <div>
+            <ul>
+                {skills.map(skill =>(
+                    <li key = {skill.id}>
+                        {skill.skill} <img src= {trash} alt="trash" style={{ cursor: 'pointer', marginLeft: '8px' }} onClick={()=>deleteSkill(skill.id)} />
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
 
 
 function Pfp(){
@@ -64,6 +82,17 @@ function Pfp(){
         getUserSkills();
     }, []);
 
+    const deleteSkill = async(skill_id) => {
+        try {
+            const data = await userService.removeSkill(skill_id,localStorage.getItem('jwt_token'));
+            const response = await userService.fetchSkills(localStorage.getItem('jwt_token'));
+            setSkills(response);
+        }
+        catch(error) {
+            console.error('error deleting the skill: ',error);
+        }
+    }
+
     const handleChange = (event) => {
         setChangedField('profilePicture');
         const file = event.target.files[0];
@@ -113,7 +142,8 @@ function Pfp(){
                     }
                     await userService.changeSkills(data);
                     alert('Skills changed successfully');
-                    await userService.fetchSkills(localStorage.getItem('jwt_token'));
+                    const response = await userService.fetchSkills(localStorage.getItem('jwt_token'));
+                    setSkills(response);
                 }
                 else if(changedField === 'workTitle'){
                     const data = {
@@ -374,7 +404,7 @@ function Pfp(){
                     <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicSkills} id="skills"></ToggleSwitch>
                     </div>
 
-                    <p>{user.skills}</p>
+                   <Skills skills={skills} deleteSkill={deleteSkill}/>
                         
 
                 </div>

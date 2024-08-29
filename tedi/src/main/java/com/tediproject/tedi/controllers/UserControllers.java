@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -415,6 +416,16 @@ public class UserControllers {
     }
 
 
+    @DeleteMapping(value = "/Profile/DeleteSkill")
+    public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {
+        try {
+            userService.deleteSkill(skill_id,token);
+            return ResponseEntity.ok("OK");
+        }
+        catch(Exception e) {
+            return ResponseEntity.badRequest().body("ID is required");
+        }
+    }
 }
 
 
