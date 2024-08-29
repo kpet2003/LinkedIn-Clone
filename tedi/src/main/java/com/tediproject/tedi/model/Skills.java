@@ -1,6 +1,9 @@
 package com.tediproject.tedi.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,8 +29,46 @@ public class Skills {
     @JoinTable(name = "job_skills",joinColumns = @JoinColumn(name = "skill_id"),inverseJoinColumns = @JoinColumn(name = "job_id"))
     private List <Job> jobs_related;
 
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name = "user_skills",joinColumns = @JoinColumn(name = "skill_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List <UserEntity> skilled_users;
+
+    public Skills() {
+        this.skilled_users = new ArrayList<>();
+        this.jobs_related = new ArrayList<>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getSkill() {
+        return skill;
+    }
+
+    public void setSkill(String skill) {
+        this.skill = skill;
+    }
+
+    public List<Job> getJobs_related() {
+        return jobs_related;
+    }
+
+    public void setJobs_related(List<Job> jobs_related) {
+        this.jobs_related = jobs_related;
+    }
+
+    public List<UserEntity> getSkilled_users() {
+        return skilled_users;
+    }
+
+    public void setSkilled_users(List<UserEntity> skilled_users) {
+        this.skilled_users = skilled_users;
+    }
 
 }

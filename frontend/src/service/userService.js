@@ -80,6 +80,14 @@ class UserService {
         }).data;
     }
 
+    fetchSkills(token) {
+        const API_URL = "/Profile/GetSkills";
+        return axios.get(API_URL,{
+            params: {token : token},
+            responseType: 'json'
+        }).then(response => response.data);
+    }
+
     changeEduState(state){
         const API_URL = "/Profile/edubool";
         return axios.put(API_URL,state);

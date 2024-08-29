@@ -32,12 +32,14 @@ function Pfp(){
     const [user, setUser] = useState(initialState);
     const [selectedFile, setSelectedFile] = useState(null);
     const [changedField, setChangedField] = useState('');
+    const [skills,setSkills] = useState([]);
 
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const data = await userService.getUserData(localStorage.getItem('jwt_token'));
+                console.log(data);
                 setUser((user) => ({
                     ...user,
                     ...data
@@ -47,7 +49,19 @@ function Pfp(){
             }
         };
 
+        const getUserSkills = async () => {
+            try {
+                const data = await userService.fetchSkills(localStorage.getItem('jwt_token'));
+                console.log(data)
+                setSkills(data);
+            }
+            catch(error) {
+                console.error('Error fetching skills',error);
+            }
+        }
+
         fetchUserData();
+        getUserSkills();
     }, []);
 
     const handleChange = (event) => {
@@ -99,6 +113,7 @@ function Pfp(){
                     }
                     await userService.changeSkills(data);
                     alert('Skills changed successfully');
+                    await userService.fetchSkills(localStorage.getItem('jwt_token'));
                 }
                 else if(changedField === 'workTitle'){
                     const data = {
@@ -347,7 +362,7 @@ function Pfp(){
                             <span className="close" onClick={close}>
                             &times;
                             </span>
-                            <h2>Edit Skills</h2>
+                            <h2> Add Skills</h2>
                             <form onSubmit={handleSubmit}>
                             <input type="text" className="file-input" onChange={handleChangedText} id="skills"/>
                             <input type="submit" value="Save" className="save-button" />

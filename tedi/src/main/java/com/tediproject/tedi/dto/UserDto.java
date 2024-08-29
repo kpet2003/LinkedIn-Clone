@@ -9,7 +9,6 @@ public class UserDto {
     protected byte[] resume;
     protected String workExperience;
     protected String education;
-    protected String skills;
     protected Boolean isPublicWorkExperience;
     protected Boolean isPublicEducation;
     protected Boolean isPublicSkills;
@@ -60,10 +59,6 @@ public class UserDto {
         this.education = edu;
     }
 
-    public void setSkills(String skill){
-        this.skills = skill;
-    }
-
     public void setPublicWork(Boolean val){
         this.isPublicWorkExperience = val;
     }
@@ -109,9 +104,7 @@ public class UserDto {
         return this.education;
     }
 
-    public String getSkills(){
-        return this.skills;
-    }
+
 
     public Boolean getPublicWork(){
         return this.isPublicWorkExperience;

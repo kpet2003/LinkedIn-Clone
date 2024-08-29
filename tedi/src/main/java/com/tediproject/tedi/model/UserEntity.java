@@ -3,7 +3,8 @@ package com.tediproject.tedi.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -56,8 +57,8 @@ public class UserEntity {
     @Column
     protected String education;
 
-    @Column
-    protected String skills;
+    // @Column
+    // protected String skills;
 
     @Column
     protected Boolean isPublicWorkExperience = true;
@@ -103,11 +104,42 @@ public class UserEntity {
     protected List<Job> jobs_posted;
 
 
-    @ManyToMany(mappedBy = "applicants", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "applicants", fetch = FetchType.EAGER)
     protected List<Job> jobs_applied;
 
-    @ManyToMany(mappedBy = "skilled_users", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "skilled_users", fetch = FetchType.EAGER)
     private List <Skills> user_skills;
+
+
+    public List<Job> getJobs_posted() {
+        return jobs_posted;
+    }
+
+
+    public void setJobs_posted(List<Job> jobs_posted) {
+        this.jobs_posted = jobs_posted;
+    }
+
+
+    public List<Job> getJobs_applied() {
+        return jobs_applied;
+    }
+
+
+    public void setJobs_applied(List<Job> jobs_applied) {
+        this.jobs_applied = jobs_applied;
+    }
+
+
+    public List<Skills> getUser_skills() {
+        return user_skills;
+    }
+
+
+    public void setUser_skills(List<Skills> user_skills) {
+        this.user_skills = user_skills;
+    }
 
 
     public UserEntity() {}
@@ -154,9 +186,6 @@ public class UserEntity {
         this.education = edu;
     }
 
-    public void setSkills(String skill){
-        this.skills = skill;
-    }
 
     public void setPublicWork(Boolean val){
         this.isPublicWorkExperience = val;
@@ -218,9 +247,6 @@ public class UserEntity {
         return this.education;
     }
 
-    public String getSkills(){
-        return this.skills;
-    }
 
     public Boolean getPublicWork(){
         return this.isPublicWorkExperience;

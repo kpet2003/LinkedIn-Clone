@@ -14,13 +14,16 @@ import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
 import com.tediproject.tedi.model.Connection;
 import com.tediproject.tedi.model.Role;
+import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.RoleRepo;
+import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService{
@@ -37,7 +40,12 @@ public class UserService{
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired ConnectionRepo connectionRepo;
+    @Autowired 
+    private ConnectionRepo connectionRepo;
+
+    @Autowired
+    private SkillsRepo skillRepo;
+
 
 
     public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
@@ -148,12 +156,33 @@ public class UserService{
          }
     }
 
+   
+    @Transactional
     public void changeUserSkills(String token, String skills){
         try {
             UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-            user.setSkills(skills);
+            
+            Skills skill = skillRepo.findBySkill(skills);
+
+            
+            if(skill == null) {
+                skill = new Skills();
+                skill.setSkill(skills);
+               
+
+            }
+            
+            if (!user.getUser_skills().contains(skill)) {
+                user.getUser_skills().add(skill);
+                skill.getSkilled_users().add(user);
+            }
+ 
+
+  
+            skillRepo.save(skill);
             userRepo.save(user);
         } catch (Exception e) {
+            e.printStackTrace();  // Log the exception for debugging purposes
             throw new RuntimeException("File save failed");
          }
     }
@@ -208,6 +237,11 @@ public class UserService{
         }
     }
 
+    public List <Skills> findSkills(String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        return user.getUser_skills();
+    }
+
     @PostConstruct
     public void init() {
         // set admin role
@@ -243,8 +277,8 @@ public class UserService{
 
         }
         
-
-
     }
+
+    
 }
 

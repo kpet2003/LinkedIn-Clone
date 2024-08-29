@@ -1,5 +1,6 @@
 package com.tediproject.tedi.controllers;
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.tediproject.tedi.dto.InfoChangeDto;
 import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.dto.UserDto;
+import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -205,7 +207,8 @@ public class UserControllers {
     public ResponseEntity<?> changeSkill(@RequestBody InfoChangeDto change){
         try {
             jwtUtil.validateToken(change.getToken());
-            userService.changeUserWork(change.getToken(), change.getInfo());
+            
+            userService.changeUserSkills(change.getToken(), change.getInfo());
             return ResponseEntity.ok(HttpStatus.OK);
         }
         catch (AuthenticationCredentialsNotFoundException e) {
@@ -332,7 +335,6 @@ public class UserControllers {
                 userDto.setResume(user.getResume());
                 userDto.setWorkExperience(user.getWorkExperience());
                 userDto.setEducation(user.getEducation());
-                userDto.setSkills(user.getSkills());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
@@ -340,6 +342,7 @@ public class UserControllers {
                 userDto.setWorkplace(user.getWorkplace());
                 userDto.setWebsite(user.getWebsite());
                 userDto.setId(user.getID());
+                
                 if (user.getProfilePicture() != null) {
                     String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
                     userDto.setProfilePicture(base64Image);
@@ -363,6 +366,12 @@ public class UserControllers {
         return userService.checkIfConnected(id,token);
     }
 
+
+    @GetMapping(value = "/Profile/GetSkills")
+    public List<Skills> getUserSkills(String token) {
+        return userService.findSkills(token);
+    }
+
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 
@@ -370,7 +379,6 @@ public class UserControllers {
             if(id == null){
                 return ResponseEntity.badRequest().body("id is required");
             }
-            System.out.println("id is"+id);
             UserEntity user = userService.getUserById(id);
 
             if(user != null){
@@ -382,13 +390,13 @@ public class UserControllers {
                 userDto.setResume(user.getResume());
                 userDto.setWorkExperience(user.getWorkExperience());
                 userDto.setEducation(user.getEducation());
-                userDto.setSkills(user.getSkills());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
                 userDto.setWorkTitle(user.getWorkTitle());
                 userDto.setWorkplace(user.getWorkplace());
                 userDto.setWebsite(user.getWebsite());
+                
                 if (user.getProfilePicture() != null) {
                     String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
                     userDto.setProfilePicture(base64Image);
