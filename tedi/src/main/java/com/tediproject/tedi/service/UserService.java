@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.tediproject.tedi.dto.EmailChangeDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.exceptions.UserAlreadyExists;
@@ -254,6 +255,12 @@ public class UserService{
 
     }
 
+    public List<Skills> findSkillsByID(Long id) {
+        UserEntity user = userRepo.findById(id).get();
+        return user.getUser_skills();
+    }
+
+
     @PostConstruct
     public void init() {
         // set admin role
@@ -290,6 +297,7 @@ public class UserService{
         }
         
     }
+
 
 
 

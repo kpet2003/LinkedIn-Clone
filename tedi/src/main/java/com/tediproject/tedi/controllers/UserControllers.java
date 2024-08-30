@@ -415,6 +415,10 @@ public class UserControllers {
         }
     }
 
+    @GetMapping(value = "/VisitProfile/getSkills/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Skills> getSkillsByID(@PathVariable Long id) {
+        return userService.findSkillsByID(id);
+    }
 
     @DeleteMapping(value = "/Profile/DeleteSkill")
     public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {

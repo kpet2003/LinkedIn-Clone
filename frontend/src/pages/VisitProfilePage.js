@@ -7,6 +7,22 @@ import '../styling/Visit.css';
 import '../styling/Profile.css';
 import placeholder from '../icons/avatar.png';
 
+
+function Skills({skills}) {
+    return (
+        <div>
+            <ul>
+                {skills.map(skill =>(
+                    <li key = {skill.id}>
+                        {skill.skill} 
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+
 function VisitProfile(){
     const initialState = {
         firstName: '',
@@ -30,6 +46,7 @@ function VisitProfile(){
     const { id } = useParams();
     const [isAdmin,setAdmin] = useState(false);
     const [isConnected,setIsConnected] = useState(false);
+    const [skills,setSkills] = useState([]);
     console.log('userId is',id);
 
     useEffect(() => {
@@ -62,8 +79,21 @@ function VisitProfile(){
             }
         }
 
+        const fetchSkills = async() => {
+            try{
+               
+                const response = await userService.fetchSkillsById(id);
+                setSkills(response);
+                console.log("skills are: ",response);
+            }
+            catch(error) {
+                console.error("Error fetching the user's skills: ",error)
+            }
+        }
+
         fetchUserData();
         checkIfConnected();
+        fetchSkills();
     }, [id]);
 
     const viewNetwork = (id) => {
@@ -148,9 +178,10 @@ function VisitProfile(){
                         <div className="card">
                         <div className="about-me-container">
                         <h2><i>Skills</i></h2>
+                       
                         </div>
 
-                        <p>{user.skills}</p>
+                        <Skills skills = {skills}/>
                             
 
                     </div>

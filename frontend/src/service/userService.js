@@ -118,6 +118,11 @@ class UserService {
         return axios.put(API_URL,place);
     }
 
+    fetchSkillsById(id) {
+        const API_URL = `/VisitProfile/getSkills/${id}`;
+        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+    }
+
     async getUserEmail(ID) {
         if (!ID) {
             console.error("Invalid ID");
