@@ -16,7 +16,7 @@ function Requests() {
                 const token = localStorage.getItem('jwt_token');
                 const response = await  notificationService.getRequests(token);
                 setUsers(response);
-                console.log(response);
+                console.log('Requests for user are:  ',response);
             } 
             catch (error) {
                 console.error("There was an error getting the request list", error);

@@ -1,12 +1,10 @@
 package com.tediproject.tedi.service;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Notification;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.NotificationRepo;
@@ -33,8 +31,7 @@ public class NotificationService {
     // find users that made a friend request
     public List<UserEntity> findUsers(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<Long> sender_ids = requestRepo.findSenders(user.getID());
-        List<UserEntity> senders = userRepo.findAllById(sender_ids);
+        List<UserEntity> senders = requestRepo.findSenders(user);
         return senders;
     }
 

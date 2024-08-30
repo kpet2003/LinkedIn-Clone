@@ -1,6 +1,7 @@
 package com.tediproject.tedi.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,15 +30,18 @@ public class NetworkService {
     ConnectionRepo connectionRepo;
 
 
+
+    // make a friend request
     public void createRequest(long receiver_id, String token) {
 
         UserEntity sender = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        long sender_id = sender.getID(); 
-        
+        UserEntity receiver = userRepo.findById(receiver_id);
+    
         Request new_request = new Request();
-        new_request.set_receiver(receiver_id);
-        new_request.set_sender(sender_id);
+
         new_request.set_date();
+        new_request.setReceiver(receiver);
+        new_request.setSender(sender);
 
         requestRepo.save(new_request);
     }
@@ -45,8 +49,9 @@ public class NetworkService {
     public void addConnection(long user_id, String token) {
         
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        Request request = requestRepo.findByUsers(user_a.getID(), user_id);
-
+        UserEntity user_b = userRepo.findById(user_id);
+        Request request = requestRepo.findByUsers(user_a, user_b);
+        
         requestRepo.delete(request);
         
         Connection con = new Connection();
@@ -59,15 +64,20 @@ public class NetworkService {
 
     public void removeRequest(long user_id, String token) {
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        Request request = requestRepo.findByUsers(user_a.getID(), user_id);
+        UserEntity user_b = userRepo.findById(user_id);
+
+        Request request = requestRepo.findByUsers(user_a, user_b);
         requestRepo.delete(request);
     }
 
     public List<UserEntity> findUsers(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<Long> receivers = requestRepo.findReceivers(user.getID());
+        List<UserEntity> receivers = requestRepo.findReceivers(user);
 
-        List<UserEntity> senders = userRepo.findAllById(receivers);
+        List<Long> receiver_ids = receivers.stream().map(UserEntity::getID).collect(Collectors.toList());
+
+
+        List<UserEntity> senders = userRepo.findAllById(receiver_ids);
         return senders;
 
     }
