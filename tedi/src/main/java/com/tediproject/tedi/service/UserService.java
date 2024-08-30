@@ -102,7 +102,7 @@ public class UserService{
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         UserEntity user_b = getUserById(id);
 
-        List <Connection> connection = connectionRepo.findByUsers(user_a.getID(), user_b.getID());
+        List <Connection> connection = connectionRepo.findByUsers(user_a, user_b);
         return !connection.isEmpty();
 
     }

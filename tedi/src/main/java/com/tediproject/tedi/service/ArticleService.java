@@ -37,8 +37,9 @@ public class ArticleService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired 
-    ConnectionRepo connectionRepo;
+    @Autowired
+    private NetworkService networkService;
+
 
     @Autowired 
     LikeRepo likeRepo;
@@ -58,11 +59,10 @@ public class ArticleService {
         Set<Article> articles = new HashSet<>();
         
         // find articles written by user
-        List <Long> network = connectionRepo.findByUser(author.getID());
         articles.addAll(articleRepo.findByAuthor(author));
         
         // find articles that the user's connections have written
-        List<UserEntity> connections = userRepo.findAllById(network);
+        List<UserEntity> connections = networkService.findConnections(token);
         articles.addAll(articleRepo.findByAuthorIn(connections));
 
         // find articles that the user's connections have liked

@@ -105,6 +105,16 @@ public class UserEntity {
     @OneToMany(mappedBy = "sender", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> notifications_sent;
 
+
+    @OneToMany(mappedBy = "user_a", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Connection> connections_requested;
+
+
+    @OneToMany(mappedBy = "user_b", orphanRemoval = true,fetch = FetchType.EAGER)
+    protected List<Connection> connections_accepted;
+
+
+
     @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Job> jobs_posted;
 

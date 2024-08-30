@@ -75,7 +75,8 @@ public class NetworkController {
     }
 
     @GetMapping(value = "/ViewNetwork/getConnections/{id}")
-    public List<UserEntity> getProfile(@PathVariable Long id) {
+    public List<UserEntity> getNetwork(@PathVariable Long id) {
+
         return networkService.findConnectionsById(id);
     }
         

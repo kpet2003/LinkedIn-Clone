@@ -1,5 +1,6 @@
 package com.tediproject.tedi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,8 @@ public class NetworkService {
         requestRepo.save(new_request);
     }
 
+
+    // add a new connection to the connections table
     public void addConnection(long user_id, String token) {
         
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
@@ -55,13 +58,15 @@ public class NetworkService {
         requestRepo.delete(request);
         
         Connection con = new Connection();
-        con.setUser_a(user_a.getID());
-        con.setUser_b(user_id);
+        con.setUser_a(user_a);
+        con.setUser_b(user_b);
 
         connectionRepo.save(con);
 
     }
 
+
+    // handle declining of requests
     public void removeRequest(long user_id, String token) {
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         UserEntity user_b = userRepo.findById(user_id);
@@ -70,6 +75,7 @@ public class NetworkService {
         requestRepo.delete(request);
     }
 
+    // find users that have made a friend request
     public List<UserEntity> findUsers(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<UserEntity> receivers = requestRepo.findReceivers(user);
@@ -81,22 +87,35 @@ public class NetworkService {
         return senders;
 
     }
+    
 
+    private List<UserEntity> getConnectedUsers(UserEntity user) {
+        List<UserEntity> user_bs = connectionRepo.findUserB(user);
+        List <UserEntity> user_as = connectionRepo.findUserA(user);
+
+        List<UserEntity> connectedUsers = new ArrayList<>();
+        connectedUsers.addAll(user_bs);
+        connectedUsers.addAll(user_as);
+
+        return connectedUsers;
+    }
+
+    // find the connections of a user
     public List<UserEntity> findConnections(String token) {
         
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        Long user_id = user.getID();
-        List<Long> connected_ids = connectionRepo.findByUser(user_id);
-        List<UserEntity> connections = userRepo.findAllById(connected_ids);
+        List<UserEntity> connections  = this.getConnectedUsers(user);
+    
 
         return connections;
         
     }
-
+    // find the connections of a user
     public List<UserEntity> findConnectionsById(Long id ) {
         
-        List<Long> connected_ids = connectionRepo.findByUser(id);
-        List<UserEntity> connections = userRepo.findAllById(connected_ids);
+        UserEntity user = userRepo.findById(id).get();
+        List<UserEntity> connections  = this.getConnectedUsers(user);
+    
         return connections;
         
     }
