@@ -1,6 +1,8 @@
 package com.tediproject.tedi.controllers;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import com.tediproject.tedi.dto.InfoChangeDto;
 import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.dto.UserDto;
+import com.tediproject.tedi.model.Education;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
@@ -176,10 +179,16 @@ public class UserControllers {
 
     @PutMapping(value= "/Profile/educhange")
     public ResponseEntity<?> changeEdu(@RequestBody InfoChangeDto change){
+
+         Map<String, Object> response = new HashMap<>();
         try {
             jwtUtil.validateToken(change.getToken());
+            
             userService.changeUserEdu(change.getToken(), change.getInfo());
-            return ResponseEntity.ok(HttpStatus.OK);
+
+            response.put("status", HttpStatus.OK.value());
+            response.put("message", "Education updated successfully");
+            return ResponseEntity.ok(response);
         }
         catch (AuthenticationCredentialsNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
@@ -335,13 +344,12 @@ public class UserControllers {
                 userDto.setPhoneNumber(user.getPhoneNumber());
                 userDto.setResume(user.getResume());
                 userDto.setWorkExperience(user.getWorkExperience());
-                userDto.setEducation(user.getEducation());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
                 userDto.setWorkTitle(user.getWorkTitle());
                 userDto.setWorkplace(user.getWorkplace());
-                userDto.setWebsite(user.getWebsite());
+        
                 userDto.setId(user.getID());
                 
                 if (user.getProfilePicture() != null) {
@@ -373,6 +381,11 @@ public class UserControllers {
         return userService.findSkills(token);
     }
 
+    @GetMapping(value="/Profile/GetEducation")
+    public List<Education> getUserEducation(String token) {
+        return userService.findEducation(token);
+    }
+
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 
@@ -390,13 +403,12 @@ public class UserControllers {
                 userDto.setPhoneNumber(user.getPhoneNumber());
                 userDto.setResume(user.getResume());
                 userDto.setWorkExperience(user.getWorkExperience());
-                userDto.setEducation(user.getEducation());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
                 userDto.setWorkTitle(user.getWorkTitle());
                 userDto.setWorkplace(user.getWorkplace());
-                userDto.setWebsite(user.getWebsite());
+
                 
                 if (user.getProfilePicture() != null) {
                     String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
@@ -420,6 +432,11 @@ public class UserControllers {
         return userService.findSkillsByID(id);
     }
 
+    @GetMapping(value = "/VisitProfile/getEducation/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Education> getEducationByID(@PathVariable Long id) {
+        return userService.findEducationByID(id);
+    }
+
     @DeleteMapping(value = "/Profile/DeleteSkill")
     public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {
         try {
@@ -430,6 +447,18 @@ public class UserControllers {
             return ResponseEntity.badRequest().body("ID is required");
         }
     }
+
+    @DeleteMapping(value = "/Profile/DeleteEdu")
+    public ResponseEntity<?> removeEducation(@RequestParam(value="education_id") Long education_id,@RequestParam(value="token") String token) {
+        try {
+            userService.deleteEducation(education_id, token);
+            return ResponseEntity.ok("OK");
+        }
+        catch(Exception e) {
+            return ResponseEntity.badRequest().body("ID is required");
+        }
+    }
+
 }
 
 

@@ -22,6 +22,21 @@ function Skills({skills}) {
     );
 }
 
+function Education({education}) {
+    return (
+        <div>
+            <ul>
+                {education.map(edu =>(
+                    <li key = {edu.id}>
+                        {edu.education} 
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+
 
 function VisitProfile(){
     const initialState = {
@@ -47,6 +62,7 @@ function VisitProfile(){
     const [isAdmin,setAdmin] = useState(false);
     const [isConnected,setIsConnected] = useState(false);
     const [skills,setSkills] = useState([]);
+    const [education,setEducation] = useState([]);
     console.log('userId is',id);
 
     useEffect(() => {
@@ -91,9 +107,22 @@ function VisitProfile(){
             }
         }
 
+        const fetchEducation = async() => {
+            try{
+               
+                const response = await userService.fetchEducationById(id);
+                setEducation(response);
+                console.log("skills are: ",response);
+            }
+            catch(error) {
+                console.error("Error fetching the user's skills: ",error)
+            }
+        }
+
         fetchUserData();
         checkIfConnected();
         fetchSkills();
+        fetchEducation();
     }, [id]);
 
     const viewNetwork = (id) => {
@@ -157,7 +186,7 @@ function VisitProfile(){
                         <div className="about-me-container">
                             <h2><i>Education</i></h2>
                         </div>
-                        <p>{user.education}</p>
+                        <Education education = {education}/>
                         </div>
                         </>
                     ) : null}
@@ -192,7 +221,7 @@ function VisitProfile(){
                         <h2><i>Contact Info</i></h2>
                         <p><b>Email:</b> {user.email}</p>
                         <p><b>Phone Number:</b> {user.phoneNumber}</p>
-                        <p><b>Website:</b> <a href={user.website}>{user.website}</a> </p>
+                      
                     </div>
                 </div>
             </div>

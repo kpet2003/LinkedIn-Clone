@@ -55,11 +55,31 @@ class UserService {
 
     changeEducation(education) {
         const API_URL = "/Profile/educhange";
-        return axios.put(API_URL, education, {
+        console.log('education is: ', education);
+               return axios.put(API_URL, education, {
             headers: {
-                'Content-Type': 'application/json'
+                 'Content-Type': 'application/json'
             }
         }).data;
+    }
+    
+    
+    fetchEducation(token) {
+        const API_URL = "/Profile/GetEducation";
+        return axios.get(API_URL,{
+            params: {token : token},
+            responseType: 'json'
+        }).then(response => response.data);
+    }
+
+    fetchEducationById(id) {
+        const API_URL = `/VisitProfile/getEducation/${id}`;
+        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+    }
+
+    removeEdu(education_id,token) {
+        const API_URL = "/Profile/DeleteEdu";
+        return axios.delete(API_URL, {params: {education_id: education_id,token: token}});
     }
 
     changeWork(work) {
@@ -87,6 +107,12 @@ class UserService {
             responseType: 'json'
         }).then(response => response.data);
     }
+
+    fetchSkillsById(id) {
+        const API_URL = `/VisitProfile/getSkills/${id}`;
+        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+    }
+
 
     removeSkill(skill_id,token) {
         const API_URL = "/Profile/DeleteSkill";
@@ -118,10 +144,8 @@ class UserService {
         return axios.put(API_URL,place);
     }
 
-    fetchSkillsById(id) {
-        const API_URL = `/VisitProfile/getSkills/${id}`;
-        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
-    }
+
+    
 
     async getUserEmail(ID) {
         if (!ID) {

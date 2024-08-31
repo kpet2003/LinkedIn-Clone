@@ -14,10 +14,12 @@ import com.tediproject.tedi.exceptions.UserAlreadyExists;
 import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
 import com.tediproject.tedi.model.Connection;
+import com.tediproject.tedi.model.Education;
 import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ConnectionRepo;
+import com.tediproject.tedi.repo.EducationRepo;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -47,6 +49,9 @@ public class UserService{
     @Autowired
     private SkillsRepo skillRepo;
 
+    @Autowired
+    private EducationRepo eduRepo;
+
 
 
     public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
@@ -60,9 +65,7 @@ public class UserService{
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
-        System.out.println("HERE");
         user.setPassword(passwordEncoder.encode(password));
-        System.out.println("HERE");
         user.setPhoneNumber(phoneNumber);
         if(pfp!=null) {
             user.setProfilePicture(pfp.getBytes());
@@ -137,12 +140,29 @@ public class UserService{
          }
     }
 
+    @Transactional
     public void changeUserEdu(String token, String edu){
         try {
             UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-            user.setEducation(edu);
+            
+            Education education = eduRepo.findByEducation(edu);
+
+            if(education == null) {
+                education = new Education();
+                education.setEducation(edu);
+            }
+
+            
+
+            if (!user.getUser_education().contains(education)) {
+                user.getUser_education().add(education);
+                education.getEducated_users().add(user);
+            }
+ 
+            eduRepo.save(education);
             userRepo.save(user);
         } catch (Exception e) {
+            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }
@@ -183,7 +203,7 @@ public class UserService{
             skillRepo.save(skill);
             userRepo.save(user);
         } catch (Exception e) {
-            e.printStackTrace();  // Log the exception for debugging purposes
+            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }
@@ -242,6 +262,29 @@ public class UserService{
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         return user.getUser_skills();
     }
+
+    public List <Education> findEducation(String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        return user.getUser_education();
+    }
+
+    public List<Education> findEducationByID(Long id) {
+        UserEntity user = userRepo.findById(id).get();
+        return user.getUser_education();
+    }
+
+    public void deleteEducation(Long edu_id,String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        Education education = eduRepo.findById(edu_id).get();
+        user.getUser_education().remove(education);
+        education.getEducated_users().remove(user);
+
+        userRepo.save(user);
+        eduRepo.save(education);
+    }
+
+
 
     public void deleteSkill(Long skill_id,String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));

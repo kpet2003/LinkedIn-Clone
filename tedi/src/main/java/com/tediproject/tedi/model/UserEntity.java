@@ -54,11 +54,6 @@ public class UserEntity {
     @Column
     protected String workExperience;
 
-    @Column
-    protected String education;
-
-    // @Column
-    // protected String skills;
 
     @Column
     protected Boolean isPublicWorkExperience = true;
@@ -81,8 +76,19 @@ public class UserEntity {
     @Column
     protected String workTitle;
 
-    @Column
-    protected String website;
+   
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "educated_users", fetch = FetchType.EAGER)
+    private List <Education> user_education;
+
+    public List<Education> getUser_education() {
+        return user_education;
+    }
+
+
+    public void setUser_education(List<Education> user_education) {
+        this.user_education = user_education;
+    }
 
     @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Article> articles_written;
@@ -109,15 +115,11 @@ public class UserEntity {
     @OneToMany(mappedBy = "user_a", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Connection> connections_requested;
 
-
     @OneToMany(mappedBy = "user_b", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Connection> connections_accepted;
 
-
-
     @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Job> jobs_posted;
-
 
     @ManyToMany(mappedBy = "applicants", fetch = FetchType.EAGER)
     protected List<Job> jobs_applied;
@@ -197,11 +199,6 @@ public class UserEntity {
         this.workExperience = experience;
     }
 
-    public void setEducation(String edu){
-        this.education = edu;
-    }
-
-
     public void setPublicWork(Boolean val){
         this.isPublicWorkExperience = val;
     }
@@ -258,10 +255,6 @@ public class UserEntity {
         return this.workExperience;
     }
 
-    public String getEducation(){
-        return this.education;
-    }
-
 
     public Boolean getPublicWork(){
         return this.isPublicWorkExperience;
@@ -295,13 +288,6 @@ public class UserEntity {
         this.workTitle = workTitle;
     }
 
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
 
 
 

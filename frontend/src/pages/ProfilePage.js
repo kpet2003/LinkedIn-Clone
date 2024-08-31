@@ -27,6 +27,20 @@ function Skills({skills,deleteSkill}) {
     );
 }
 
+function Education({education,deleteEdu}) {
+    return (
+        <div>
+            <ul>
+                {education.map(edu =>(
+                    <li key = {edu.id}>
+                        {edu.education} <img src= {trash} alt="trash" style={{ cursor: 'pointer', marginLeft: '8px' }} onClick={()=>deleteEdu(edu.id)} />
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
 
 function Pfp(){
     const initialState = {
@@ -37,20 +51,21 @@ function Pfp(){
         profilePicture: '',
         resume: null,
         workExperience: '',
-        education: '',
-        skills: '',
         publicWork: '',
         publicSkills: '',
         publicEducation: '',
         workTitle: '',
         workplace: '',
-        website: ''
+        education:'',
+        skills:'',
+       
     };
 
     const [user, setUser] = useState(initialState);
     const [selectedFile, setSelectedFile] = useState(null);
     const [changedField, setChangedField] = useState('');
     const [skills,setSkills] = useState([]);
+    const [education,setEducation] = useState([]);
 
 
     useEffect(() => {
@@ -78,15 +93,39 @@ function Pfp(){
             }
         }
 
+        const getUserEducation = async () => {
+            try {
+                const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
+                console.log(response);
+                setEducation(response);
+            }
+            catch(error) {
+                console.error('Error fetching education',error);
+            }
+          
+        }
+
         fetchUserData();
+        getUserEducation();
         getUserSkills();
     }, []);
 
     const deleteSkill = async(skill_id) => {
         try {
-            const data = await userService.removeSkill(skill_id,localStorage.getItem('jwt_token'));
+            await userService.removeSkill(skill_id,localStorage.getItem('jwt_token'));
             const response = await userService.fetchSkills(localStorage.getItem('jwt_token'));
             setSkills(response);
+        }
+        catch(error) {
+            console.error('error deleting the skill: ',error);
+        }
+    }
+
+    const deleteEducation = async(edu_id) =>{
+        try {
+            await userService.removeEdu(edu_id,localStorage.getItem('jwt_token'));
+            const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
+            setEducation(response);
         }
         catch(error) {
             console.error('error deleting the skill: ',error);
@@ -122,10 +161,13 @@ function Pfp(){
                 if(changedField === 'education'){
                     const data = {
                         token: localStorage.getItem('jwt_token'),
-                        info: user.education
+                        info:user.education
                     }
+                    console.log('user education is: ',user.education)
                     await userService.changeEducation(data);
                     alert('Education info changed successfully');
+                    const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
+                    setEducation(response);
                 }
                 else if(changedField === 'workExperience'){
                     const data = {
@@ -317,7 +359,7 @@ function Pfp(){
                     <div className="about-me-container">
                         <Popup
                             trigger={
-                            <div className="pen-icon" title="Edit Education">
+                            <div className="pen-icon" title="Add Education">
                                 <img src={penIcon} alt="Pen" className="pen-icon" />
                             </div>
                             }
@@ -330,10 +372,10 @@ function Pfp(){
                                 <span className="close" onClick={close}>
                                 &times;
                                 </span>
-                                <h2>Edit Education</h2>
+                                <h2>Add Education</h2>
                                 <form onSubmit={handleSubmit}>
-                                <input type="text" className="file-input" onChange={handleChangedText}  id="education"/>
-                                <input type="submit" value="Save" className="save-button" />
+                                    <input type="text" className="file-input" onChange={handleChangedText} id="education" value={user.education} />
+                                    <input type="submit" value="Save" className="save-button" />
                                 </form>
                             </div>
                             )}
@@ -341,7 +383,7 @@ function Pfp(){
                         <h2><i>Education</i></h2>
                         <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicEducation} id="edu"></ToggleSwitch>
                     </div>
-                    <p>{user.education}</p>
+                    <Education education = {education} deleteEdu={deleteEducation}/>
                     </div>
                     <br></br>
                     <div className="card">
@@ -413,7 +455,6 @@ function Pfp(){
                     <h2><i>Contact Info</i></h2>
                     <p><b>Email:</b> {user.email}</p>
                     <p><b>Phone Number:</b> {user.phoneNumber}</p>
-                    <p><b>Website:</b> <a href={user.website}>{user.website}</a> </p>
                 </div>
             </div>
         </div>

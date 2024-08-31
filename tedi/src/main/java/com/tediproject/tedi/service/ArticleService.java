@@ -18,7 +18,6 @@ import com.tediproject.tedi.model.Notification;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.CommentRepo;
-import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.NotificationRepo;
 import com.tediproject.tedi.repo.UserRepo;
