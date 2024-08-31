@@ -3,6 +3,8 @@ package com.tediproject.tedi.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,10 +35,12 @@ public class Job {
     @Column(length = 16777216)
     private String job_description;
 
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author") 
     private UserEntity author;
 
+    
     @ManyToMany
     @JoinTable(name = "job_applicants",joinColumns = @JoinColumn(name = "job_id"),inverseJoinColumns = @JoinColumn(name = "applicant"))
     private List <UserEntity> applicants;

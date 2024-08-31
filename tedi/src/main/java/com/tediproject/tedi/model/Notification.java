@@ -2,6 +2,8 @@ package com.tediproject.tedi.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,16 +16,16 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Notification {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     protected long id;
     
-
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender") 
     protected UserEntity sender;
 
-   
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver") 
     protected UserEntity receiver;

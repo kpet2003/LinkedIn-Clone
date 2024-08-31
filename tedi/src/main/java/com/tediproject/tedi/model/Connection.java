@@ -1,4 +1,6 @@
 package com.tediproject.tedi.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,12 +19,12 @@ public class Connection {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     protected long id;
     
-
+    @JsonBackReference
     @ManyToOne(fetch =  FetchType.EAGER)
     @JoinColumn(name = "user_b") 
     private UserEntity user_b;
 
-
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_a") 
     private UserEntity user_a;

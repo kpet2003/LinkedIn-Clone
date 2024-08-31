@@ -1,5 +1,7 @@
 package com.tediproject.tedi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +22,7 @@ public class Comments {
     @Column(length = 16777216)
     private String comment;
 
-
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "poster") 
     private UserEntity poster;

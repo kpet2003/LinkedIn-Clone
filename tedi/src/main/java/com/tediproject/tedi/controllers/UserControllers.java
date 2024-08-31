@@ -31,6 +31,7 @@ import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.dto.UserDto;
 import com.tediproject.tedi.model.Education;
+import com.tediproject.tedi.model.Experience;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.RoleRepo;
@@ -199,18 +200,21 @@ public class UserControllers {
     }
 
     @PutMapping(value= "/Profile/workchange")
-    public ResponseEntity<?> changeWork(@RequestBody InfoChangeDto change){
-        try {
-            jwtUtil.validateToken(change.getToken());
-            userService.changeUserWork(change.getToken(), change.getInfo());
-            return ResponseEntity.ok(HttpStatus.OK);
-        } 
-        catch (AuthenticationCredentialsNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    public void changeWork(@RequestBody InfoChangeDto change){
+
+        jwtUtil.validateToken(change.getToken());
+        userService.changeUserWork(change.getToken(), change.getInfo());
+        // try {
+        //     jwtUtil.validateToken(change.getToken());
+        //     userService.changeUserWork(change.getToken(), change.getInfo());
+        //     return ResponseEntity.ok(HttpStatus.OK);
+        // } 
+        // catch (AuthenticationCredentialsNotFoundException e) {
+        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        // }
+        // catch (Exception e) {
+        //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        // }
     }
 
     @PutMapping(value= "/Profile/skillchange")
@@ -343,7 +347,6 @@ public class UserControllers {
                 userDto.setEmail(user.getEmail());
                 userDto.setPhoneNumber(user.getPhoneNumber());
                 userDto.setResume(user.getResume());
-                userDto.setWorkExperience(user.getWorkExperience());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
@@ -386,6 +389,11 @@ public class UserControllers {
         return userService.findEducation(token);
     }
 
+    @GetMapping(value="/Profile/GetExperience")
+    public List<Experience> getUserExperience(String token) {
+        return userService.findExperience(token);
+    }
+
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 
@@ -402,7 +410,6 @@ public class UserControllers {
                 userDto.setEmail(user.getEmail());
                 userDto.setPhoneNumber(user.getPhoneNumber());
                 userDto.setResume(user.getResume());
-                userDto.setWorkExperience(user.getWorkExperience());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
@@ -437,6 +444,11 @@ public class UserControllers {
         return userService.findEducationByID(id);
     }
 
+    @GetMapping(value = "/VisitProfile/getExperience/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Experience> getExperienceByID(@PathVariable Long id) {
+        return userService.findExperienceByID(id);
+    }
+
     @DeleteMapping(value = "/Profile/DeleteSkill")
     public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {
         try {
@@ -452,6 +464,17 @@ public class UserControllers {
     public ResponseEntity<?> removeEducation(@RequestParam(value="education_id") Long education_id,@RequestParam(value="token") String token) {
         try {
             userService.deleteEducation(education_id, token);
+            return ResponseEntity.ok("OK");
+        }
+        catch(Exception e) {
+            return ResponseEntity.badRequest().body("ID is required");
+        }
+    }
+
+    @DeleteMapping(value = "/Profile/DeleteExp")
+    public ResponseEntity<?> removeExperience(@RequestParam(value="experience_id") Long experience_id,@RequestParam(value="token") String token) {
+        try {
+            userService.deleteExperience(experience_id, token);
             return ResponseEntity.ok("OK");
         }
         catch(Exception e) {

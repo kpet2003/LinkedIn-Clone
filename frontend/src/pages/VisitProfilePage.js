@@ -36,6 +36,21 @@ function Education({education}) {
     );
 }
 
+function Experience({experience}) {
+    return (
+        <div>
+            <ul>
+                {experience.map(experience =>(
+                    <li key = {experience.id}>
+                        {experience.experience}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+
 
 
 function VisitProfile(){
@@ -63,6 +78,7 @@ function VisitProfile(){
     const [isConnected,setIsConnected] = useState(false);
     const [skills,setSkills] = useState([]);
     const [education,setEducation] = useState([]);
+    const [experience,setExperience] = useState([]);
     console.log('userId is',id);
 
     useEffect(() => {
@@ -119,10 +135,23 @@ function VisitProfile(){
             }
         }
 
+        const fetchExperience = async() => {
+            try{
+               
+                const response = await userService.fetchExperienceById(id);
+                setExperience(response);
+                console.log("skills are: ",response);
+            }
+            catch(error) {
+                console.error("Error fetching the user's skills: ",error)
+            }
+        }
+
         fetchUserData();
         checkIfConnected();
         fetchSkills();
         fetchEducation();
+        fetchExperience();
     }, [id]);
 
     const viewNetwork = (id) => {
@@ -197,7 +226,7 @@ function VisitProfile(){
                         <div className="about-me-container">
                             <h2><i>Work Experience</i></h2>
                             </div>
-                        <p>{user.workExperience}</p>
+                       <Experience experience={experience}/>
                         </div>
                     </>
                     ) : null}

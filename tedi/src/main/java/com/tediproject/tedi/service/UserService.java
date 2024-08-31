@@ -15,11 +15,13 @@ import com.tediproject.tedi.exceptions.UserDoesNotExist;
 import com.tediproject.tedi.exceptions.WrongPassword;
 import com.tediproject.tedi.model.Connection;
 import com.tediproject.tedi.model.Education;
+import com.tediproject.tedi.model.Experience;
 import com.tediproject.tedi.model.Role;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.EducationRepo;
+import com.tediproject.tedi.repo.ExperienceRepo;
 import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -51,6 +53,9 @@ public class UserService{
 
     @Autowired
     private EducationRepo eduRepo;
+
+    @Autowired
+    private ExperienceRepo expRepo;
 
 
 
@@ -167,12 +172,29 @@ public class UserService{
          }
     }
 
-    public void changeUserWork(String token, String work){
+    @Transactional
+    public void changeUserWork(String token, String experience){
         try {
             UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-            user.setWorkExperience(work);
+
+            Experience exp = expRepo.findByExperience(experience);
+
+            if(exp == null) {
+                exp = new Experience();
+                exp.setExperience(experience);
+               
+
+            }
+            
+            if (!user.getUser_experience().contains(exp)) {
+                user.getUser_experience().add(exp);
+                exp.getExperiencedUsers().add(user);
+            }
+
+            expRepo.save(exp);
             userRepo.save(user);
         } catch (Exception e) {
+            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }
@@ -303,6 +325,30 @@ public class UserService{
         return user.getUser_skills();
     }
 
+    public List<Experience> findExperience(String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        return user.getUser_experience();
+    }
+
+    public List<Experience> findExperienceByID(Long id) {
+        UserEntity user = userRepo.findById(id).get();
+        return user.getUser_experience();
+    }
+
+    public void deleteExperience(Long experience_id, String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+        Experience exp = expRepo.findById(experience_id).get();
+        user.getUser_experience().remove(exp);
+
+        exp.getExperiencedUsers().remove(user);
+        expRepo.save(exp);
+        userRepo.save(user);
+
+    }
+
+
+
 
     @PostConstruct
     public void init() {
@@ -341,6 +387,7 @@ public class UserService{
         
     }
 
+   
 
 
 

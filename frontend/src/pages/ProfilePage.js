@@ -28,6 +28,7 @@ function Skills({skills,deleteSkill}) {
 }
 
 function Education({education,deleteEdu}) {
+
     return (
         <div>
             <ul>
@@ -40,6 +41,21 @@ function Education({education,deleteEdu}) {
         </div>
     );
 }
+
+function Experience({experience,deleteExperience}) {
+    return (
+        <div>
+            <ul>
+                {experience.map(experience =>(
+                    <li key = {experience.id}>
+                        {experience.experience} <img src= {trash} alt="trash" style={{ cursor: 'pointer', marginLeft: '8px' }} onClick={()=>deleteExperience(experience.id)} />
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
 
 
 function Pfp(){
@@ -66,6 +82,7 @@ function Pfp(){
     const [changedField, setChangedField] = useState('');
     const [skills,setSkills] = useState([]);
     const [education,setEducation] = useState([]);
+    const [experience,setExperience] = useState([]);
 
 
     useEffect(() => {
@@ -105,9 +122,21 @@ function Pfp(){
           
         }
 
+        const getUserExperience = async() => {
+            try {
+                const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
+                console.log(response);
+                setExperience(response);
+            }
+            catch(error) {
+                console.error('Error fetching education',error);
+            }
+        }
+
         fetchUserData();
         getUserEducation();
         getUserSkills();
+        getUserExperience();
     }, []);
 
     const deleteSkill = async(skill_id) => {
@@ -128,7 +157,18 @@ function Pfp(){
             setEducation(response);
         }
         catch(error) {
-            console.error('error deleting the skill: ',error);
+            console.error('error deleting the education: ',error);
+        }
+    }
+
+    const deleteExperience = async(exp_id) => {
+        try {
+            await userService.removeExp(exp_id,localStorage.getItem('jwt_token'));
+            const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
+            setExperience(response);
+        }
+        catch(error) {
+            console.error('error deleting the experience: ',error);
         }
     }
 
@@ -176,6 +216,8 @@ function Pfp(){
                     }
                     await userService.changeWork(data);
                     alert('Work experience changed successfully');
+                    const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
+                    setExperience(response);
                 }
                 else if(changedField === 'skills'){
                     const data = {
@@ -414,7 +456,7 @@ function Pfp(){
                         <h2><i>Work Experience</i></h2>
                         <ToggleSwitch className="switch" onChange={handleBool} checked={user.publicWork} id="work"></ToggleSwitch>
                         </div>
-                    <p>{user.workExperience}</p>
+                        < Experience experience={experience} deleteExperience={deleteExperience}    />
                     </div>
                     <br></br>
                     <div className="card">

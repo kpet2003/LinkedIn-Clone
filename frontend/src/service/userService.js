@@ -91,6 +91,24 @@ class UserService {
         }).data;
     }
 
+    fetchExperience(token) {
+        const API_URL = "/Profile/GetExperience";
+        return axios.get(API_URL,{
+            params: {token : token},
+            responseType: 'json'
+        }).then(response => response.data);
+    }
+
+    fetchExperienceById(id) {
+        const API_URL = `/VisitProfile/getExperience/${id}`;
+        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+    }
+
+    removeExp(experience_id,token) {
+        const API_URL = "/Profile/DeleteExp";
+        return axios.delete(API_URL, {params: {experience_id: experience_id,token: token}});
+    }
+
     changeSkills(skills) {
         const API_URL = "/Profile/skillchange";
         return axios.put(API_URL, skills, {

@@ -3,7 +3,10 @@ package com.tediproject.tedi.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +22,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 @Entity
 @Table(name="user")
 public class UserEntity {
@@ -45,14 +48,13 @@ public class UserEntity {
     protected byte[] image;
     
     @Lob
+    @JsonIgnore
     @Column(length=100000)
     protected byte[] resume;
     
     @Column
     protected Boolean admin = false;
 
-    @Column
-    protected String workExperience;
 
 
     @Column
@@ -64,7 +66,7 @@ public class UserEntity {
     @Column
     protected Boolean isPublicSkills = true;
 
-
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     protected Role role;
@@ -81,6 +83,21 @@ public class UserEntity {
     @ManyToMany(mappedBy = "educated_users", fetch = FetchType.EAGER)
     private List <Education> user_education;
 
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "experienced_users", fetch = FetchType.EAGER)
+    private List <Experience> user_experience;
+
+
+    public List<Experience> getUser_experience() {
+        return user_experience;
+    }
+
+
+    public void setUser_experience(List<Experience> user_experience) {
+        this.user_experience = user_experience;
+    }
+
+
     public List<Education> getUser_education() {
         return user_education;
     }
@@ -93,38 +110,48 @@ public class UserEntity {
     @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Article> articles_written;
 
+
+
     @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Likes> likes_posted;
+
 
     @OneToMany(mappedBy = "poster", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Comments> comments_posted;
 
+   
     @OneToMany(mappedBy = "receiver", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Request> requests_received;
 
+    
     @OneToMany(mappedBy = "sender", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Request> requests_sent;
 
+   
     @OneToMany(mappedBy = "receiver", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> notifications_received;
 
+   
     @OneToMany(mappedBy = "sender", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> notifications_sent;
 
-
+    
     @OneToMany(mappedBy = "user_a", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Connection> connections_requested;
 
+    
     @OneToMany(mappedBy = "user_b", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Connection> connections_accepted;
 
+    
     @OneToMany(mappedBy = "author", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Job> jobs_posted;
 
+    
     @ManyToMany(mappedBy = "applicants", fetch = FetchType.EAGER)
     protected List<Job> jobs_applied;
 
-    @JsonManagedReference
+   
     @ManyToMany(mappedBy = "skilled_users", fetch = FetchType.EAGER)
     private List <Skills> user_skills;
 
@@ -195,10 +222,6 @@ public class UserEntity {
         this.admin = true;
     }
 
-    public void setWorkExperience(String experience){
-        this.workExperience = experience;
-    }
-
     public void setPublicWork(Boolean val){
         this.isPublicWorkExperience = val;
     }
@@ -251,9 +274,6 @@ public class UserEntity {
         return this.id;
     }
 
-    public String getWorkExperience(){
-        return this.workExperience;
-    }
 
 
     public Boolean getPublicWork(){
