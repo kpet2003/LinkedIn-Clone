@@ -1,5 +1,5 @@
 import '../styling/Network.css';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import networkService from '../service/networkService.js'; 
 import UserService from '../service/userService.js';
 import { useParams } from 'react-router-dom';
@@ -45,7 +45,14 @@ function Network() {
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
                          <img src={connectedUser.profilePicture?`data:image/jpeg;base64,${connectedUser.profilePicture}`:placeholder } alt = 'profile'className='picture'/>
-                       <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p> <p className='description'>{connectedUser.workTitle} at </p> <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
+                       <p className='title'>{connectedUser.firstName} {connectedUser.lastName} </p>
+
+                       {connectedUser.workTitle && connectedUser.workplace &&  (<p className='description'>{connectedUser.workTitle} at {connectedUser.workplace}</p> )}
+                       {connectedUser.workTitle && !connectedUser.workplace && ( <p className='description'>{connectedUser.workTitle} </p> )}
+                       {!connectedUser.workTitle && !connectedUser.workplace && ( <p className='description'>{connectedUser.email}</p>) }
+                
+                       
+                       <a  href={`/VisitProfile/${connectedUser.id}`} className='profile_link'>Visit Profile</a> 
                      
                     </span>
                 ))}
