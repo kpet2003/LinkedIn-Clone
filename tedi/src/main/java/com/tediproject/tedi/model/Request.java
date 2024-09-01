@@ -10,8 +10,6 @@ import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference; 
-
 @Entity
 public class Request {
     
@@ -20,12 +18,11 @@ public class Request {
     protected long id;
     
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver") 
     private UserEntity receiver;
 
-    @JsonBackReference
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender") 
     private UserEntity sender;

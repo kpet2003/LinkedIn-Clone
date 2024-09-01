@@ -1,5 +1,5 @@
 import NavigationBar from './NavigationBar.js';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminService from '../service/adminService.js'; 
 import glass from "../icons/glass.png";
 import '../styling/Network.css';
@@ -7,69 +7,14 @@ import networkService from '../service/networkService.js';
 import UserService from '../service/userService.js';
 import placeholder from '../icons/avatar.png';
 
-function SearchBar() {
+function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
 
-    const [users, setUsers] = useState([]);
+    
     const [selectedUsers,setSelectedUsers] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [requestUsers,setRequestUsers] = useState([]);
-    const [connectedUsers,setConnectedUsers] = useState([]);
     const [isListVisible, setIsListVisible] = useState(true);
     const searchBarRef = useRef(null);
-
-    // renders the list of existing users, except for the admin 
-    useEffect(() => {
-        const token = localStorage.getItem('jwt_token');
-        const email = UserService.decodeToken(token).sub;
-     
-        const fetchUsers = async() => {
-            try {
-                const response = await  AdminService.getUsers();
-                const finalUsers = response.filter(user => user.admin !== true && 
-                    user.email !== email &&
-                    !connectedUsers.includes(user.id) &&
-                    !requestUsers.includes(user.id))
-                setUsers(finalUsers);
-            } 
-            catch (error) {
-                console.error("There was an error getting the user list", error);
-            }
-        };
-
-        const findRequests = async() => {
-            const token = localStorage.getItem('jwt_token');
-
-            try {
-                const response = await networkService.fetchRequests(token);
-                const finalUsers = response;
-                setRequestUsers(finalUsers);
-                console.log(finalUsers);
-            }
-            catch (error) {
-                console.error("There was an error getting the request list", error);
-            }
-
-        }
-
-        const findConnections = async() => {
-            const token = localStorage.getItem('jwt_token');
-
-            try {
-                const response = await networkService.fetchConnections(token);
-                const finalUsers = response;
-                setConnectedUsers(finalUsers);
-                console.log(finalUsers);
-            }
-            catch (error) {
-                console.error("There was an error getting the connections list", error);
-            }
-
-        }
-
-        findConnections();
-        findRequests();
-        fetchUsers();
-    }, []);
+  
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -85,7 +30,7 @@ function SearchBar() {
     }, []);
 
 
-    const handleFilter = (event) => {
+    const handleFilter = useCallback((event) => {
         setSearchTerm(event.target.value);
         setSelectedUsers(searchTerm);
         
@@ -101,14 +46,14 @@ function SearchBar() {
             setSelectedUsers(newFilter);
             setIsListVisible(true);
         }
-    };
+    }, [users]);
 
     const handleSearchClick = () => {
         handleFilter();
     };
 
 
-    const makeRequest = async (userID) => {
+    const makeRequest =  useCallback(async(userID) => {
      
         const token = localStorage.getItem('jwt_token');
         try {
@@ -120,7 +65,7 @@ function SearchBar() {
             console.log("Error creating request",error);
         }
         
-    }
+    },[setRequestUsers]);
 
 
 
@@ -176,32 +121,43 @@ function SearchBar() {
 }    
 
 function MyNetwork() {
-
+    const [users, setUsers] = useState([]);
     const [connectedUsers,setConnectedUsers] = useState([]);
+    const [requestUsers,setRequestUsers] = useState([]);
 
-    useEffect(() => {
-        const findConnections = async() => {
+
+        // renders the list of existing users, except for the admin 
+        useEffect(() => {
             const token = localStorage.getItem('jwt_token');
-
-            try {
-                const response = await networkService.fetchConnections(token);
-                const finalUsers = response;
-                setConnectedUsers(finalUsers);
-                console.log(finalUsers);
+            const email = UserService.decodeToken(token).sub;
+    
+            const fetchData = async () => {
+                try {
+                    const [usersResponse, requestsResponse, connectionsResponse] = await Promise.all([
+                        AdminService.getUsers(),
+                        networkService.fetchRequests(token),
+                        networkService.fetchConnections(token)
+                    ]);
+                    const finalUsers = usersResponse.filter(user => user.admin !== true && 
+                        user.email !== email &&
+                        !connectedUsers.includes(user.id) &&
+                        !requestUsers.includes(user.id))
+                    setUsers(finalUsers);
+                    setConnectedUsers(connectionsResponse);
+                    setRequestUsers(requestsResponse);
+                } 
+                catch (error) {
+                    console.error("There was an error getting the user list", error);
+                }
             }
-            catch (error) {
-                console.error("There was an error getting the connections list", error);
-            }
-
-        }
-
-        findConnections();
-    }, []);
+            fetchData();
+        });
 
 
 
     return(
         <div >
+            <SearchBar users={users} requestUsers={requestUsers} connectedUsers={connectedUsers} setRequestUsers={setRequestUsers}/>
             <div className='net'>
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
@@ -225,7 +181,6 @@ function Network(){
     return(
         <div>
             <NavigationBar></NavigationBar>
-            <SearchBar></SearchBar>
             <MyNetwork></MyNetwork>
         </div>
     );
