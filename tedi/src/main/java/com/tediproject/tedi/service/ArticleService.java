@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tediproject.tedi.dto.ArticleDto;
+import com.tediproject.tedi.dto.CommentDto;
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Comments;
@@ -160,9 +161,25 @@ public class ArticleService {
         return commentRepo.countByArticle(article); 
     }
 
-    public List<Comments> findComments(Long article_id) {
+    public List<CommentDto> findComments(Long article_id) {
         Article article = articleRepo.findById(article_id).get();
-        return commentRepo.findCommentsByArticle(article);
+        List<CommentDto> comments = new ArrayList<>();
+
+        List <Comments> article_comments = commentRepo.findCommentsByArticle(article);
+
+        for(int i=0; i<article_comments.size(); i++) {
+            CommentDto comment = new CommentDto();
+            comment.setId(article_comments.get(i).getId());
+            comment.setPoster_id(article_comments.get(i).getPoster().getID());
+            comment.setArticle_id(article_id);
+            comment.setFirstName(article_comments.get(i).getPoster().getFirstName());
+            comment.setLastName(article_comments.get(i).getPoster().getLastName());
+            comment.setProfilePicture(article_comments.get(i).getPoster().getProfilePicture());
+            comment.setContent(article_comments.get(i).getComment());
+            comments.addLast(comment);
+        }
+        
+        return comments;
     }
 
     public List<ArticleDto> fetchArticles(String token) {
@@ -174,7 +191,16 @@ public class ArticleService {
         for(int i=0; i<articles.size(); i++) {
             
             ArticleDto article_data = new ArticleDto();
-            article_data.setArticle(articles.get(i));
+            article_data.setId(articles.get(i).getId());
+            article_data.setAuthorId(articles.get(i).getAuthor().getID());
+            article_data.setAuthorFirstName(articles.get(i).getAuthor().getFirstName());
+            article_data.setAuthorLastName(articles.get(i).getAuthor().getLastName());
+            article_data.setProfilePicture(articles.get(i).getAuthor().getProfilePicture());
+            article_data.setContent(articles.get(i).getContent());
+            article_data.setTitle(articles.get(i).getTitle());
+            article_data.setPicture(articles.get(i).getPicture());
+            article_data.setVideo(articles.get(i).getVideo());
+            
 
             Long article_id = articles.get(i).getId();
             

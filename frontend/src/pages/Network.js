@@ -10,7 +10,7 @@ import placeholder from '../icons/avatar.png';
 function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
 
     
-    const [selectedUsers,setSelectedUsers] = useState("");
+    const [selectedUsers,setSelectedUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isListVisible, setIsListVisible] = useState(true);
     const searchBarRef = useRef(null);
@@ -30,10 +30,9 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
     }, []);
 
 
-    const handleFilter = useCallback((event) => {
+    const handleFilter = (event) => {
         setSearchTerm(event.target.value);
-        setSelectedUsers(searchTerm);
-        
+
         if (searchTerm === "") {
             setSelectedUsers([]);
             setIsListVisible(false);
@@ -46,7 +45,7 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
             setSelectedUsers(newFilter);
             setIsListVisible(true);
         }
-    }, [users]);
+    };
 
     const handleSearchClick = () => {
         handleFilter();
@@ -151,7 +150,7 @@ function MyNetwork() {
                 }
             }
             fetchData();
-        });
+        },[]);
 
 
 

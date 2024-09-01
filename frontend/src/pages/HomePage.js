@@ -161,12 +161,12 @@ function Comments({comments}) {
                     comments.map(comment => (
                         <span key={comment.id} className='comment' >
                             <div className='comment_intro'>
-                            <img src={comment.poster.profilePicture? `data:image/jpeg;base64,${comment.poster.profilePicture}`: placeholder }
-                                alt={comment.poster.profilePicture ? 'author' : 'default'}className='author_pfp'/>
-                            <p  className='comment_author' onClick={() => gotoProfile(comment.poster.id)}> {comment.poster.firstName} {comment.poster.lastName}  </p>
+                            <img src={comment.profilePicture? `data:image/jpeg;base64,${comment.profilePicture}`: placeholder }
+                                alt={comment.profilePicture ? 'author' : 'default'}className='author_pfp'/>
+                            <p  className='comment_author' onClick={() => gotoProfile(comment.poster_id)}> {comment.firstName} {comment.lastName}  </p>
                             </div>
                             <div className='comment_content'>
-                                <p> {comment.comment}</p>
+                                <p> {comment.content}</p>
                             </div>
 
                         </span>))) : (
@@ -203,7 +203,7 @@ function Timeline({articleData,setArticleData}) {
             
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
-                    if (article.article.id === article_id) {
+                    if (article.id === article_id) {
                         return {
                             ...article,
                             isLikedByUser: !previous_state,
@@ -238,7 +238,7 @@ function Timeline({articleData,setArticleData}) {
             const comment_response =  await  ArticleService.getComments(article_id);
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
-                    if (article.article.id === article_id) {
+                    if (article.id === article_id) {
 
                         console.log('comments are: ',comment_response);
                         return {
@@ -267,7 +267,7 @@ function Timeline({articleData,setArticleData}) {
     const toggleVisibility = (article_id,previous_state) => {
         setArticleData((prevArticleData) =>
             prevArticleData.map((article) => {
-                if (article.article.id === article_id) {
+                if (article.id === article_id) {
                     return {
                         ...article,
                         showComments: !previous_state,
@@ -299,36 +299,36 @@ function Timeline({articleData,setArticleData}) {
         <NewPost onNewPost={handleNewPost} />
        {
         articleData.map(article=>(
-            <span  key = {article.article.id} className='article'>
+            <span  key = {article.id} className='article'>
                 {console.log('article data = ',article)}
                 <div className='intro'>
-                            <p className='title'>{article.article.title} by    </p> 
-                            <img src={article.article.author.profilePicture?`data:image/jpeg;base64,${article.article.author.profilePicture}`:placeholder } alt = 'author'className='author_pfp'/>
-                            <p className='author_name'  onClick={() => gotoProfile(article.article.author.id)}> {article.article.author.firstName} {article.article.author.lastName}  </p>
+                            <p className='title'>{article.title} by    </p> 
+                            <img src={article.profilePicture?`data:image/jpeg;base64,${article.profilePicture}`:placeholder } alt = 'author'className='author_pfp'/>
+                            <p className='author_name'  onClick={() => gotoProfile(article.authorId)}> {article.authorFirstName} {article.authorLastName}  </p>
                 </div>
 
                 <div className='article_content'>
-                    <p className='description'>{article.article.content}</p> 
+                    <p className='description'>{article.content}</p> 
                 </div>
 
                 <div className='article_media'>
-                    {article.article.picture &&(<img src={`data:image/jpeg;base64,${article.article.picture}`} alt='profile' className='article_picture' />) }
-                    {article.article.video &&(<video src={`data:image/jpeg;base64,${article.article.video}`} alt='profile' className='article_video' controls />) }
+                    {article.picture &&(<img src={`data:image/jpeg;base64,${article.picture}`} alt='profile' className='article_picture' />) }
+                    {article.video &&(<video src={`data:image/jpeg;base64,${article.video}`} alt='profile' className='article_video' controls />) }
                 </div>
 
                 <div className='likes_display'>
                             <p>{article.likes_count} likes</p>
-                            <p className='display_comments' onClick={()=>toggleVisibility(article.article.id,article.showComments)}> {article.comments_count} comments</p>
+                            <p className='display_comments' onClick={()=>toggleVisibility(article.id,article.showComments)}> {article.comments_count} comments</p>
                 </div>
 
                 <div className='add'>
                     <div >
-                        {article.isLikedByUser && (<img src={blue_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='blue' className='like_button'/>  ) }
-                        {!article.isLikedByUser && (<img src={white_like} onClick={() => AddLike(article.article.id,article.isLikedByUser)}  alt='white' className='like_button'/>  ) }
+                        {article.isLikedByUser && (<img src={blue_like} onClick={() => AddLike(article.id,article.isLikedByUser)}  alt='blue' className='like_button'/>  ) }
+                        {!article.isLikedByUser && (<img src={white_like} onClick={() => AddLike(article.id,article.isLikedByUser)}  alt='white' className='like_button'/>  ) }
                     </div>
                     <div className='add_comment'>
-                        <textarea className='new_comment' placeholder='Add your comment' onChange={(event)=>handleChange(event,article.article.id)} id='new_comment' rows={1}  value={NewComment[article.article.id]}/>
-                        <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.article.id)} />
+                        <textarea className='new_comment' placeholder='Add your comment' onChange={(event)=>handleChange(event,article.id)} id='new_comment' rows={1}  value={NewComment[article.id]}/>
+                        <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.id)} />
                     </div>
                 </div>
                 <Suspense fallback={<div>Loading comments...</div>}>

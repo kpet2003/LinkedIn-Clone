@@ -6,24 +6,10 @@ import "../styling/Notifications.css"
 import placeholder from '../icons/avatar.png';
 
 
-function Requests() {
+function Requests({users,setUsers}) {
 
-    const [users, setUsers] = useState([]);
+   
 
-    useEffect(() => {
-        const fetchRequests = async() => {
-            try {
-                const token = localStorage.getItem('jwt_token');
-                const response = await  notificationService.getRequests(token);
-                setUsers(response);
-                console.log('Requests for user are:  ',response);
-            } 
-            catch (error) {
-                console.error("There was an error getting the request list", error);
-            }
-        };
-        fetchRequests();
-    }, []);
 
     const addConnection = async (userID) => {
         const token = localStorage.getItem('jwt_token');
@@ -53,42 +39,34 @@ function Requests() {
 
     return (
         <div>
-            <h2 className='my-h2'> Your requests: </h2> 
-            <ul className='list'>
-                {users.map(user => (
-                    <li key={user.id} className='user' >
-                        <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder} alt='profile' className='profile_photo' />
-                       <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
-                         <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.id)}/> 
-                    </li>
-                ))}
-            </ul>
+            {  users.length>0 && (
+                <div>
+                <h2 className='my-h2'> Your requests: </h2> 
+                    <ul className='list'>
+                         { users.map(user => (
+                            <li key={user.id} className='user' >
+                                <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder} alt='profile' className='profile_photo' />
+                               <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
+                                 <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.id)}/> 
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+            }
+            
         </div>
     );
 
 
 
-    
 
 }
 
-function PostNotifications() {
-    const [Notifications,setNotifications] = useState([])
+function PostNotifications({Notifications}) {
+    
 
-    useEffect(() => {
-        const fetchNotifications = async() => {
-            try {
-                const token = localStorage.getItem('jwt_token');
-                const response = await  notificationService.getNotifications(token);
-                setNotifications(response);
-                console.log(response);
-            } 
-            catch (error) {
-                console.error("There was an error getting the notification list", error);
-            }
-        };
-        fetchNotifications();
-    }, []);
+
 
     const gotoProfile = (user_id) => {
         console.log(user_id);
@@ -100,8 +78,9 @@ function PostNotifications() {
     };
 
     return(
-        <div>
-            <h2 className='my-h2'> Your Post Notifications: </h2> 
+        <div>{Notifications.length>0 && (
+            <div>
+                <h2 className='my-h2'> Your Post Notifications: </h2> 
                 <ul className='list'>
                     {Notifications.map(Notification => (
                         <li key={Notifications.id} className='notification' >
@@ -112,6 +91,10 @@ function PostNotifications() {
                         </li>
                     ))}
                 </ul>
+            </div>    
+        )}
+   
+          
         </div>
     );
 
@@ -120,11 +103,37 @@ function PostNotifications() {
 
 
 function Notifications(){
+    const [users, setUsers] = useState([]);
+    const [Notifications,setNotifications] = useState([]);
+    const token = localStorage.getItem('jwt_token');
+   
+    
+    useEffect(() => {
+       
+
+        const fetchData = async () => {
+            try {
+                const [users, Notifications] = await Promise.all([
+                    notificationService.getRequests(token),
+                    notificationService.getNotifications(token)
+                ]);
+                setUsers(users);
+                setNotifications(Notifications);
+            } 
+            catch (error) {
+                console.error("There was an error getting the user list", error);
+            }
+        }
+        fetchData();
+    },[]);
+
+
+    
     return(
         <div className='notifications'>
             <NavigationBar></NavigationBar>
-            <Requests></Requests>
-            <PostNotifications></PostNotifications>
+            <Requests users = {users}  setUsers={setUsers}/>
+            <PostNotifications Notifications = {Notifications}></PostNotifications>
         </div>
     );
 }

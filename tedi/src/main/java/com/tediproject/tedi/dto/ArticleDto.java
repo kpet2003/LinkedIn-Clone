@@ -1,12 +1,35 @@
 package com.tediproject.tedi.dto;
 import java.util.List;
 
-import com.tediproject.tedi.model.Article;
-import com.tediproject.tedi.model.Comments;
+
+
 
 public class ArticleDto {
-    Article article;
-    List <Comments> comments;
+    
+    Long id;
+    Long authorId;
+    public Long getAuthorId() {
+        return authorId;
+    }
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    String authorFirstName;
+    String authorLastName;
+    byte[] profilePicture;
+
+    String title;
+    String content;
+    byte[] picture;
+    byte[] video;
+
+    List <CommentDto> comments;
 
     Long comments_count;
     Long likes_count;
@@ -16,18 +39,13 @@ public class ArticleDto {
     
 
   
-    public List<Comments> getComments() {
+    public List<CommentDto> getComments() {
         return comments;
     }
-    public void setComments(List<Comments> comments) {
+    public void setComments(List<CommentDto> comments) {
         this.comments = comments;
     }
-    public Article getArticle() {
-        return article;
-    }
-    public void setArticle(Article article) {
-        this.article = article;
-    }
+
     public Long getComments_count() {
         return comments_count;
     }
@@ -51,5 +69,48 @@ public class ArticleDto {
     }
     public void setShowComments(Boolean showComments) {
         this.showComments = showComments;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public byte[] getPicture() {
+        return picture;
+    }
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+    public byte[] getVideo() {
+        return video;
+    }
+    public void setVideo(byte[] video) {
+        this.video = video;
+    }
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }
