@@ -179,42 +179,41 @@ public class UserControllers {
     }
 
     @PutMapping(value= "/Profile/educhange")
-    public ResponseEntity<?> changeEdu(@RequestBody InfoChangeDto change){
+    public void changeEdu(@RequestBody InfoChangeDto change) {
+        jwtUtil.validateToken(change.getToken());
+        userService.changeUserEdu(change.getToken(), change.getInfo());
+    }
+    // public ResponseEntity<?> changeEdu(@RequestBody InfoChangeDto change){
 
-         Map<String, Object> response = new HashMap<>();
+    
+    //     try {
+    //         jwtUtil.validateToken(change.getToken());
+    //         userService.changeUserEdu(change.getToken(), change.getInfo());
+    //         return ResponseEntity.ok(HttpStatus.OK);
+    //     }
+    //     catch (AuthenticationCredentialsNotFoundException e) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    //     } 
+    //     catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    //     }
+    // }
+
+    @PutMapping(value= "/Profile/workchange")
+    public ResponseEntity<?> changeWork(@RequestBody InfoChangeDto change){
+
+
         try {
             jwtUtil.validateToken(change.getToken());
-            
-            userService.changeUserEdu(change.getToken(), change.getInfo());
-
-            response.put("status", HttpStatus.OK.value());
-            response.put("message", "Education updated successfully");
-            return ResponseEntity.ok(response);
-        }
+            userService.changeUserWork(change.getToken(), change.getInfo());
+            return ResponseEntity.ok(HttpStatus.OK);
+        } 
         catch (AuthenticationCredentialsNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } 
+        }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
-
-    @PutMapping(value= "/Profile/workchange")
-    public void changeWork(@RequestBody InfoChangeDto change){
-
-        jwtUtil.validateToken(change.getToken());
-        userService.changeUserWork(change.getToken(), change.getInfo());
-        // try {
-        //     jwtUtil.validateToken(change.getToken());
-        //     userService.changeUserWork(change.getToken(), change.getInfo());
-        //     return ResponseEntity.ok(HttpStatus.OK);
-        // } 
-        // catch (AuthenticationCredentialsNotFoundException e) {
-        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        // }
-        // catch (Exception e) {
-        //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        // }
     }
 
     @PutMapping(value= "/Profile/skillchange")
