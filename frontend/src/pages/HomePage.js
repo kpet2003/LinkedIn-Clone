@@ -111,25 +111,12 @@ function NewPost({ onNewPost }) {
     );  
 }
 
-function Profile() {
+function Profile({user}) {
     
     const navigate = useNavigate();
-    const [user, setUser] = useState([]);
+  
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const data = await userService.getUserData(localStorage.getItem('jwt_token'));
-                console.log("Fetched user data: ",data);
-                setUser(data);
-                console.log(user);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
 
-        fetchUserData();
-    }, []);
 
     const handleClick = (event) => {
         const {id} = event.target;
@@ -191,27 +178,11 @@ function Comments({comments}) {
 
 
 
-function Timeline() {
+function Timeline({articleData,setArticleData}) {
 
-    const [articleData, setArticleData] = useState([]);
+    
     const [NewComment,setNewComment] = useState({});
  
-
-    useEffect(() => {
-        const getArticles = async () => {
-            try {
-                const token = localStorage.getItem('jwt_token');
-                
-                //fetch articles and their data
-                const articleDataArray = await ArticleService.fetchArticleData(token);
-                setArticleData(articleDataArray);
-            } catch (error) {
-                console.error("There was an error getting the article list", error);
-            }
-        };
-
-        getArticles();
-    }, []);
 
     const gotoProfile = (user_id) => {
         console.log(user_id);
@@ -380,13 +351,36 @@ function Timeline() {
 
 
 function HomePage() {
+    
+    const [articleData, setArticleData] = useState([]);
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [articleData, user] = await Promise.all([
+                    articleService.fetchArticleData(localStorage.getItem('jwt_token')),
+                    userService.getUserData(localStorage.getItem('jwt_token')),
+                ]);
+                console.log("Fetched user data: ",user);
+                console.log("Fetched article data: ",articleData)
+                setUser(user);
+                setArticleData(articleData);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div  >
             <NavigationBar/>
             <div className='homepage'>
-                <Profile/>
+                <Profile user={user}/>
                 <div className='main_content'>
-                    <Timeline/>
+                    <Timeline articleData={articleData} setArticleData={setArticleData}/>
                 </div>
                 
             </div>
