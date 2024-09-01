@@ -63,6 +63,12 @@ p {
     margin-bottom: 10%;
 }
 
+.accept_button:hover {
+    background-color: rgb(12, 67, 231);
+    cursor: pointer;
+}
+
+
 .decline_button {
     border: none;
     border-radius: 4px;

@@ -1,6 +1,6 @@
 import '../styling/Settings.css'
 import UserService from '../service/userService.js';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import NavigationBar from './NavigationBar.js';
 

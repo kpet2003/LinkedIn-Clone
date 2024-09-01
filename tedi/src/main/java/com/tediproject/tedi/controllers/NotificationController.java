@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tediproject.tedi.model.Notification;
-import com.tediproject.tedi.model.UserEntity;
+import com.tediproject.tedi.dto.NotificationDto;
+import com.tediproject.tedi.dto.RequestDto;
 import com.tediproject.tedi.service.NotificationService;
 
 @RestController
@@ -18,12 +18,12 @@ public class NotificationController {
     NotificationService notificationService;
 
     @GetMapping(value = "/Notifications/Requests")
-    public List<UserEntity> getRequests(@RequestParam(value="token", required = false)String token ) {
-        return notificationService.findUsers(token);
+    public List<RequestDto> getRequests(@RequestParam(value="token", required = false)String token ) {
+        return notificationService.findRequests(token);
     }
 
     @GetMapping(value = "/Notifications/PostNotifications")
-    public List<Notification> getNotifications(@RequestParam(value="token", required = false)String token ) {
+    public List<NotificationDto> getNotifications(@RequestParam(value="token", required = false)String token ) {
         return notificationService.findNotifications(token);
     }
 

@@ -14,9 +14,10 @@ function Requests({users,setUsers}) {
     const addConnection = async (userID) => {
         const token = localStorage.getItem('jwt_token');
         try {
+            console.log('user id is: ',userID)
             const response =  await networkService.newConnection(userID,token);
             console.log(response);
-            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
+            setUsers(prevUsers => prevUsers.filter(user => user.sender_id !== userID));
         }
         catch(error) {
             console.log("Error creating request",error);
@@ -28,7 +29,7 @@ function Requests({users,setUsers}) {
         try {
             const response =  await networkService.declineRequest(userID,token);
             console.log(response);
-            setUsers(prevUsers => prevUsers.filter(user => user.id !== userID));
+            setUsers(prevUsers => prevUsers.filter(user => user.sender_id !== userID));
             
         }
         catch(error) {
@@ -46,8 +47,8 @@ function Requests({users,setUsers}) {
                          { users.map(user => (
                             <li key={user.id} className='user' >
                                 <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder} alt='profile' className='profile_photo' />
-                               <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.id)}  /> 
-                                 <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.id)}/> 
+                               <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.sender_id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.sender_id)}  /> 
+                                 <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.sender_id)}/> 
                             </li>
                         ))}
                     </ul>
@@ -84,10 +85,10 @@ function PostNotifications({Notifications}) {
                 <ul className='list'>
                     {Notifications.map(Notification => (
                         <li key={Notifications.id} className='notification' >
-                             <img src={Notification.sender.profilePicture?`data:image/jpeg;base64,${Notification.sender.profilePicture}`:placeholder} alt='profile' className='profile_photo' /> 
-                            <p className='notification_username' onClick={() => gotoProfile(Notification.sender.id)}>{Notification.sender.firstName} {Notification.sender.lastName} </p>
-                            {Notification.isComment && (<p> commented {Notification.message} on your article: {Notification.article.title} </p>)}
-                            {!Notification.isComment && (<p> liked your article: {Notification.article.title} </p>)}
+                             <img src={Notification.profilePicture?`data:image/jpeg;base64,${Notification.profilePicture}`:placeholder} alt='profile' className='profile_photo' /> 
+                            <p className='notification_username' onClick={() => gotoProfile(Notification.sender_id)}>{Notification.firstName} {Notification.lastName} </p>
+                            {Notification.isComment && (<p> commented {Notification.message} on your article: {Notification.title} </p>)}
+                            {!Notification.isComment && (<p> liked your article: {Notification.title} </p>)}
                         </li>
                     ))}
                 </ul>
