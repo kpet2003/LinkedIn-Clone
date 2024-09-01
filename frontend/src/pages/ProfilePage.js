@@ -84,60 +84,33 @@ function Pfp(){
     const [education,setEducation] = useState([]);
     const [experience,setExperience] = useState([]);
 
-
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const data = await userService.getUserData(localStorage.getItem('jwt_token'));
-                console.log(data);
-                setUser((user) => ({
-                    ...user,
-                    ...data
-                }));
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
 
-        const getUserSkills = async () => {
+
+        const fetchData = async () => {
             try {
-                const data = await userService.fetchSkills(localStorage.getItem('jwt_token'));
-                console.log(data)
-                setSkills(data);
-            }
-            catch(error) {
-                console.error('Error fetching skills',error);
+                const [user, education, experience,skills] = await Promise.all([
+                    userService.getUserData(localStorage.getItem('jwt_token')),
+                    userService.fetchEducation(localStorage.getItem('jwt_token')),
+                    userService.fetchExperience(localStorage.getItem('jwt_token')),
+                    userService.fetchSkills(localStorage.getItem('jwt_token'))
+                ]);
+                setUser(user);
+                setEducation(education);
+                setExperience(experience);
+                setSkills(skills);
+                
+            } 
+            catch (error) {
+                console.error("There was an error getting the user list", error);
             }
         }
+        fetchData();
+    },[]);
 
-        const getUserEducation = async () => {
-            try {
-                const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
-                console.log(response);
-                setEducation(response);
-            }
-            catch(error) {
-                console.error('Error fetching education',error);
-            }
-          
-        }
 
-        const getUserExperience = async() => {
-            try {
-                const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
-                console.log(response);
-                setExperience(response);
-            }
-            catch(error) {
-                console.error('Error fetching education',error);
-            }
-        }
 
-        fetchUserData();
-        getUserEducation();
-        getUserSkills();
-        getUserExperience();
-    }, []);
+  
 
     const deleteSkill = async(skill_id) => {
         try {
