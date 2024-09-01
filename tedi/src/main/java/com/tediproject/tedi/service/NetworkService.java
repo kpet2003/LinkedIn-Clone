@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tediproject.tedi.dto.NetworkDto;
 import com.tediproject.tedi.model.Connection;
 import com.tediproject.tedi.model.Request;
 import com.tediproject.tedi.model.UserEntity;
@@ -29,6 +30,28 @@ public class NetworkService {
 
     @Autowired 
     ConnectionRepo connectionRepo;
+
+    public List<NetworkDto> getUsers() {
+        List <UserEntity> users = userRepo.findAll();
+        List <NetworkDto> final_users = new ArrayList<>();
+
+        for(int i=0; i<users.size(); i++) {
+            NetworkDto user = new NetworkDto();
+            user.setId(users.get(i).getID());
+            user.setFirstName(users.get(i).getFirstName());
+            user.setLastName(users.get(i).getLastName());
+            user.setEmail(users.get(i).getEmail());
+            user.setProfilePicture(users.get(i).getProfilePicture());
+            user.setWorkTitle(users.get(i).getWorkTitle());
+            user.setWorkplace(users.get(i).getWorkplace());
+            final_users.addLast(user);
+        }
+
+
+
+        return final_users; 
+
+    }
 
 
 
@@ -76,20 +99,68 @@ public class NetworkService {
     }
 
     // find users that have made a friend request
-    public List<UserEntity> findUsers(String token) {
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<UserEntity> receivers = requestRepo.findReceivers(user);
-
+    public List<NetworkDto> findUsers(String token) {
+        UserEntity myuser = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<UserEntity> receivers = requestRepo.findReceivers(myuser);
         List<Long> receiver_ids = receivers.stream().map(UserEntity::getID).collect(Collectors.toList());
-
-
         List<UserEntity> senders = userRepo.findAllById(receiver_ids);
-        return senders;
+
+        List <NetworkDto> final_users = new ArrayList<>();
+
+        for(int i=0; i<senders.size(); i++) {
+            NetworkDto user = new NetworkDto();
+            user.setId(senders.get(i).getID());
+            user.setFirstName(senders.get(i).getFirstName());
+            user.setLastName(senders.get(i).getLastName());
+            user.setEmail(senders.get(i).getEmail());
+            user.setProfilePicture(senders.get(i).getProfilePicture());
+            user.setWorkTitle(senders.get(i).getWorkTitle());
+            user.setWorkplace(senders.get(i).getWorkplace());
+            final_users.addLast(user);
+        }
+
+
+
+        return final_users;
+        
+
+        
 
     }
     
 
-    private List<UserEntity> getConnectedUsers(UserEntity user) {
+    private List<NetworkDto> getConnectedUsers(UserEntity myuser) {
+        List<UserEntity> user_bs = connectionRepo.findUserB(myuser);
+        List <UserEntity> user_as = connectionRepo.findUserA(myuser);
+
+        List<UserEntity> connectedUsers = new ArrayList<>();
+        connectedUsers.addAll(user_bs);
+        connectedUsers.addAll(user_as);
+
+        List <NetworkDto> final_users = new ArrayList<>();
+
+        for(int i=0; i<connectedUsers.size(); i++) {
+            NetworkDto user = new NetworkDto();
+            user.setId(connectedUsers.get(i).getID());
+            user.setFirstName(connectedUsers.get(i).getFirstName());
+            user.setLastName(connectedUsers.get(i).getLastName());
+            user.setEmail(connectedUsers.get(i).getEmail());
+            user.setProfilePicture(connectedUsers.get(i).getProfilePicture());
+            user.setWorkTitle(connectedUsers.get(i).getWorkTitle());
+            user.setWorkplace(connectedUsers.get(i).getWorkplace());
+            final_users.addLast(user);
+        }
+
+
+
+        return final_users;
+
+        
+    }
+
+    public List<UserEntity> findUserConnections(String token) {
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
         List<UserEntity> user_bs = connectionRepo.findUserB(user);
         List <UserEntity> user_as = connectionRepo.findUserA(user);
 
@@ -101,23 +172,25 @@ public class NetworkService {
     }
 
     // find the connections of a user
-    public List<UserEntity> findConnections(String token) {
+    public List<NetworkDto> findConnections(String token) {
         
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<UserEntity> connections  = this.getConnectedUsers(user);
+        List<NetworkDto> connections  = this.getConnectedUsers(user);
     
 
         return connections;
         
     }
     // find the connections of a user
-    public List<UserEntity> findConnectionsById(Long id ) {
+    public List<NetworkDto> findConnectionsById(Long id ) {
         
         UserEntity user = userRepo.findById(id).get();
-        List<UserEntity> connections  = this.getConnectedUsers(user);
+        List<NetworkDto> connections  = this.getConnectedUsers(user);
     
         return connections;
         
     }
+
+  
 
 }

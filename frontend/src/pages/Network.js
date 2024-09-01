@@ -1,6 +1,5 @@
 import NavigationBar from './NavigationBar.js';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import AdminService from '../service/adminService.js'; 
 import glass from "../icons/glass.png";
 import '../styling/Network.css';
 import networkService from '../service/networkService.js'; 
@@ -133,11 +132,11 @@ function MyNetwork() {
             const fetchData = async () => {
                 try {
                     const [usersResponse, requestsResponse, connectionsResponse] = await Promise.all([
-                        AdminService.getUsers(),
+                        networkService.getUsers(),
                         networkService.fetchRequests(token),
                         networkService.fetchConnections(token)
                     ]);
-                    const finalUsers = usersResponse.filter(user => user.admin !== true && 
+                    const finalUsers = usersResponse.filter(user => user.email !== 'admin@gmail.com' && 
                         user.email !== email &&
                         !connectedUsers.includes(user.id) &&
                         !requestUsers.includes(user.id))

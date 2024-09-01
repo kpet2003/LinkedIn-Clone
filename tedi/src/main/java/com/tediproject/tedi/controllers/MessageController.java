@@ -81,7 +81,7 @@ public class MessageController {
                     chatUser.setImage(base64Image);
                 }
                 System.out.println("MAKING THE CONNECTIONS NOWWWWWW");
-                List<UserEntity> connectedUsers = netService.findConnections(token);
+                List<UserEntity> connectedUsers = netService.findUserConnections(token);
                 System.out.println("GOT CONNECTIONS");
                 List<InChatUserDto> temp = new ArrayList<>();
                 for(UserEntity tempUser : connectedUsers){

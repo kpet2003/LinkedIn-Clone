@@ -62,7 +62,7 @@ public class ArticleService {
         articles.addAll(articleRepo.findByAuthor(author));
         
         // find articles that the user's connections have written
-        List<UserEntity> connections = networkService.findConnections(token);
+        List<UserEntity> connections = networkService.findUserConnections(token);
         articles.addAll(articleRepo.findByAuthorIn(connections));
 
         // find articles that the user's connections have liked

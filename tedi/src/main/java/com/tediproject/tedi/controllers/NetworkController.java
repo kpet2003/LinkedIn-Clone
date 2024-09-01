@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tediproject.tedi.dto.NetworkDto;
 import com.tediproject.tedi.dto.NewRequestDto;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.UserRepo;
@@ -26,6 +27,11 @@ public class NetworkController {
 
     @Autowired
     NetworkService networkService;
+
+    @GetMapping(value = "/Network/getUsers")
+    public List<NetworkDto> getUsers() {
+        return networkService.getUsers();
+    }
 
     @PostMapping(value = "/Network/newRequest")
     public ResponseEntity<?> newRequest(@RequestBody NewRequestDto request) {
@@ -65,17 +71,17 @@ public class NetworkController {
     }
 
     @GetMapping(value = "/Network/Requests")
-    public List<UserEntity> getRequests(@RequestParam(value="token", required = false)String token ) {
+    public List<NetworkDto> getRequests(@RequestParam(value="token", required = false)String token ) {
         return networkService.findUsers(token);
     }
 
     @GetMapping(value = "/Network/Connections")
-    public List<UserEntity> getConnections(@RequestParam(value="token", required = false)String token ) {
+    public List<NetworkDto> getConnections(@RequestParam(value="token", required = false)String token ) {
         return networkService.findConnections(token);
     }
 
     @GetMapping(value = "/ViewNetwork/getConnections/{id}")
-    public List<UserEntity> getNetwork(@PathVariable Long id) {
+    public List<NetworkDto> getNetwork(@PathVariable Long id) {
 
         return networkService.findConnectionsById(id);
     }
