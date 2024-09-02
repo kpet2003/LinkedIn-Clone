@@ -13,7 +13,7 @@ function UserList() {
         const fetchUsers = async() => {
             try {
                 const response = await  AdminService.getUsers();
-                const finalUsers = response.filter(user => user.admin !== true);
+                const finalUsers = response.filter(user => user.email !== 'admin@gmail.com');
                 setUsers(finalUsers);
             } 
             catch (error) {

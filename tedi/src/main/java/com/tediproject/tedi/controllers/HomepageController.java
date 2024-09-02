@@ -1,7 +1,6 @@
 package com.tediproject.tedi.controllers;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import com.tediproject.tedi.dto.ArticleDto;
 import com.tediproject.tedi.dto.CommentDto;
 import com.tediproject.tedi.dto.NewArticleDto;
 import com.tediproject.tedi.model.Article;
-import com.tediproject.tedi.model.Comments;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.service.ArticleService;
 

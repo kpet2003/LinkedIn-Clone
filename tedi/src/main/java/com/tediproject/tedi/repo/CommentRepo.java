@@ -22,5 +22,8 @@ public interface CommentRepo extends JpaRepository<Comments, Long>{
     @Query("SELECT c.article FROM Comments c  WHERE c.poster IN ?1")
     List<Article> findCommentedArticles( List<UserEntity> connections);
 
+    @Query("SELECT c FROM Comments c  WHERE c.poster = ?1 ")
+    public List<Comments> findByPoster(UserEntity user);
+
 }
 

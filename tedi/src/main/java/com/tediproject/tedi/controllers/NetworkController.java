@@ -14,16 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tediproject.tedi.dto.NetworkDto;
 import com.tediproject.tedi.dto.NewRequestDto;
-import com.tediproject.tedi.model.UserEntity;
-import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.service.NetworkService;
 
 
 @RestController
 public class NetworkController {
-
-    @Autowired
-    UserRepo userRepo;
 
     @Autowired
     NetworkService networkService;
