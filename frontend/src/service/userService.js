@@ -1,9 +1,11 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+const SERVER_URL =  "http://localhost:8080"
+
 
 class UserService {
     saveUser(user) {
-        const API_URL = "/SignUp/signup";
+        const API_URL = SERVER_URL +"/SignUp/signup";
         return axios.post(API_URL, user, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -12,7 +14,7 @@ class UserService {
     }
     
     loginUser(user) {
-        const API_URL = "/Login";
+        const API_URL = SERVER_URL +"/Login";
         return axios.post(API_URL, user);
     }
 
@@ -24,7 +26,7 @@ class UserService {
     }
 
     checkConnection(token, id) {
-        const API_URL = "/ViewProfile";
+        const API_URL = SERVER_URL +"/ViewProfile";
         return axios.get(API_URL, {
             params: {
                 user_id: id,
@@ -35,17 +37,17 @@ class UserService {
     
 
     changeEmail(data) {
-        const API_URL = "/NewEmail";
+        const API_URL = SERVER_URL +"/NewEmail";
         return axios.put(API_URL, data);
     }
 
     changePassword(password) {
-        const API_URL = "/NewPassword";
+        const API_URL = SERVER_URL +"/NewPassword";
         return axios.put(API_URL, password).data;
     }
 
     changeProfilePicture(picture) {
-        const API_URL = "/Profile/pfpchange";
+        const API_URL = SERVER_URL +"/Profile/pfpchange";
         return axios.put(API_URL, picture, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -54,7 +56,7 @@ class UserService {
     }
 
     changeEducation(education) {
-        const API_URL = "/Profile/educhange";
+        const API_URL = SERVER_URL + "/Profile/educhange";
         console.log('education is: ', education);
                return axios.put(API_URL, education, {
             headers: {
@@ -65,7 +67,7 @@ class UserService {
     
     
     fetchEducation(token) {
-        const API_URL = "/Profile/GetEducation";
+        const API_URL = SERVER_URL + "/Profile/GetEducation";
         return axios.get(API_URL,{
             params: {token : token},
             responseType: 'json'
@@ -73,17 +75,17 @@ class UserService {
     }
 
     fetchEducationById(id) {
-        const API_URL = `/VisitProfile/getEducation/${id}`;
+        const API_URL = SERVER_URL + `/VisitProfile/getEducation/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
 
     removeEdu(education_id,token) {
-        const API_URL = "/Profile/DeleteEdu";
+        const API_URL = SERVER_URL + "/Profile/DeleteEdu";
         return axios.delete(API_URL, {params: {education_id: education_id,token: token}});
     }
 
     changeWork(work) {
-        const API_URL = "/Profile/workchange";
+        const API_URL = SERVER_URL + "/Profile/workchange";
         return axios.put(API_URL, work, {
             headers: {
                 'Content-Type': 'application/json'
@@ -92,7 +94,7 @@ class UserService {
     }
 
     fetchExperience(token) {
-        const API_URL = "/Profile/GetExperience";
+        const API_URL = SERVER_URL + "/Profile/GetExperience";
         return axios.get(API_URL,{
             params: {token : token},
             responseType: 'json'
@@ -100,17 +102,17 @@ class UserService {
     }
 
     fetchExperienceById(id) {
-        const API_URL = `/VisitProfile/getExperience/${id}`;
+        const API_URL = SERVER_URL +`/VisitProfile/getExperience/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
 
     removeExp(experience_id,token) {
-        const API_URL = "/Profile/DeleteExp";
+        const API_URL = SERVER_URL + "/Profile/DeleteExp";
         return axios.delete(API_URL, {params: {experience_id: experience_id,token: token}});
     }
 
     changeSkills(skills) {
-        const API_URL = "/Profile/skillchange";
+        const API_URL = SERVER_URL + "/Profile/skillchange";
         return axios.put(API_URL, skills, {
             headers: {
                  'Content-Type': 'application/json'
@@ -119,7 +121,7 @@ class UserService {
     }
 
     fetchSkills(token) {
-        const API_URL = "/Profile/GetSkills";
+        const API_URL = SERVER_URL + "/Profile/GetSkills";
         return axios.get(API_URL,{
             params: {token : token},
             responseType: 'json'
@@ -127,38 +129,38 @@ class UserService {
     }
 
     fetchSkillsById(id) {
-        const API_URL = `/VisitProfile/getSkills/${id}`;
+        const API_URL = SERVER_URL + `/VisitProfile/getSkills/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
 
 
     removeSkill(skill_id,token) {
-        const API_URL = "/Profile/DeleteSkill";
+        const API_URL = SERVER_URL + "/Profile/DeleteSkill";
         return axios.delete(API_URL, {params: {skill_id: skill_id,token: token}});
     }
 
     changeEduState(state){
-        const API_URL = "/Profile/edubool";
+        const API_URL = SERVER_URL + "/Profile/edubool";
         return axios.put(API_URL,state);
     }
 
     changeWorkState(state){
-        const API_URL = "/Profile/workbool";
+        const API_URL = SERVER_URL + "/Profile/workbool";
         return axios.put(API_URL,state);
     }
 
     changeSkillsState(state){
-        const API_URL= "/Profile/skillsbool";
+        const API_URL= SERVER_URL + "/Profile/skillsbool";
         return axios.put(API_URL,state);
     }
 
     changeWorkTitle(title){
-        const API_URL= "/Profile/worktitle"
+        const API_URL= SERVER_URL + "/Profile/worktitle"
         return axios.put(API_URL,title);
     }
 
     changeWorkplace(place){
-        const API_URL= "/Profile/workplace"
+        const API_URL= SERVER_URL + "/Profile/workplace"
         return axios.put(API_URL,place);
     }
 
@@ -170,7 +172,7 @@ class UserService {
             console.error("Invalid ID");
             return;
         }
-        const url = "/NewEmail";
+        const url = SERVER_URL + "/NewEmail";
         const response = await axios.get(url,{
             params: {id : ID},
             responseType: 'json'
@@ -185,7 +187,7 @@ class UserService {
             console.error("Invalid token");
             return;
         }
-        const url = "/Profile";
+        const url = SERVER_URL +"/Profile";
         const response = await axios.get(url,{
             params: {token: token},
             responseType: 'json'
@@ -195,7 +197,7 @@ class UserService {
     }
 
     async getProfile(id){
-        const url = `/VisitProfile/${id}`;
+        const url = SERVER_URL + `/VisitProfile/${id}`;
         const response = await axios.get(url, {
             responseType: 'json'
         });
@@ -204,7 +206,7 @@ class UserService {
     }
 
     async getUserChatData(token){
-        const url = '/Messages';
+        const url = SERVER_URL + '/Messages';
         const response = await axios.get(url, {
             params: {token: token},
             responseType: 'json'
@@ -213,13 +215,13 @@ class UserService {
     }
 
     async getChatHistory(user1,user2){
-        const url = `/chathistory/${user1}/${user2}`
+        const url = SERVER_URL + `/chathistory/${user1}/${user2}`
         const response = await axios.get(url);
         return response.data;
     }
 
     async getImage(user){
-        const url = `/image/${user}`;
+        const url = SERVER_URL + `/image/${user}`;
         const response = await axios.get(url);
         return response.data;
     }

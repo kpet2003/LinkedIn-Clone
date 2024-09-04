@@ -1,5 +1,7 @@
 package com.tediproject.tedi.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.tediproject.tedi.security.CustomUserDetailsService;
 import com.tediproject.tedi.security.JwtAuthenticationFilter;
 import com.tediproject.tedi.security.JwtEntryPoint;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -36,6 +40,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http 
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/static/css/**", "/static/js/**", "/**", "/ws/**").permitAll()
@@ -70,6 +75,20 @@ public class SecurityConfig {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration configuration = new CorsConfiguration();
+        configuration.applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.addExposedHeader("Authorization");
+        configuration.setAllowCredentials(true);
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
 
 

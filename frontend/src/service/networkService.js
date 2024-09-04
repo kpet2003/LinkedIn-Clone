@@ -1,13 +1,13 @@
 import axios from "axios";
-
+const SERVER_URL =  "http://localhost:8080"
 class networkService {
     getUsers() {
-        const API_URL = "/Network/getUsers";
+        const API_URL = SERVER_URL +"/Network/getUsers";
         return axios.get(API_URL).then(response => response.data);
     }
 
     newRequest(user_id, sender_token) {
-        const API_URL = "/Network/newRequest";
+        const API_URL = SERVER_URL +"/Network/newRequest";
         return axios.post(API_URL, {
             user_id: user_id,
             token: sender_token
@@ -19,7 +19,7 @@ class networkService {
     }
 
     newConnection(user_id,token) {
-        const API_URL = "/Notifications/newConnection";
+        const API_URL = SERVER_URL +"/Notifications/newConnection";
         return axios.post(API_URL, {
             user_id: user_id,
             token: token
@@ -31,7 +31,7 @@ class networkService {
     }
 
     declineRequest(user_id,token) {
-        const API_URL = "/Notifications/declineRequest";
+        const API_URL = SERVER_URL +"/Notifications/declineRequest";
         return axios.post(API_URL, {
             user_id: user_id,
             token: token
@@ -43,17 +43,17 @@ class networkService {
     }
 
     fetchRequests(token) {
-        const API_URL = `/Network/Requests?token=${encodeURIComponent(token)}`;
+        const API_URL = SERVER_URL +`/Network/Requests?token=${encodeURIComponent(token)}`;
         return axios.get(API_URL).then(response => response.data);
     }
 
     fetchConnections(token) {
-        const API_URL = `/Network/Connections?token=${encodeURIComponent(token)}`;
+        const API_URL = SERVER_URL +`/Network/Connections?token=${encodeURIComponent(token)}`;
         return axios.get(API_URL).then(response => response.data);
     }
 
     fetchConnectionsById(id) {
-        const API_URL =  `/ViewNetwork/getConnections/${id}`;
+        const API_URL = SERVER_URL + `/ViewNetwork/getConnections/${id}`;
         return axios.get(API_URL).then(response => response.data);
     }
 }
