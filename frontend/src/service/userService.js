@@ -66,7 +66,7 @@ class UserService {
     }
     
     
-    fetchEducation(token) {
+    getEducation(token) {
         const API_URL = SERVER_URL + "/Profile/GetEducation";
         return axios.get(API_URL,{
             params: {token : token},
@@ -74,7 +74,7 @@ class UserService {
         }).then(response => response.data);
     }
 
-    fetchEducationById(id) {
+    getEducationById(id) {
         const API_URL = SERVER_URL + `/VisitProfile/getEducation/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
@@ -93,7 +93,7 @@ class UserService {
         }).data;
     }
 
-    fetchExperience(token) {
+    getExperience(token) {
         const API_URL = SERVER_URL + "/Profile/GetExperience";
         return axios.get(API_URL,{
             params: {token : token},
@@ -101,7 +101,7 @@ class UserService {
         }).then(response => response.data);
     }
 
-    fetchExperienceById(id) {
+    getExperienceById(id) {
         const API_URL = SERVER_URL +`/VisitProfile/getExperience/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
@@ -120,7 +120,7 @@ class UserService {
         }).data;
     }
 
-    fetchSkills(token) {
+    getSkills(token) {
         const API_URL = SERVER_URL + "/Profile/GetSkills";
         return axios.get(API_URL,{
             params: {token : token},
@@ -128,7 +128,7 @@ class UserService {
         }).then(response => response.data);
     }
 
-    fetchSkillsById(id) {
+    getSkillsById(id) {
         const API_URL = SERVER_URL + `/VisitProfile/getSkills/${id}`;
         return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
     }
@@ -163,8 +163,6 @@ class UserService {
         const API_URL= SERVER_URL + "/Profile/workplace"
         return axios.put(API_URL,place);
     }
-
-
     
 
     async getUserEmail(ID) {

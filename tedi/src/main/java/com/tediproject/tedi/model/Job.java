@@ -3,6 +3,7 @@ package com.tediproject.tedi.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,10 +44,23 @@ public class Job {
     @JoinTable(name = "job_applicants",joinColumns = @JoinColumn(name = "job_id"),inverseJoinColumns = @JoinColumn(name = "applicant"))
     private List <UserEntity> applicants;
 
-    @ManyToMany(mappedBy = "jobs_related", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "job_skills",  // or whatever your join table is named
+        joinColumns = @JoinColumn(name = "job_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
     private List <Skills> relevant_skills;
 
     
+
+    public List<Skills> getRelevant_skills() {
+        return relevant_skills;
+    }
+
+    public void setRelevant_skills(List<Skills> relevant_skills) {
+        this.relevant_skills = relevant_skills;
+    }
 
     public Job() {
         this.date_posted = LocalDateTime.now();

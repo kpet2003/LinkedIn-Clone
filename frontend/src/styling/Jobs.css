@@ -1,0 +1,71 @@
+body {
+    background-color: rgb(175, 235, 255);
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.create-job-container{
+   width: 300px;
+}
+
+.insert-text{
+    border-radius: 8px;
+    resize: none;
+    width: auto;
+    height: 20px;
+    overflow-y: auto;
+    font-size: medium;
+    padding-top: 6px;
+    border-color: gray;
+}
+
+.insert-text.about{
+    height:40px;
+}
+
+.job-container{
+    width: 60%;
+    height: max-content;
+    background-color: white;
+    margin-left: 20%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+    border: 1px solid gray;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.job-header{
+    margin: 0;
+    margin-top: 1%;
+    margin-left: 2%;
+    cursor: pointer;
+    font-size: larger;
+}
+
+.job-header:hover{
+    text-decoration: underline;
+}
+
+.apply-button{
+    width: 80px;
+}
+
+.author {
+    font-size: small;
+    color: gray;
+    margin-left: 2%;
+    margin-top: 0;
+}
+
+.footer {
+    text-align: right;
+    float: right;
+    position: absolute;
+    bottom: 1%;
+    right: 2%;
+    font-size: small;
+}

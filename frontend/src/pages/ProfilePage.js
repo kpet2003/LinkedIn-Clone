@@ -12,8 +12,6 @@ import trash from '../icons/trash.png';
 
 function Skills({skills,deleteSkill}) {
 
-    
-
     return (
         <div>
             <ul>
@@ -85,15 +83,13 @@ function Pfp(){
     const [experience,setExperience] = useState([]);
 
     useEffect(() => {
-
-
         const fetchData = async () => {
             try {
                 const [user, education, experience,skills] = await Promise.all([
                     userService.getUserData(localStorage.getItem('jwt_token')),
-                    userService.fetchEducation(localStorage.getItem('jwt_token')),
-                    userService.fetchExperience(localStorage.getItem('jwt_token')),
-                    userService.fetchSkills(localStorage.getItem('jwt_token'))
+                    userService.getEducation(localStorage.getItem('jwt_token')),
+                    userService.getExperience(localStorage.getItem('jwt_token')),
+                    userService.getSkills(localStorage.getItem('jwt_token'))
                 ]);
                 setUser(user);
                 setEducation(education);
@@ -109,13 +105,10 @@ function Pfp(){
     },[]);
 
 
-
-  
-
     const deleteSkill = async(skill_id) => {
         try {
             await userService.removeSkill(skill_id,localStorage.getItem('jwt_token'));
-            const response = await userService.fetchSkills(localStorage.getItem('jwt_token'));
+            const response = await userService.getSkills(localStorage.getItem('jwt_token'));
             setSkills(response);
         }
         catch(error) {
@@ -126,7 +119,7 @@ function Pfp(){
     const deleteEducation = async(edu_id) =>{
         try {
             await userService.removeEdu(edu_id,localStorage.getItem('jwt_token'));
-            const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
+            const response = await userService.getEducation(localStorage.getItem('jwt_token'));
             setEducation(response);
         }
         catch(error) {
@@ -137,7 +130,7 @@ function Pfp(){
     const deleteExperience = async(exp_id) => {
         try {
             await userService.removeExp(exp_id,localStorage.getItem('jwt_token'));
-            const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
+            const response = await userService.getExperience(localStorage.getItem('jwt_token'));
             setExperience(response);
         }
         catch(error) {
@@ -179,7 +172,7 @@ function Pfp(){
                     console.log('user education is: ',user.education)
                     await userService.changeEducation(data);
                     alert('Education info changed successfully');
-                    const response = await userService.fetchEducation(localStorage.getItem('jwt_token'));
+                    const response = await userService.getEducation(localStorage.getItem('jwt_token'));
                     setEducation(response);
                 }
                 else if(changedField === 'workExperience'){
@@ -189,7 +182,7 @@ function Pfp(){
                     }
                     await userService.changeWork(data);
                     alert('Work experience changed successfully');
-                    const response = await userService.fetchExperience(localStorage.getItem('jwt_token'));
+                    const response = await userService.getExperience(localStorage.getItem('jwt_token'));
                     setExperience(response);
                 }
                 else if(changedField === 'skills'){
@@ -199,7 +192,7 @@ function Pfp(){
                     }
                     await userService.changeSkills(data);
                     alert('Skills changed successfully');
-                    const response = await userService.fetchSkills(localStorage.getItem('jwt_token'));
+                    const response = await userService.getSkills(localStorage.getItem('jwt_token'));
                     setSkills(response);
                 }
                 else if(changedField === 'workTitle'){
@@ -287,12 +280,12 @@ function Pfp(){
                     modal
                     closeOnDocumentClick
                     className="modal-content"
-                >
+                > 
                     {(close) => (
                     <div className="modal-background">
                         <span className="close" onClick={close}>
                         &times;
-                        </span>
+                        </span><br></br>
                         <h2>Edit Profile Picture</h2>
                         <form onSubmit={handleSubmit}>
                         <input type="file" className="file-input" onChange={handleChange} id="profilePicture" />
@@ -328,7 +321,7 @@ function Pfp(){
                         <div className="modal-background">
                             <span className="close" onClick={close}>
                             &times;
-                            </span>
+                            </span><br></br>
                             <h2>Edit Work Title</h2>
                             <form onSubmit={handleSubmit}>
                             <input type="text" className="file-input" onChange={handleChangedText} id="workTitle" />
@@ -355,7 +348,7 @@ function Pfp(){
                         <div className="modal-background">
                             <span className="close" onClick={close}>
                             &times;
-                            </span>
+                            </span><br></br>
                             <h2>Edit Workplace</h2>
                             <form onSubmit={handleSubmit}>
                             <input type="text" className="file-input" onChange={handleChangedText} id="workplace" />
@@ -386,7 +379,7 @@ function Pfp(){
                             <div className="modal-background">
                                 <span className="close" onClick={close}>
                                 &times;
-                                </span>
+                                </span><br></br>
                                 <h2>Add Education</h2>
                                 <form onSubmit={handleSubmit}>
                                     <input type="text" className="file-input" onChange={handleChangedText} id="education" value={user.education} />
@@ -417,7 +410,7 @@ function Pfp(){
                             <div className="modal-background">
                                 <span className="close" onClick={close}>
                                 &times;
-                                </span>
+                                </span><br></br>
                                 <h2>Edit Work Experience</h2>
                                 <form onSubmit={handleSubmit}>
                                 <input type="text" className="file-input" onChange={handleChangedText} id="workExperience" />
@@ -448,8 +441,8 @@ function Pfp(){
                         <div className="modal-background">
                             <span className="close" onClick={close}>
                             &times;
-                            </span>
-                            <h2> Add Skills</h2>
+                            </span><br></br>
+                            <h2> Add Skill</h2>
                             <form onSubmit={handleSubmit}>
                             <input type="text" className="file-input" onChange={handleChangedText} id="skills"/>
                             <input type="submit" value="Save" className="save-button" />
