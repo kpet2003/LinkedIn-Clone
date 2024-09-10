@@ -1,6 +1,7 @@
 package com.tediproject.tedi.service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tediproject.tedi.dto.ApplicantDto;
 import com.tediproject.tedi.dto.JobDto;
 import com.tediproject.tedi.dto.NewJobDto;
 import com.tediproject.tedi.model.Job;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
-import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.JobRepo;
 import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
@@ -32,13 +33,13 @@ public class JobService {
     private JwtUtil jwtUtil;
 
     @Autowired 
-    ConnectionRepo connectionRepo;
-
-    @Autowired 
     JobRepo jobRepo;
 
     @Autowired
     SkillsRepo skillsRepo;
+
+    @Autowired
+    NetworkService networkService;
 
     public void createJob(NewJobDto job) {
         Job j = new Job();
@@ -82,22 +83,90 @@ public class JobService {
             
         }
         List<Job> sortedJobs = jobSkillCountMap.entrySet().stream()
-                                .sorted(Map.Entry.<Job, Integer>comparingByValue().reversed())
-                                .map(Map.Entry::getKey)
-                                .collect(Collectors.toList());
+        .sorted((entry1, entry2) -> {
+            // First, compare by matching skills (descending)
+            int skillCompare = entry2.getValue().compareTo(entry1.getValue());
+            
+            // If skill counts are equal, compare by date posted (descending)
+            if (skillCompare == 0) {
+                return entry2.getKey().getDate_posted().compareTo(entry1.getKey().getDate_posted());
+            }
+            return skillCompare;
+        })
+        .map(Map.Entry::getKey)
+        .collect(Collectors.toList());
 
         for (Job job : sortedJobs) {
-            String author = user.getFirstName() + " " + user.getLastName();
-            JobDto j = new JobDto(author, job.getJob_title(), job.getJob_description(), job.getDate_posted(), job.getId());
+            String author = job.getAuthor().getFirstName() + " " + job.getAuthor().getLastName();
+            JobDto j = new JobDto(author, job.getJob_title(), job.getJob_description(), job.getDate_posted(), job.getId(), job.getAuthor().getID());
             jobs.add(j);
         }
         return jobs;
     }
 
+    public List<JobDto> getConnectionsJobs(List<JobDto> allJobs, String token){
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        List<JobDto> connectedJobs = new ArrayList<>();
+        for(JobDto job:allJobs){
+            Job j = jobRepo.findById(job.getJobId());
+            for(UserEntity u:connectedUsers){
+                if(job.getAuthorId() == u.getID()){
+                    if(!j.getApplicants().contains(user)){
+                        connectedJobs.add(job);
+                    }
+                }
+            }
+        }
+        return connectedJobs;
+    }
+
+    public List<JobDto> getOtherJobs(List<JobDto> allJobs, String token){
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        List<JobDto> otherJobs = new ArrayList<>();
+        for(JobDto job:allJobs){
+            for(UserEntity u:connectedUsers){
+                Job j = jobRepo.findById(job.getJobId());
+                if((job.getAuthorId() != u.getID()) && (user.getID() != job.getAuthorId())){
+                    if(!j.getApplicants().contains(user)){
+                        otherJobs.add(job);
+                    }
+                }
+            }
+        }
+        return otherJobs;
+    }
+
+    public List<JobDto> getMyJobs(List<JobDto> allJobs, String token){
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<JobDto> myJobs = new ArrayList<>();
+        for(JobDto job:allJobs){
+            System.out.println("WHEN JOB AUTHOR IS "+job.getAuthorId());
+            if(job.getAuthorId() == user.getID()){
+                System.out.println("MYJOBS: ADDED "+user.getID());
+                myJobs.add(job);
+            }
+        }
+        return myJobs;
+    }
+
+    public List<JobDto> getAppliedJobs(List<JobDto> allJobs, String token){
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        List<JobDto> appliedJobs = new ArrayList<>();
+        for(JobDto job:allJobs){
+            Job j = jobRepo.findById(job.getJobId());
+            if(j.getApplicants().contains(user)){
+                appliedJobs.add(job);
+            }
+        }
+        return appliedJobs;
+    }
+
     @Transactional
     public void applyForJob(long jobId, String userToken) {
         // Retrieve the job and user entities
-        Job job = jobRepo.findById(jobId).orElseThrow(() -> new RuntimeException("Job not found"));
+        Job job = jobRepo.findById(jobId);
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(userToken));
         
         if (!job.getApplicants().contains(user)) {
@@ -111,6 +180,23 @@ public class JobService {
         // Save the updated entities
         jobRepo.save(job);
         userRepo.save(user);
+    }
+
+    public List<ApplicantDto> getApplicants(long jobId){
+        Job job = jobRepo.findById(jobId);
+        List<ApplicantDto> applicants = new ArrayList<>();
+        List<UserEntity> temp = new ArrayList<>();
+        temp = job.getApplicants();
+        for(UserEntity user: temp){
+            String name = user.getFirstName()+" "+user.getLastName();
+            String base64Image = null;
+            if (user.getProfilePicture() != null) {
+                base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
+            }
+            ApplicantDto app = new ApplicantDto(user.getID(), name, base64Image);
+            applicants.add(app);
+        }
+        return applicants;
     }
 
 }

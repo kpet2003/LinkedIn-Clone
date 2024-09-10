@@ -20,17 +20,30 @@ function Jobs() {
         skills: []
     };
 
-    const [jobs, setJobs] = useState([]);
+    const [myJobs, setMyJobs] = useState([]);
+    const [connectionsJobs, setConnectionsJobs] = useState([]);
+    const [othersJobs, setOthersJobs] = useState([]);
     const [newJob, setNewJob] = useState(initialState);
     const [newSkill, setNewSkill] = useState('');
-    const [showJobDesc, setShowJobDesc] = useState(null);
+    const [showMyJobDesc, setShowMyJobDesc] = useState(null);
+    const [showConnJobDesc, setShowConnJobDesc] = useState(null);
+    const [showOtherJobDesc, setShowOtherJobDesc] = useState(null);
+    const [showAppliedJobDesc, setShowAppliedJobDesc] = useState(null);
+    const [jobsApplied, setJobsApplied] = useState([]);
+    const [showApplicants, setshowApplicants] = useState(null);
+    const [applicants, setApplicants] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await jobService.getJobs(localStorage.getItem('jwt_token'));
-                setJobs(data);
-                console.log(jobs);
+                const [myJobs, connectionsJobs, othersJobs] = await Promise.all([
+                    jobService.getMyJobs(localStorage.getItem('jwt_token')),
+                    jobService.getConnectionJobs(localStorage.getItem('jwt_token')),
+                    jobService.getOtherJobs(localStorage.getItem('jwt_token'))
+                ]);
+                setMyJobs(myJobs);
+                setConnectionsJobs(connectionsJobs);
+                setOthersJobs(othersJobs);
             } 
             catch (error) {
                 console.error("There was an error getting the available jobs", error);
@@ -84,12 +97,35 @@ function Jobs() {
         setNewSkill('');
     }
 
-    const toggleDescription = (i) => {
-        // Toggle the description for the clicked job
-        if (showJobDesc === i) {
-            setShowJobDesc(null);  // Close the description if clicked again
+    const toggleMyDescription = (i) => {
+        if (showMyJobDesc === i) {
+            setShowMyJobDesc(null);
         } else {
-            setShowJobDesc(i);  // Show the description for the clicked job
+            setShowMyJobDesc(i);
+        }
+    };
+
+    const toggleConnDescription = (i) => {
+        if (showConnJobDesc === i) {
+            setShowConnJobDesc(null);
+        } else {
+            setShowConnJobDesc(i);
+        }
+    };
+
+    const toggleOtherDescription = (i) => {
+        if (showOtherJobDesc === i) {
+            setShowOtherJobDesc(null);
+        } else {
+            setShowOtherJobDesc(i);
+        }
+    };
+
+    const toggleAppliedDescription = (i) => {
+        if (showAppliedJobDesc === i) {
+            setShowAppliedJobDesc(null);
+        } else {
+            setShowAppliedJobDesc(i);
         }
     };
 
@@ -104,11 +140,75 @@ function Jobs() {
         }
     }
 
+    const getJobsApplied = async()=>{
+        try{
+        const response = await jobService.getJobsApplied(localStorage.getItem('jwt_token'));
+        setJobsApplied(response);
+        }catch(error){
+            console.error("Error getting jobs applied:",error);
+            alert("Could not get the jobs you have applied for")
+        }
+    }
+
+    const getApplicants = async(i)=>{
+        try {
+            if (showApplicants === i) {
+                setshowApplicants(null);
+            } else {
+                const data = await jobService.getJobApplicants(i, localStorage.getItem('jwt_token'));
+                setApplicants(data);
+                setshowApplicants(i);
+            }
+            
+        } catch (error) {
+            console.error("Error getting applicants:", error);
+            alert("There was an error getting the applicants");
+        }
+    }
+
     return (
         <div>
+            <div className='buttons-container'>
             <Popup trigger={
-                <div style={{textAlign: 'right', marginRight: '20%'}}>
-                <button className='save-button'>Post a Job</button>
+                <div>
+                <button className='save-button job-button' onClick={getJobsApplied}>Jobs Applied For</button>
+                </div>
+            } modal closeOnDocumentClick className="modal-content">
+                {(close) => (
+                    <div className='modal-background'>
+                        <span className="close" onClick={close}>
+                        &times;
+                        </span><br></br><br></br>
+                        <div className='view-jobs'>
+                    {
+                        jobsApplied.map((job,i)=>(
+                            <>
+                            <div className='in-view' key={job.id}>
+                                <h3 className='job-header' onClick={() => toggleAppliedDescription(i)}>{job.title}</h3>
+                                <p className='author'>Posted by {job.author}</p>
+                                {showAppliedJobDesc === i && (
+                                    <div style={{ marginLeft: '2%' }}>
+                                        <p>{job.desc}</p>
+                                    </div>
+                                )}
+                                <span className='footer'>
+                                    {new Date(job.date).toLocaleDateString()}
+                                    &nbsp;
+                                    {new Date(job.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>                    
+                            </div>
+                            <br></br>
+                            </>
+                        )
+        
+                    )}
+                    </div>
+                    </div>
+                )}
+            </Popup>
+            <Popup trigger={
+                <div>
+                <button className='save-button job-button'>Post a Job</button>
                 </div>
             } modal closeOnDocumentClick className="modal-content create-job-container" onClose={reset}>
                 {(close) => (
@@ -143,15 +243,78 @@ function Jobs() {
                     </div>
                     )}
             </Popup>
-        
+            </div>
         <br></br>
+        <h2 style={{textAlign: 'left', marginLeft: '20%'}}>Jobs you have posted</h2>
             {
-                jobs.map((job,i)=>(
+                myJobs.map((job,i)=>(
                     <>
                     <div className='job-container' key={job.id}>
-                        <h3 className='job-header' onClick={() => toggleDescription(i)}>{job.title}</h3>
+                        <h3 className='job-header' onClick={() => toggleMyDescription(i)}>{job.title}</h3>
                         <p className='author'>Posted by {job.author}</p>
-                        {showJobDesc === i && (
+                        {showMyJobDesc === i && (
+                            <div style={{ marginLeft: '2%' }}>
+                                <p>{job.desc}</p>
+                                <button className='save-button applicant-button' onClick={()=>getApplicants(job.jobId)}>View Applicants</button>
+                                <br></br>
+                                {showApplicants === job.jobId &&(
+                                    applicants.map((applicant)=>(
+                                        <div className='applicants-container' key={applicant.id}>
+                                            <img src={applicant.profilePicture?`data:image/jpeg;base64,${applicant.profilePicture}`:avatar}
+                                            alt='profile pic' className='profile-picture pfp'></img>
+                                            <p style={{alignSelf: 'center'}}>{applicant.name}</p>
+                                            <a  href={`/VisitProfile/${applicant.id}`} className='profile_link'>Visit Profile</a> 
+                                            <br></br>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+                        )}
+                        <span className='footer'>
+                            {new Date(job.date).toLocaleDateString()}
+                            &nbsp;
+                            {new Date(job.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>                    
+                    </div>
+                    <br></br>
+                    </>
+                )
+
+            )}
+        <br></br>
+        <h2 style={{textAlign: 'left', marginLeft: '20%'}}>Jobs your connections have posted</h2>
+            {
+                connectionsJobs.map((job,i)=>(
+                    <>
+                    <div className='job-container' key={job.id}>
+                        <h3 className='job-header' onClick={() => toggleConnDescription(i)}>{job.title}</h3>
+                        <p className='author'>Posted by {job.author}</p>
+                        {showConnJobDesc === i && (
+                            <div style={{ marginLeft: '2%' }}>
+                                <p>{job.desc}</p>
+                                <button className='save-button apply-button' onClick={() => apply(job.jobId)}>Apply</button>
+                            </div>
+                        )}
+                        <span className='footer'>
+                            {new Date(job.date).toLocaleDateString()}
+                            &nbsp;
+                            {new Date(job.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>                    
+                    </div>
+                    <br></br>
+                    </>
+                )
+
+            )}
+            <br></br>
+            <h2 style={{textAlign: 'left', marginLeft: '20%'}}>Jobs other users have posted</h2>
+            {
+                othersJobs.map((job,i)=>(
+                    <>
+                    <div className='job-container' key={job.id}>
+                        <h3 className='job-header' onClick={() => toggleOtherDescription(i)}>{job.title}</h3>
+                        <p className='author'>Posted by {job.author}</p>
+                        {showOtherJobDesc === i && (
                             <div style={{ marginLeft: '2%' }}>
                                 <p>{job.desc}</p>
                                 <button className='save-button apply-button' onClick={() => apply(job.jobId)}>Apply</button>

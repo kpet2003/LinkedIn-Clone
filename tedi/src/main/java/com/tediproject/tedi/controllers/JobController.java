@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tediproject.tedi.dto.ApplicantDto;
 import com.tediproject.tedi.dto.JobDto;
 import com.tediproject.tedi.dto.NewJobDto;
 import com.tediproject.tedi.security.JwtUtil;
@@ -35,11 +36,36 @@ public class JobController {
         }
     }
 
-    @GetMapping(value = "/jobs/{user}")
-    public ResponseEntity<?> getJobs(@PathVariable String user){
+    @GetMapping(value = "/connectionjobs/{user}")
+    public ResponseEntity<?> getConnectionJobs(@PathVariable String user){
         try {
             jwtUtil.validateToken(user);
-            List<JobDto> jobs = jobService.getJobs(user);
+            List<JobDto> allJobs = jobService.getJobs(user);
+            List<JobDto> jobs = jobService.getConnectionsJobs(allJobs,user);
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/otherjobs/{user}")
+    public ResponseEntity<?> getOtherJobs(@PathVariable String user){
+        try {
+            jwtUtil.validateToken(user);
+            List<JobDto> allJobs = jobService.getJobs(user);
+            List<JobDto> jobs = jobService.getOtherJobs(allJobs,user);
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/myjobs/{user}")
+    public ResponseEntity<?> getMyJobs(@PathVariable String user){
+        try {
+            jwtUtil.validateToken(user);
+            List<JobDto> allJobs = jobService.getJobs(user);
+            List<JobDto> jobs = jobService.getMyJobs(allJobs,user);
             return ResponseEntity.ok(jobs);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -52,6 +78,29 @@ public class JobController {
             jwtUtil.validateToken(token);
             jobService.applyForJob(jobId, token);
             return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value="/applied/{token}")
+    public ResponseEntity<?> getAppliedJobs(@PathVariable String token){
+        try {
+            jwtUtil.validateToken(token);
+            List<JobDto> allJobs = jobService.getJobs(token);
+            List<JobDto> jobs = jobService.getAppliedJobs(allJobs,token);
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value="/applicants/{jobId}/{token}")
+    public ResponseEntity<?> getApplicants(@PathVariable long jobId, @PathVariable String token){
+        try {
+            jwtUtil.validateToken(token);
+            List<ApplicantDto> applicants = jobService.getApplicants(jobId);
+            return ResponseEntity.ok(applicants);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
