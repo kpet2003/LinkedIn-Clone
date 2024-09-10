@@ -48,6 +48,7 @@ body {
   font-weight: 250px;
 }
 
+
 .WelcomeButton {
   margin-left: 5px;
   text-align: left;
@@ -58,7 +59,10 @@ body {
   font-size: 16px;
   cursor: pointer;
   font-weight: normal;
-  text-decoration-line: underline;
   text-decoration-style: solid;
   
+}
+
+.WelcomeButton:hover {
+  text-decoration: underline;
 }

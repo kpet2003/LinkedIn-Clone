@@ -62,7 +62,7 @@ function NewMail(){
             <p>Your current e-mail is: {email}</p><br></br>
             <form onSubmit={handleSubmit}>
                 <label>New email: </label>
-                <input type='email' onChange={handleChange}></input><br></br><br></br>
+                <input type='email' onChange={handleChange} style={{ outline: 'none' }}></input><br></br><br></br>
                 <input type='submit' value="Change" className='save-button'></input>
             </form>
 
@@ -74,7 +74,7 @@ function NewMail(){
                         </span>
                         <h2>Enter your password to confirm</h2>
                         <form onSubmit={handlePopupSubmit}>
-                            <input type='password' onChange={handlePasswordChange} required/>
+                            <input type='password' onChange={handlePasswordChange} required style={{ outline: 'none' }} />
                             <br /><br />
                             <button type='submit' className='save-button'>Submit</button>
                         </form>

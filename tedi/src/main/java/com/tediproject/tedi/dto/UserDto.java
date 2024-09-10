@@ -1,12 +1,15 @@
 package com.tediproject.tedi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class UserDto {
     protected String first_name;
     protected String last_name;
     protected String email;
     protected long phone_number;
     protected String image;
-    protected byte[] resume;
     protected String workExperience;
     protected String education;
     protected Boolean isPublicWorkExperience;
@@ -14,7 +17,6 @@ public class UserDto {
     protected Boolean isPublicSkills;
     protected String workTitle;
     protected String workplace;
-    protected String website;
     protected Long id;
 
     public Long getId() {
@@ -45,10 +47,6 @@ public class UserDto {
 
     public void setProfilePicture(String pfp){
         this.image = pfp;
-    }
-
-    public void setResume(byte[] CV){
-        this.resume = CV;
     }
 
     public void setWorkExperience(String experience){
@@ -91,11 +89,6 @@ public class UserDto {
         return this.image;
     }   
 
-    public byte[] getResume(){
-        return this.resume;
-    }
-
-
     public String getWorkExperience(){
         return this.workExperience;
     }
@@ -134,11 +127,4 @@ public class UserDto {
         this.workTitle = workTitle;
     }
 
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
 }

@@ -41,13 +41,13 @@ function Requests({users,setUsers}) {
     return (
         <div>
             {  users.length>0 && (
-                <div>
-                <h2 className='my-h2'> Your requests: </h2> 
+                <div >
+                <h2 className='my-h2'> Your requests: </h2> <br></br><br></br>
                     <ul className='list'>
                          { users.map(user => (
-                            <li key={user.id} className='user' >
+                            <li key={user.id} className='request_user' >
                                 <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder} alt='profile' className='profile_photo' />
-                               <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.sender_id}`} className='profile'>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.sender_id)}  /> 
+                               <p>{user.firstName} {user.lastName} wants to connect with you</p> <a href={`/VisitProfile/${user.sender_id}`} className='request_link' style={{  marginTop: '1%'}}>Visit Profile</a> <input type='button'value={'Accept'} className='accept_button'  onClick={() => addConnection(user.sender_id)}  /> 
                                  <input type='button' value={'Decline'} className='decline_button' onClick={() => decline(user.sender_id)}/> 
                             </li>
                         ))}

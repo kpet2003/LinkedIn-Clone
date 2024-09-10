@@ -4,42 +4,53 @@ body {
     font-family: 'Arial';
 }
 
+.admin {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .userlist {
-    border: 5px solid grey;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    border-collapse: collapse; 
-}
-
-.userlist tr, .userlist td {
-    border: 1px solid grey; 
-    padding: 8px; 
-    width: 200px;
-}
-
-.header {
-    border-bottom: 3px solid grey;
-    height: 35px;
-}
-
-.userlist th.select{
-    width: 50px;
-    border-right: 1px solid grey ;
+    display: grid;
+    column-gap: 10%;
+    row-gap: 2%;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px;
+    padding: 2%;
+    margin-left: 12%;
+    padding-bottom: 5%;
 }
 
 
-.userlist td.select {
-    width: 50px;
+.user {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-style: none;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	min-height: 150px;
+    min-width: 180px;
+	margin: 0;
+    text-align: center;
+    cursor: pointer;
 }
 
+.user.selected {
+    background-color: lightblue;
+}
 
-
+.user:hover {
+    transform: scale(1.05);
+}
 .buttons{
-    float: right;
-    margin-right: 560px;
-    margin-top: 10px;
+    margin-top: 2%;
+    margin-left: 40%;
+    padding: auto;
 }
+
 
 .button {
     background-color: royalblue;

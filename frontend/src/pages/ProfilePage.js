@@ -324,7 +324,7 @@ function Pfp(){
                             </span><br></br>
                             <h2>Edit Work Title</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChangedText} id="workTitle" />
+                            <input type="text" className="file-input" onChange={handleChangedText} id="workTitle" style={{ outline: 'none' }} />
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>
@@ -351,7 +351,7 @@ function Pfp(){
                             </span><br></br>
                             <h2>Edit Workplace</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChangedText} id="workplace" />
+                            <input type="text" className="file-input" onChange={handleChangedText} id="workplace" style={{ outline: 'none' }}/>
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>
@@ -382,7 +382,7 @@ function Pfp(){
                                 </span><br></br>
                                 <h2>Add Education</h2>
                                 <form onSubmit={handleSubmit}>
-                                    <input type="text" className="file-input" onChange={handleChangedText} id="education" value={user.education} />
+                                    <input type="text" className="file-input" onChange={handleChangedText} id="education" value={user.education} style={{ outline: 'none' }}/>
                                     <input type="submit" value="Save" className="save-button" />
                                 </form>
                             </div>
@@ -413,7 +413,7 @@ function Pfp(){
                                 </span><br></br>
                                 <h2>Edit Work Experience</h2>
                                 <form onSubmit={handleSubmit}>
-                                <input type="text" className="file-input" onChange={handleChangedText} id="workExperience" />
+                                <input type="text" className="file-input" onChange={handleChangedText} id="workExperience" style={{ outline: 'none' }}/>
                                 <input type="submit" value="Save" className="save-button" />
                                 </form>
                             </div>
@@ -444,7 +444,7 @@ function Pfp(){
                             </span><br></br>
                             <h2> Add Skill</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChangedText} id="skills"/>
+                            <input type="text" className="file-input" onChange={handleChangedText} id="skills"style={{ outline: 'none' }}/>
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>

@@ -43,11 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+            jwtToken = authorizationHeader.substring(7); 
             try {
-                email = jwtUtil.getEmailFromJWT(jwtToken); // Extract email from the token
+                email = jwtUtil.getEmailFromJWT(jwtToken); 
             } catch (Exception e) {
-                // Handle token extraction/validation errors
+                
                 System.out.println("Error extracting email from token: " + e.getMessage());
             }
         }

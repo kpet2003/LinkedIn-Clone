@@ -59,7 +59,7 @@ public class UserService{
 
 
 
-    public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp, MultipartFile cv ) throws Exception {
+    public void createUser(String firstName, String lastName, String email, String password, Long phoneNumber, MultipartFile pfp ) throws Exception {
         
         if (userRepo.findByEmail(email) != null) {
             throw new UserAlreadyExists("User already exists");
@@ -75,9 +75,7 @@ public class UserService{
         if(pfp!=null) {
             user.setProfilePicture(pfp.getBytes());
         }
-        if(cv!=null) {
-            user.setResume(cv.getBytes());
-        }
+
 
         Role new_role = roleRepo.findByRole("user");
         user.setRoles(new_role);
@@ -352,6 +350,7 @@ public class UserService{
 
     @PostConstruct
     public void init() {
+       
         // set admin role
         if (roleRepo.findById(1) == null) {
             Role role = new Role();
@@ -368,6 +367,17 @@ public class UserService{
         }
 
         if (userRepo.findByEmail("admin@gmail.com") == null) {
+
+            
+            List <UserEntity> users = userRepo.findAll();
+            System.out.println("\n\n in here \n\n");
+            for(int i=0; i<users.size(); i++) {
+                UserEntity user = users.get(i);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userRepo.save(user);
+            }
+
+
             UserEntity user = new UserEntity();
             user.setEmail("admin@gmail.com");
             user.setPassword(passwordEncoder.encode("admin"));
@@ -380,6 +390,8 @@ public class UserService{
             System.out.println("add admin in user table");
             
             userRepo.save(user);
+
+
             
 
 

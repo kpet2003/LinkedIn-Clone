@@ -44,9 +44,9 @@ function ChangePassword(){
             <h1>Change Password</h1><br></br>
             <form onSubmit={handleSubmit}>
                 <label>New Password: </label>
-                <input type='password' onChange={handleChange1}></input><br></br><br></br>
+                <input type='password' onChange={handleChange1} style={{ outline: 'none' }}></input><br></br><br></br>
                 <label>Repeat New Password: </label>
-                <input type='password' onChange={handleChange2}></input><br></br><br></br>
+                <input type='password' onChange={handleChange2} style={{ outline: 'none' }} ></input><br></br><br></br>
                 <input type='submit' value="Change"></input>
             </form>
         </div> 

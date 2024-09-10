@@ -1,6 +1,7 @@
 import '../styling/Admin.css';
 import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
+import placeholder from '../icons/avatar.png';
 
 
 
@@ -62,25 +63,25 @@ function UserList() {
     }
 
     function JSONtoXML(obj) {
-        let xml = '';
-        for (let prop in obj) {
-          xml += obj[prop] instanceof Array ? '' : '<' + prop + '>';
-          if (obj[prop] instanceof Array) {
-            for (let array in obj[prop]) {
-              xml += '\n<' + prop + '>\n';
-              xml += JSONtoXML(new Object(obj[prop][array]));
-              xml += '</' + prop + '>';
+        var xml = '';
+        for (var prop in obj) {
+            if (obj[prop] instanceof Array) {
+                for (var array in obj[prop]) {
+                    xml += '<' + prop + '>';
+                    xml += JSONtoXML(new Object(obj[prop][array]));
+                    xml += '</' + prop + '>';
+                }
+            } else {
+                xml += '<' + prop + '>';
+                typeof obj[prop] == 'object' ? xml += JSONtoXML(new Object(obj[prop])) : xml += obj[prop];
+                xml += '</' + prop + '>';
             }
-          } else if (typeof obj[prop] == 'object') {
-            xml += JSONtoXML(new Object(obj[prop]));
-          } else {
-            xml += obj[prop];
-          }
-          xml += obj[prop] instanceof Array ? '' : '</' + prop + '>\n';
         }
-        xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+        xml+="\n";
+        var xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+        xml+="\n";
         return xml;
-      }
+    }
 
     // export the user data in XML form
     const exportXML = () => {
@@ -106,32 +107,26 @@ function UserList() {
 
  
     return (
-        <div>
-            <table className='userlist'> 
-                <thead className='header'>
-                    <tr>
-                        <th className='select'> <input type='checkbox' name='selectall' onChange={selectAll} checked={selectedUsers.length===users.length}/>   </th>
-                        <th > Name </th>
-                        <th> E-mail </th>
-                        <th> Profile Page</th>
-                    </tr>
-                </thead>
-                
-                <tbody>                    
-                    {users.map(user => (
-                        <tr key={user.id}>
-                            <td  className='select' > <input type="checkbox" name={user.id}  checked={selectedUsers.includes(user.id)} onChange={() => {handleSelect(user.id)}}/>  </td>
-                            <td>{user.firstName} {user.lastName}</td>
-                            <td> {user.email}</td>
-                            <td> <a href={`/VisitProfile/${user.id}`}> Visit Profile </a></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className='admin'>
+           
             <div className='buttons'>
                 <input type='button' value={'Export in JSON '}className='button'onClick={exportJSON}/>
                 <input type='button' value={'Export in XML '}className='button'onClick={exportXML}/>
+                <input type='button' value={'Select All '}className='button'onClick={selectAll}/>
             </div>
+
+            <div className='userlist'> 
+                {users.map(user => (
+            
+                    <span key={user.id}  className={`user ${selectedUsers.includes(user.id) ? 'selected' : ''}`} onClick={()=>handleSelect(user.id)}>
+                         <img src={user.profilePicture?`data:image/jpeg;base64,${user.profilePicture}`:placeholder } alt = 'profile'className='picture'/>
+                       <p className='title'>{user.firstName} {user.lastName} </p>
+                        <p className='description'>{user.email}</p> 
+                       <a  href={`/VisitProfile/${user.id}`} className='profile_link' >Visit Profile</a> 
+                    </span>   
+                ))}
+            </div>
+
             
         </div>
         

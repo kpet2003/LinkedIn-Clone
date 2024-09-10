@@ -1,4 +1,5 @@
 package com.tediproject.tedi.controllers;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -23,10 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tediproject.tedi.dto.BoolChangeDto;
+import com.tediproject.tedi.dto.EducationDto;
 import com.tediproject.tedi.dto.EmailChangeDto;
+import com.tediproject.tedi.dto.ExperienceDto;
 import com.tediproject.tedi.dto.InfoChangeDto;
 import com.tediproject.tedi.dto.LoginDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
+import com.tediproject.tedi.dto.SkillsDto;
 import com.tediproject.tedi.dto.UserDto;
 import com.tediproject.tedi.model.Education;
 import com.tediproject.tedi.model.Experience;
@@ -77,10 +81,10 @@ public class UserControllers {
         @RequestParam(value="lastName", required = false) String lastName,
         @RequestParam(value="password", required = false) String password,
         @RequestParam(value="phoneNumber", required = false) Long phoneNumber,
-        @RequestPart(value = "profilePicture", required = false) MultipartFile pfp,
-        @RequestPart(value = "resume", required = false) MultipartFile cv) {
+        @RequestPart(value = "profilePicture", required = false) MultipartFile pfp)
+        {
         try {
-            userService.createUser(firstName, lastName, email, password, phoneNumber, pfp, cv);
+            userService.createUser(firstName, lastName, email, password, phoneNumber, pfp );
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -181,21 +185,6 @@ public class UserControllers {
         jwtUtil.validateToken(change.getToken());
         userService.changeUserEdu(change.getToken(), change.getInfo());
     }
-    // public ResponseEntity<?> changeEdu(@RequestBody InfoChangeDto change){
-
-    
-    //     try {
-    //         jwtUtil.validateToken(change.getToken());
-    //         userService.changeUserEdu(change.getToken(), change.getInfo());
-    //         return ResponseEntity.ok(HttpStatus.OK);
-    //     }
-    //     catch (AuthenticationCredentialsNotFoundException e) {
-    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    //     } 
-    //     catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    //     }
-    // }
 
     @PutMapping(value= "/Profile/workchange")
     public ResponseEntity<?> changeWork(@RequestBody InfoChangeDto change){
@@ -343,7 +332,6 @@ public class UserControllers {
                 userDto.setLastName(user.getLastName());
                 userDto.setEmail(user.getEmail());
                 userDto.setPhoneNumber(user.getPhoneNumber());
-                userDto.setResume(user.getResume());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
@@ -377,18 +365,51 @@ public class UserControllers {
 
 
     @GetMapping(value = "/Profile/GetSkills")
-    public List<Skills> getUserSkills(String token) {
-        return userService.findSkills(token);
+    public List<SkillsDto> getUserSkills(String token) {
+        List<Skills> skills =  userService.findSkills(token);
+
+        List <SkillsDto> user_skills = new ArrayList<>();
+
+        for(int i=0; i<skills.size(); i++) {
+            SkillsDto skill = new SkillsDto();
+            skill.setId(skills.get(i).getId());
+            skill.setSkill(skills.get(i).getSkill());
+            user_skills.add(skill);
+        }
+
+        return user_skills;
     }
 
     @GetMapping(value="/Profile/GetEducation")
-    public List<Education> getUserEducation(String token) {
-        return userService.findEducation(token);
+    public List<EducationDto> getUserEducation(String token) {
+        List<Education> edu =  userService.findEducation(token);
+
+        List<EducationDto> education = new ArrayList<>();
+
+        for(int i=0; i<edu.size(); i++) {
+            EducationDto user_edu = new EducationDto();
+            user_edu.setId(edu.get(i).getId());
+            user_edu.setEducation(edu.get(i).getEducation());
+
+            education.add(user_edu);
+        }
+        return education;
     }
 
     @GetMapping(value="/Profile/GetExperience")
-    public List<Experience> getUserExperience(String token) {
-        return userService.findExperience(token);
+    public List<ExperienceDto> getUserExperience(String token) {
+        List<Experience> exp = userService.findExperience(token);
+
+        List <ExperienceDto> user_exp = new ArrayList<>();
+        for(int i=0; i<exp.size(); i++) {
+            ExperienceDto experience = new ExperienceDto();
+            experience.setId(exp.get(i).getId());
+            experience.setExperience(exp.get(i).getExperience());
+            user_exp.add(experience);
+        }
+
+
+        return user_exp;
     }
 
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -406,7 +427,6 @@ public class UserControllers {
                 userDto.setLastName(user.getLastName());
                 userDto.setEmail(user.getEmail());
                 userDto.setPhoneNumber(user.getPhoneNumber());
-                userDto.setResume(user.getResume());
                 userDto.setPublicWork(user.getPublicWork());
                 userDto.setPublicEducation(user.getPublicEducation());
                 userDto.setPublicSkills(user.getPublicSkills());
@@ -432,18 +452,51 @@ public class UserControllers {
     }
 
     @GetMapping(value = "/VisitProfile/getSkills/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Skills> getSkillsByID(@PathVariable Long id) {
-        return userService.findSkillsByID(id);
+    public List<SkillsDto> getSkillsByID(@PathVariable Long id) {
+        List <Skills> skills =  userService.findSkillsByID(id);
+
+        List <SkillsDto> user_skills = new ArrayList<>();
+
+        for(int i=0; i<skills.size(); i++) {
+            SkillsDto skill = new SkillsDto();
+            skill.setId(skills.get(i).getId());
+            skill.setSkill(skills.get(i).getSkill());
+            user_skills.add(skill);
+        }
+
+        return user_skills;
     }
 
     @GetMapping(value = "/VisitProfile/getEducation/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Education> getEducationByID(@PathVariable Long id) {
-        return userService.findEducationByID(id);
+    public List<EducationDto> getEducationByID(@PathVariable Long id) {
+   
+        List<Education> edu =  userService.findEducationByID(id);
+
+        List<EducationDto> education = new ArrayList<>();
+
+        for(int i=0; i<edu.size(); i++) {
+            EducationDto user_edu = new EducationDto();
+            user_edu.setId(edu.get(i).getId());
+            user_edu.setEducation(edu.get(i).getEducation());
+
+            education.add(user_edu);
+        }
+        return education;
     }
 
     @GetMapping(value = "/VisitProfile/getExperience/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Experience> getExperienceByID(@PathVariable Long id) {
-        return userService.findExperienceByID(id);
+    public List<ExperienceDto> getExperienceByID(@PathVariable Long id) {
+        List<Experience> exp =  userService.findExperienceByID(id);
+        List <ExperienceDto> user_exp = new ArrayList<>();
+        for(int i=0; i<exp.size(); i++) {
+            ExperienceDto experience = new ExperienceDto();
+            experience.setId(exp.get(i).getId());
+            experience.setExperience(exp.get(i).getExperience());
+            user_exp.add(experience);
+        }
+
+
+        return user_exp;
     }
 
     @DeleteMapping(value = "/Profile/DeleteSkill")

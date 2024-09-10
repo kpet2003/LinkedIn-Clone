@@ -30,7 +30,7 @@ body {
     margin-top: 20px;
     margin-left: 300px;
     margin-right: auto;
-    width: 40%;
+    width: 50%;
     justify-items: center;
     background-color: white;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -193,7 +193,7 @@ body {
     margin-right: auto;
     justify-content: space-between;
     margin-top: 20px;
-    width: 40%;
+    width: 50%;
 }
 
 .article:last-child {

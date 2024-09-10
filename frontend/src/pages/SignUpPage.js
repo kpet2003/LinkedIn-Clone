@@ -13,7 +13,6 @@ function SignUpPage(){
         repeat_password: '',
         phone: '',
         profile_picture: null,
-        cv: null
     };
 
     const [user, setUser] = useState(initialState);
@@ -34,7 +33,6 @@ function SignUpPage(){
         formData.append('password', user.password);
         formData.append('phoneNumber', user.phone);
         formData.append('profilePicture', user.profile_picture);
-        formData.append('resume', user.cv);
 
 
         try {
@@ -74,7 +72,7 @@ function SignUpPage(){
 
     return (
         <div>
-            <form className="signUp" onSubmit={handleSubmit}>
+            <form className="signUp" onSubmit={handleSubmit} style={{ outline: 'none' }}>
                 <label>E-mail:</label><br></br>
                 <input type='email' required value = {user.email} onChange={handleChange}  id="email"></input> <br></br>
                 <label>First Name: </label><br></br>
@@ -91,11 +89,6 @@ function SignUpPage(){
                 <div className='profile'>
                     <label>Profile Picture:</label>
                     <input type='file' onChange={handleFiles} id="profile_picture"></input><br></br>
-                </div>
-               
-                <div className='profile'>
-                    <label>CV: </label>
-                    <input type='file' onChange={handleFiles}  id="cv" ></input><br></br>
                 </div>
                
                <div className='submit'>

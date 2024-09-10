@@ -4,7 +4,6 @@ package com.tediproject.tedi.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -48,11 +47,7 @@ public class UserEntity {
     @Column(length=100000)
     protected byte[] image;
     
-    @Lob
-    @JsonIgnore
-    @Column(length=100000)
-    protected byte[] resume;
-    
+
     @Column
     protected Boolean admin = false;
 
@@ -219,9 +214,6 @@ public class UserEntity {
         this.image = pfp;
     }
 
-    public void setResume(byte[] CV){
-        this.resume = CV;
-    }
 
     public void setAdmin(){
         this.admin = true;
@@ -267,10 +259,6 @@ public class UserEntity {
         return this.image;
     }   
 
-    public byte[] getResume(){
-        return this.resume;
-    }
-
     public Boolean getAdmin(){
         return this.admin;
     }
@@ -311,6 +299,11 @@ public class UserEntity {
 
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
+    }
+
+
+    public void setId(Long i) {
+        this.id = i;
     }
 
 

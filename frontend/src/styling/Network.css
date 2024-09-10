@@ -148,3 +148,7 @@ body {
     color: #007bff;
     text-decoration: none;
 }
+
+.profile_link:hover {
+    text-decoration: underline;
+}

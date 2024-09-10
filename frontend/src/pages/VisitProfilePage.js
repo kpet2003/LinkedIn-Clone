@@ -1,7 +1,6 @@
-import React from "react";
+import React , { useState,useEffect } from "react";
 import NavigationBar from './NavigationBar.js';
 import userService from "../service/userService.js";
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styling/Visit.css';
 import '../styling/Profile.css';
@@ -114,7 +113,7 @@ function VisitProfile(){
         const fetchSkills = async() => {
             try{
                
-                const response = await userService.fetchSkillsById(id);
+                const response = await userService.getSkillsById(id);
                 setSkills(response);
                 console.log("skills are: ",response);
             }
@@ -126,24 +125,24 @@ function VisitProfile(){
         const fetchEducation = async() => {
             try{
                
-                const response = await userService.fetchEducationById(id);
+                const response = await userService.getEducationById(id);
                 setEducation(response);
-                console.log("skills are: ",response);
+                console.log("education is: ",response);
             }
             catch(error) {
-                console.error("Error fetching the user's skills: ",error)
+                console.error("Error fetching the user's education: ",error)
             }
         }
 
         const fetchExperience = async() => {
             try{
                
-                const response = await userService.fetchExperienceById(id);
+                const response = await userService.getExperienceById(id);
                 setExperience(response);
                 console.log("skills are: ",response);
             }
             catch(error) {
-                console.error("Error fetching the user's skills: ",error)
+                console.error("Error fetching the user's experience: ",error)
             }
         }
 

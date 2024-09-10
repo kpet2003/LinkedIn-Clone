@@ -13,6 +13,15 @@ public class AdminDto {
     private String workTitle;
     private String workplace;
     private Long id;
+    private byte[] profilePicture;
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 
     private List <CommentInfo> comments_posted;
     private List <String> articles_liked;

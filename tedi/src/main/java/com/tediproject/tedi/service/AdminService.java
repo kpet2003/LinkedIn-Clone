@@ -60,6 +60,7 @@ public class AdminService {
             user.setPhone_number(users.get(i).getPhoneNumber());
             user.setWorkTitle(users.get(i).getWorkTitle());
             user.setWorkplace(users.get(i).getWorkplace());
+            user.setProfilePicture(users.get(i).getProfilePicture());
             user.setSkills(this.getUserSkills(users.get(i)));
             user.setEducation(this.getUserEducation(users.get(i)));
             user.setExperience(this.getUserExperience(users.get(i)));
