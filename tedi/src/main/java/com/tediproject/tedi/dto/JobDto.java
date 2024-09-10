@@ -8,7 +8,16 @@ public class JobDto {
     private String desc;
     private LocalDateTime date;
     private long jobId;
+    private long authorId;
     
+    public long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
+    }
+
     public long getJobId() {
         return jobId;
     }
@@ -17,12 +26,13 @@ public class JobDto {
         this.jobId = jobId;
     }
 
-    public JobDto(String author, String title, String desc, LocalDateTime date, long jobId) {
+    public JobDto(String author, String title, String desc, LocalDateTime date, long jobId, long authorId) {
         this.author = author;
         this.title = title;
         this.desc = desc;
         this.date = date;
         this.jobId = jobId;
+        this.authorId = authorId;
     }
 
     public String getAuthor() {

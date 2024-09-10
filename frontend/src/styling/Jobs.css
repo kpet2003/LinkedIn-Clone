@@ -4,6 +4,48 @@ body {
     font-family: 'Arial';
 }
 
+.buttons-container{
+    display: flex;
+    margin-left: 20%;
+    width: 60%;
+    justify-content: right;
+    align-items: center;
+}
+
+.view-jobs{
+    width: 400px;
+    overflow-y: auto;
+    height: 500px;
+}
+
+.view-jobs::-webkit-scrollbar-thumb {
+    background: rgb(187, 187, 187);
+    border-radius: 4px;
+}
+
+.view-jobs::-webkit-scrollbar-thumb:hover {
+    background: rgb(145, 145, 145);
+}
+
+.in-view{
+    width: 90%;
+    height: max-content;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid gray;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+    float: center;
+}
+
+.job-button{
+    width: 160px;
+    margin: 5px;
+}
+
 .create-job-container{
    width: 300px;
 }
@@ -52,6 +94,12 @@ body {
 
 .apply-button{
     width: 80px;
+    margin-left: 0;
+}
+
+.applicant-button{
+    margin-left: 0;
+    width: 130px;
 }
 
 .author {
@@ -68,4 +116,15 @@ body {
     bottom: 1%;
     right: 2%;
     font-size: small;
+}
+
+.applicants-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.pfp{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
 }
