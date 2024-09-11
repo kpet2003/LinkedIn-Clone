@@ -201,4 +201,10 @@ public class JobService {
         return applicants;
     }
 
+    public void addView(long jobId) {
+       Job job = jobRepo.findById(jobId);
+       job.setViews(job.getViews()+1);
+       jobRepo.save(job);
+    }
+
 }

@@ -2,8 +2,6 @@ package com.tediproject.tedi.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +22,24 @@ public class Article {
 
     @Column 
     private String title;
+
+    @Column
+    private int views;
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+    public int getViews() {
+        return views;
+    }
+
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
 
     @Lob 
     @Column(length = 16777216)
@@ -56,7 +72,9 @@ public class Article {
     @OneToMany(mappedBy = "article", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> article_notifications;
 
-    public Article() {}
+    public Article() {
+        this.views = 0;
+    }
 
 
     public long getId() {

@@ -44,6 +44,14 @@ class JobService{
         const response = await axios.get(url)
         return response.data
     }
+
+    async addView(jobId, token) {
+        const url = SERVER_URL + `/addView/${jobId}/${token}`
+        const response = await axios.put(url);
+        return response.data;
+    }
+
+
 }
 
 export default new JobService();

@@ -69,6 +69,7 @@ LOCK TABLES user WRITE;
 -- Insert 50 users with realistic data
 INSERT INTO user (admin, email, first_name, last_name, phone_number, work_title, workplace, role_id, password, is_public_education, is_public_skills, is_public_work_experience)
 VALUES 
+	(1,'admin@gmail.com',NULL,NULL,1234567,NULL,NULL,1,'admin',1,1,1),
     (0, 'john.doe@gmail.com', 'John', 'Doe', 1234567890, 'Software Engineer', 'Google', 2, '1234', 1, 1, 1),
     (0, 'jane.smith@gmail.com', 'Jane', 'Smith', 9876543210, 'Product Manager', 'Microsoft', 2, '1234', 0, 1, 1),
     (0, 'alice.johnson@gmail.com', 'Alice', 'Johnson', 1928374650, 'Data Scientist', 'Facebook', 2, '1234', 1, 0, 1),
@@ -129,6 +130,7 @@ CREATE TABLE article (
   date_posted datetime(6) DEFAULT NULL,
   picture mediumblob,
   title varchar(255) DEFAULT NULL,
+  views int DEFAULT 0,
   video mediumblob,
   author bigint DEFAULT NULL,
   PRIMARY KEY (id),
@@ -143,153 +145,153 @@ CREATE TABLE article (
 
 LOCK TABLES article WRITE;
 /*!40000 ALTER TABLE article DISABLE KEYS */;
-INSERT INTO article (title, content, date_posted, picture, video, author) VALUES 
+INSERT INTO article (title, content, date_posted, picture, video, author, views) VALUES 
 -- User 2
-('The Future of Web Development', 'Exploring the latest trends in web development, including the rise of frameworks like React and Angular.', '2023-01-15 10:00:00', NULL, NULL, 2),
-('Python vs. Java: A Comparison', 'A deep dive into the differences between Python and Java, and when to use each language.', '2023-02-20 14:00:00', NULL, NULL, 2),
+('The Future of Web Development', 'Exploring the latest trends in web development, including the rise of frameworks like React and Angular.', '2023-01-15 10:00:00', NULL, NULL, 2, 34),
+('Python vs. Java: A Comparison', 'A deep dive into the differences between Python and Java, and when to use each language.', '2023-02-20 14:00:00', NULL, NULL, 2, 12),
 
 -- User 3
-('Data Science in 2024', 'An analysis of the future of data science and how it will impact various industries.', '2023-03-05 09:30:00', NULL, NULL, 3),
-('Machine Learning Basics', 'An introduction to the basics of machine learning, including key concepts and algorithms.', '2023-04-10 11:15:00', NULL, NULL, 3),
-('Big Data Challenges', 'Discussing the challenges faced in handling and processing big data in modern enterprises.', '2023-05-22 13:45:00', NULL, NULL, 3),
+('Data Science in 2024', 'An analysis of the future of data science and how it will impact various industries.', '2023-03-05 09:30:00', NULL, NULL, 3, 87),
+('Machine Learning Basics', 'An introduction to the basics of machine learning, including key concepts and algorithms.', '2023-04-10 11:15:00', NULL, NULL, 3, 123),
+('Big Data Challenges', 'Discussing the challenges faced in handling and processing big data in modern enterprises.', '2023-05-22 13:45:00', NULL, NULL, 3, 26),
 
 -- User 4
-('DevOps Best Practices', 'A guide to implementing DevOps in your organization, including tools and methodologies.', '2023-06-12 08:00:00', NULL, NULL, 4),
+('DevOps Best Practices', 'A guide to implementing DevOps in your organization, including tools and methodologies.', '2023-06-12 08:00:00', NULL, NULL, 4, 1),
 
 -- User 5
-('Frontend Development Trends', 'Exploring the latest trends in frontend development, including the use of modern JavaScript frameworks.', '2023-07-03 16:30:00', NULL, NULL, 5),
-('Building Responsive UIs', 'Tips and tricks for building responsive user interfaces that work across all devices.', '2023-08-15 12:00:00', NULL, NULL, 5),
-('CSS Grid vs. Flexbox', 'A comparison of CSS Grid and Flexbox, and when to use each layout technique.', '2023-09-25 10:00:00', NULL, NULL, 5),
-('JavaScript Performance Optimization', 'How to optimize the performance of your JavaScript code for faster loading times.', '2023-10-05 14:20:00', NULL, NULL, 5),
+('Frontend Development Trends', 'Exploring the latest trends in frontend development, including the use of modern JavaScript frameworks.', '2023-07-03 16:30:00', NULL, NULL, 5, 69),
+('Building Responsive UIs', 'Tips and tricks for building responsive user interfaces that work across all devices.', '2023-08-15 12:00:00', NULL, NULL, 5, 54),
+('CSS Grid vs. Flexbox', 'A comparison of CSS Grid and Flexbox, and when to use each layout technique.', '2023-09-25 10:00:00', NULL, NULL, 5, 43),
+('JavaScript Performance Optimization', 'How to optimize the performance of your JavaScript code for faster loading times.', '2023-10-05 14:20:00', NULL, NULL, 5, 98),
 
 -- User 6
-('Designing for User Experience', 'An in-depth look at designing for user experience and how it impacts product success.', '2023-11-01 11:00:00', NULL, NULL, 6),
-('The Importance of Accessibility in Web Design', 'Why accessibility is crucial in web design and how to implement it effectively.', '2023-12-15 13:00:00', NULL, NULL, 6),
+('Designing for User Experience', 'An in-depth look at designing for user experience and how it impacts product success.', '2023-11-01 11:00:00', NULL, NULL, 6, 17),
+('The Importance of Accessibility in Web Design', 'Why accessibility is crucial in web design and how to implement it effectively.', '2023-12-15 13:00:00', NULL, NULL, 6, 73),
 
 -- User 7
-('Data Engineering Best Practices', 'Key best practices for data engineering, including pipeline design and data quality management.', '2023-12-22 09:00:00', NULL, NULL, 7),
+('Data Engineering Best Practices', 'Key best practices for data engineering, including pipeline design and data quality management.', '2023-12-22 09:00:00', NULL, NULL, 7, 59),
 
 -- User 8
-('Building Scalable Applications', 'Strategies for building scalable applications that can handle high traffic and large datasets.', '2023-06-21 15:00:00', NULL, NULL, 8),
+('Building Scalable Applications', 'Strategies for building scalable applications that can handle high traffic and large datasets.', '2023-06-21 15:00:00', NULL, NULL, 8, 86),
 
 -- User 9
-('Responsive Web Design Techniques', 'Techniques for creating responsive web designs that adapt to different screen sizes.', '2023-07-08 17:00:00', NULL, NULL, 9),
+('Responsive Web Design Techniques', 'Techniques for creating responsive web designs that adapt to different screen sizes.', '2023-07-08 17:00:00', NULL, NULL, 9, 124),
 
 -- User 10
-('Analyzing Data with Python', 'A guide to analyzing data using Python libraries such as pandas and NumPy.', '2023-08-03 10:00:00', NULL, NULL, 10),
-('SQL for Data Analysis', 'How to use SQL for data analysis, including advanced query techniques.', '2023-09-12 12:00:00', NULL, NULL, 10),
+('Analyzing Data with Python', 'A guide to analyzing data using Python libraries such as pandas and NumPy.', '2023-08-03 10:00:00', NULL, NULL, 10, 63),
+('SQL for Data Analysis', 'How to use SQL for data analysis, including advanced query techniques.', '2023-09-12 12:00:00', NULL, NULL, 10, 78),
 
 -- User 11
-('Securing Your Network', 'Best practices for securing your network infrastructure against cyber threats.', '2023-09-30 14:00:00', NULL, NULL, 11),
-('Cybersecurity Trends in 2024', 'An overview of the latest trends in cybersecurity and how to prepare for them.', '2023-10-20 09:00:00', NULL, NULL, 11),
+('Securing Your Network', 'Best practices for securing your network infrastructure against cyber threats.', '2023-09-30 14:00:00', NULL, NULL, 11, 23),
+('Cybersecurity Trends in 2024', 'An overview of the latest trends in cybersecurity and how to prepare for them.', '2023-10-20 09:00:00', NULL, NULL, 11, 11),
 
 -- User 12
-('Developing iOS Applications with Swift', 'A beginner''s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12),
-('UI Design Principles for Mobile Apps', 'Principles of UI design specifically for mobile applications.', '2023-12-10 16:00:00', NULL, NULL, 12),
+('Developing iOS Applications with Swift', 'A beginner''s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12, 54),
+('UI Design Principles for Mobile Apps', 'Principles of UI design specifically for mobile applications.', '2023-12-10 16:00:00', NULL, NULL, 12, 67),
 
 -- User 13
-('Machine Learning in Healthcare', 'How machine learning is being used to revolutionize healthcare.', '2023-06-28 14:00:00', NULL, NULL, 13),
+('Machine Learning in Healthcare', 'How machine learning is being used to revolutionize healthcare.', '2023-06-28 14:00:00', NULL, NULL, 13, 49),
 
 -- User 14
-('System Administration Tips', 'Tips and tricks for effective system administration, including automation and monitoring.', '2023-07-15 13:00:00', NULL, NULL, 14),
+('System Administration Tips', 'Tips and tricks for effective system administration, including automation and monitoring.', '2023-07-15 13:00:00', NULL, NULL, 14, 78),
 
 -- User 15
-('Cloud Computing Advantages', 'Exploring the advantages of cloud computing for businesses of all sizes.', '2023-08-20 15:00:00', NULL, NULL, 15),
-('AWS vs. Azure: A Comparison', 'Comparing the features and services of AWS and Azure.', '2023-09-18 10:00:00', NULL, NULL, 15),
+('Cloud Computing Advantages', 'Exploring the advantages of cloud computing for businesses of all sizes.', '2023-08-20 15:00:00', NULL, NULL, 15, 41),
+('AWS vs. Azure: A Comparison', 'Comparing the features and services of AWS and Azure.', '2023-09-18 10:00:00', NULL, NULL, 15, 83),
 
 -- User 16
-('Managing Databases with MySQL', 'Best practices for managing and optimizing MySQL databases.', '2023-10-25 14:00:00', NULL, NULL, 16),
+('Managing Databases with MySQL', 'Best practices for managing and optimizing MySQL databases.', '2023-10-25 14:00:00', NULL, NULL, 16, 29),
 
 -- User 17
-('Leading a Development Team', 'Strategies for effectively leading a development team and ensuring project success.', '2023-11-05 16:00:00', NULL, NULL, 17),
+('Leading a Development Team', 'Strategies for effectively leading a development team and ensuring project success.', '2023-11-05 16:00:00', NULL, NULL, 17, 43),
 
 -- User 18
-('Full Stack Development with JavaScript', 'A guide to full stack development using JavaScript, including both frontend and backend technologies.', '2023-12-01 09:00:00', NULL, NULL, 18),
-('Building RESTful APIs', 'How to design and build RESTful APIs that are secure and scalable.', '2023-12-25 11:00:00', NULL, NULL, 18),
+('Full Stack Development with JavaScript', 'A guide to full stack development using JavaScript, including both frontend and backend technologies.', '2023-12-01 09:00:00', NULL, NULL, 18, 35),
+('Building RESTful APIs', 'How to design and build RESTful APIs that are secure and scalable.', '2023-12-25 11:00:00', NULL, NULL, 18, 58),
 
 -- User 19
-('Backend Development Strategies', 'Key strategies for effective backend development, including architecture and database management.', '2023-06-17 12:00:00', NULL, NULL, 19),
+('Backend Development Strategies', 'Key strategies for effective backend development, including architecture and database management.', '2023-06-17 12:00:00', NULL, NULL, 19, 47),
 
 -- User 20
-('Designing Intuitive User Interfaces', 'How to design intuitive user interfaces that are easy to use and navigate.', '2023-07-02 14:00:00', NULL, NULL, 20),
-('CSS Grid: A Comprehensive Guide', 'A comprehensive guide to CSS Grid and how to use it for modern web layouts.', '2023-08-05 10:00:00', NULL, NULL, 20),
+('Designing Intuitive User Interfaces', 'How to design intuitive user interfaces that are easy to use and navigate.', '2023-07-02 14:00:00', NULL, NULL, 20, 52),
+('CSS Grid: A Comprehensive Guide', 'A comprehensive guide to CSS Grid and how to use it for modern web layouts.', '2023-08-05 10:00:00', NULL, NULL, 20, 61),
 
 -- User 21
-('Software Architecture Principles', 'Key principles of software architecture and how to apply them to large-scale projects.', '2023-09-10 13:00:00', NULL, NULL, 21),
+('Software Architecture Principles', 'Key principles of software architecture and how to apply them to large-scale projects.', '2023-09-10 13:00:00', NULL, NULL, 21, 74),
 
 -- User 22
-('Implementing Cybersecurity Strategies', 'How to implement effective cybersecurity strategies to protect your organization.', '2023-10-15 16:00:00', NULL, NULL, 22),
+('Implementing Cybersecurity Strategies', 'How to implement effective cybersecurity strategies to protect your organization.', '2023-10-15 16:00:00', NULL, NULL, 22, 40),
 
 -- User 23
-('Machine Learning Deployment', 'Strategies for deploying machine learning models in production environments.', '2023-11-18 12:00:00', NULL, NULL, 23),
+('Machine Learning Deployment', 'Strategies for deploying machine learning models in production environments.', '2023-11-18 12:00:00', NULL, NULL, 23, 53),
 
 -- User 24
-('DevOps in Practice', 'Practical tips for implementing DevOps in your organization.', '2023-12-20 14:00:00', NULL, NULL, 24),
+('DevOps in Practice', 'Practical tips for implementing DevOps in your organization.', '2023-12-20 14:00:00', NULL, NULL, 24, 61),
 
 -- User 25
-('Data Pipeline Optimization', 'How to optimize data pipelines for better performance and reliability.', '2023-06-30 09:00:00', NULL, NULL, 25),
+('Data Pipeline Optimization', 'How to optimize data pipelines for better performance and reliability.', '2023-06-30 09:00:00', NULL, NULL, 25, 32),
 
 -- User 26
-('Securing Network Infrastructure', 'Best practices for securing your network infrastructure.', '2023-07-18 11:00:00', NULL, NULL, 26),
+('Securing Network Infrastructure', 'Best practices for securing your network infrastructure.', '2023-07-18 11:00:00', NULL, NULL, 26, 28),
 
 -- User 27
-('Full Stack Development Tips', 'Tips for full stack developers on managing both frontend and backend tasks effectively.', '2023-08-12 13:00:00', NULL, NULL, 27),
+('Full Stack Development Tips', 'Tips for full stack developers on managing both frontend and backend tasks effectively.', '2023-08-12 13:00:00', NULL, NULL, 27, 45),
 
 -- User 28
-('Architecting for the Cloud', 'Key considerations for architecting applications for the cloud.', '2023-09-22 16:00:00', NULL, NULL, 28),
+('Architecting for the Cloud', 'Key considerations for architecting applications for the cloud.', '2023-09-22 16:00:00', NULL, NULL, 28, 48),
 
 -- User 29
-('Building Scalable Applications with Python', 'How to build scalable applications using Python.', '2023-10-08 18:00:00', NULL, NULL, 29),
-('Data Science for Beginners', 'An introduction to data science for those new to the field.', '2023-11-11 14:00:00', NULL, NULL, 29),
+('Building Scalable Applications with Python', 'How to build scalable applications using Python.', '2023-10-08 18:00:00', NULL, NULL, 29, 56),
+('Data Science for Beginners', 'An introduction to data science for those new to the field.', '2023-11-11 14:00:00', NULL, NULL, 29, 67),
 
 -- User 30
-('Designing for Mobile First', 'Why and how to design your applications with a mobile-first approach.', '2023-12-05 10:00:00', NULL, NULL, 30),
+('Designing for Mobile First', 'Why and how to design your applications with a mobile-first approach.', '2023-12-05 10:00:00', NULL, NULL, 30, 41),
 
 -- User 31
-('Developing Mobile Apps with Flutter', 'A guide to developing mobile applications using Flutter.', '2023-06-25 11:00:00', NULL, NULL, 31),
+('Developing Mobile Apps with Flutter', 'A guide to developing mobile applications using Flutter.', '2023-06-25 11:00:00', NULL, NULL, 31, 34),
 
 -- User 32
-('DevOps Automation Techniques', 'How to automate DevOps processes to increase efficiency.', '2023-07-14 12:00:00', NULL, NULL, 32),
+('DevOps Automation Techniques', 'How to automate DevOps processes to increase efficiency.', '2023-07-14 12:00:00', NULL, NULL, 32, 45),
 
 -- User 33
-('Building Modern Web Applications', 'Tips for building modern web applications using the latest technologies.', '2023-08-10 14:00:00', NULL, NULL, 33),
+('Building Modern Web Applications', 'Tips for building modern web applications using the latest technologies.', '2023-08-10 14:00:00', NULL, NULL, 33, 39),
 
 -- User 34
-('Data Engineering Challenges', 'Common challenges faced in data engineering and how to overcome them.', '2023-09-19 16:00:00', NULL, NULL, 34),
+('Data Engineering Challenges', 'Common challenges faced in data engineering and how to overcome them.', '2023-09-19 16:00:00', NULL, NULL, 34, 58),
 
 -- User 35
-('Securing Cloud Infrastructure', 'How to secure your cloud infrastructure against threats.', '2023-10-28 18:00:00', NULL, NULL, 35),
+('Securing Cloud Infrastructure', 'How to secure your cloud infrastructure against threats.', '2023-10-28 18:00:00', NULL, NULL, 35, 47),
 
 -- User 36
-('Building Enterprise Software', 'Key considerations when building enterprise software solutions.', '2023-11-22 15:00:00', NULL, NULL, 36),
-('Implementing DevOps with AWS', 'How to implement DevOps practices in AWS environments.', '2023-12-29 13:00:00', NULL, NULL, 36),
+('Building Enterprise Software', 'Key considerations when building enterprise software solutions.', '2023-11-22 15:00:00', NULL, NULL, 36, 52),
+('Implementing DevOps with AWS', 'How to implement DevOps practices in AWS environments.', '2023-12-29 13:00:00', NULL, NULL, 36, 63),
 
 -- User 37
-('Backend Development with Node.js', 'Using Node.js for backend development, including best practices and performance tips.', '2023-06-13 10:00:00', NULL, NULL, 37),
+('Backend Development with Node.js', 'Using Node.js for backend development, including best practices and performance tips.', '2023-06-13 10:00:00', NULL, NULL, 37, 38),
 
 -- User 38
-('Architecting Scalable Systems', 'How to architect systems that scale efficiently.', '2023-07-16 17:00:00', NULL, NULL, 38),
+('Architecting Scalable Systems', 'How to architect systems that scale efficiently.', '2023-07-16 17:00:00', NULL, NULL, 38, 41),
 
 -- User 39
-('Machine Learning in Production', 'Challenges and solutions for deploying machine learning models in production.', '2023-08-25 19:00:00', NULL, NULL, 39),
+('Machine Learning in Production', 'Challenges and solutions for deploying machine learning models in production.', '2023-08-25 19:00:00', NULL, NULL, 39, 33),
 
 -- User 40
-('Leading Development Teams', 'How to effectively lead a development team and ensure project success.', '2023-09-30 11:00:00', NULL, NULL, 40),
+('Leading Development Teams', 'How to effectively lead a development team and ensure project success.', '2023-09-30 11:00:00', NULL, NULL, 40, 57),
 
 -- User 41
-('Networking Basics', 'An introduction to the basics of networking for IT professionals.', '2023-10-15 13:00:00', NULL, NULL, 41),
+('Networking Basics', 'An introduction to the basics of networking for IT professionals.', '2023-10-15 13:00:00', NULL, NULL, 41, 50),
 
 -- User 42
-('Cybersecurity in the Cloud', 'How to secure cloud environments and protect against threats.', '2023-11-09 15:00:00', NULL, NULL, 42),
+('Cybersecurity in the Cloud', 'How to secure cloud environments and protect against threats.', '2023-11-09 15:00:00', NULL, NULL, 42, 39),
 
 -- User 43
-('Data Science Techniques', 'Advanced techniques in data science for analyzing large datasets.', '2023-12-04 17:00:00', NULL, NULL, 43),
+('Data Science Techniques', 'Advanced techniques in data science for analyzing large datasets.', '2023-12-04 17:00:00', NULL, NULL, 43, 60),
 
 -- User 44
-('Developing Android Apps with Kotlin', 'A guide to developing Android applications using Kotlin.', '2023-06-10 09:00:00', NULL, NULL, 44),
+('Developing Android Apps with Kotlin', 'A guide to developing Android applications using Kotlin.', '2023-06-10 09:00:00', NULL, NULL, 44, 31),
 
 -- User 45
-('Full Stack Development with React and Node.js', 'Building full stack applications using React for the frontend and Node.js for the backend.', '2023-07-07 11:00:00', NULL, NULL, 45);
+('Full Stack Development with React and Node.js', 'Building full stack applications using React for the frontend and Node.js for the backend.', '2023-07-07 11:00:00', NULL, NULL, 45, 54);
 /*!40000 ALTER TABLE article ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -686,6 +688,7 @@ CREATE TABLE job (
   date_posted datetime(6) DEFAULT NULL,
   job_description longtext,
   job_title longtext,
+  views int DEFAULT 0,
   author bigint DEFAULT NULL,
   PRIMARY KEY (id),
   KEY FKtg5s4mk68rj7q34232olppj1h (author),
@@ -696,152 +699,155 @@ CREATE TABLE job (
 --
 -- Dumping data for table job
 --
-
 LOCK TABLES job WRITE;
 /*!40000 ALTER TABLE job DISABLE KEYS */;
-INSERT INTO job (job_title, job_description, date_posted, author) VALUES 
+INSERT INTO job (job_title, job_description, date_posted, author, views) VALUES 
 -- User 2
-('Software Engineer at Google', 'Developing scalable web applications using Python and Java.', '2023-06-01 10:00:00', 2),
-('Backend Developer at Red Hat', 'Developing RESTful APIs using Java and managing databases with SQL.', '2023-06-05 14:00:00', 2),
+('Software Engineer at Google', 'Developing scalable web applications using Python and Java.', '2023-06-01 10:00:00', 2, 125),
+('Backend Developer at Red Hat', 'Developing RESTful APIs using Java and managing databases with SQL.', '2023-06-05 14:00:00', 2, 156),
 
 -- User 3
-('Data Scientist at Microsoft', 'Performing data analysis and building predictive models using Python and Machine Learning techniques.', '2023-06-02 11:00:00', 3),
+('Data Scientist at Microsoft', 'Performing data analysis and building predictive models using Python and Machine Learning techniques.', '2023-06-02 11:00:00', 3, 142),
 
 -- User 4
-('DevOps Engineer at Netflix', 'Managing and automating cloud infrastructure using AWS and DevOps practices.', '2023-06-03 12:00:00', 4),
-('Cloud Architect at AWS', 'Designing cloud-based solutions and managing cloud infrastructure on AWS.', '2023-06-06 15:00:00', 4),
-('Security Engineer at CrowdStrike', 'Implementing and managing security protocols and firewalls.', '2023-06-10 19:00:00', 4),
+('DevOps Engineer at Netflix', 'Managing and automating cloud infrastructure using AWS and DevOps practices.', '2023-06-03 12:00:00', 4, 187),
+('Cloud Architect at AWS', 'Designing cloud-based solutions and managing cloud infrastructure on AWS.', '2023-06-06 15:00:00', 4, 198),
+('Security Engineer at CrowdStrike', 'Implementing and managing security protocols and firewalls.', '2023-06-10 19:00:00', 4, 176),
 
 -- User 5
-('Frontend Developer at Facebook', 'Building responsive user interfaces using React and JavaScript.', '2023-06-04 13:00:00', 5),
+('Frontend Developer at Facebook', 'Building responsive user interfaces using React and JavaScript.', '2023-06-04 13:00:00', 5, 132),
 
 -- User 6
-('UI/UX Designer at Adobe', 'Designing user interfaces and improving user experience for web applications.', '2023-06-08 17:00:00', 6),
-('Machine Learning Engineer at DeepMind', 'Building and deploying machine learning models using Python and TensorFlow.', '2023-06-07 16:00:00', 6),
+('UI/UX Designer at Adobe', 'Designing user interfaces and improving user experience for web applications.', '2023-06-08 17:00:00', 6, 154),
+('Machine Learning Engineer at DeepMind', 'Building and deploying machine learning models using Python and TensorFlow.', '2023-06-07 16:00:00', 6, 163),
 
 -- User 7
-('Data Engineer at Palantir', 'Building data pipelines and managing data warehouses using SQL and Big Data tools.', '2023-06-09 18:00:00', 7),
+('Data Engineer at Palantir', 'Building data pipelines and managing data warehouses using SQL and Big Data tools.', '2023-06-09 18:00:00', 7, 148),
 
 -- User 8
-('Software Engineer at Microsoft', 'Developing and maintaining enterprise software solutions.', '2023-06-11 10:00:00', 8),
-('DevOps Specialist at AWS', 'Implementing DevOps practices and managing cloud infrastructure on AWS.', '2023-06-12 12:00:00', 8),
+('Software Engineer at Microsoft', 'Developing and maintaining enterprise software solutions.', '2023-06-11 10:00:00', 8, 134),
+('DevOps Specialist at AWS', 'Implementing DevOps practices and managing cloud infrastructure on AWS.', '2023-06-12 12:00:00', 8, 174),
 
 -- User 9
-('Frontend Developer at Shopify', 'Creating responsive web interfaces with JavaScript and React.', '2023-06-13 14:00:00', 9),
+('Frontend Developer at Shopify', 'Creating responsive web interfaces with JavaScript and React.', '2023-06-13 14:00:00', 9, 141),
 
 -- User 10
-('Data Analyst at Oracle', 'Analyzing data and generating reports using SQL and Python.', '2023-06-14 15:00:00', 10),
+('Data Analyst at Oracle', 'Analyzing data and generating reports using SQL and Python.', '2023-06-14 15:00:00', 10, 157),
 
 -- User 11
-('Cybersecurity Analyst at Cisco', 'Monitoring and responding to security threats in a large enterprise environment.', '2023-06-15 16:00:00', 11),
-('Network Engineer at IBM', 'Designing and maintaining network infrastructure.', '2023-06-16 17:00:00', 11),
+('Cybersecurity Analyst at Cisco', 'Monitoring and responding to security threats in a large enterprise environment.', '2023-06-15 16:00:00', 11, 165),
+('Network Engineer at IBM', 'Designing and maintaining network infrastructure.', '2023-06-16 17:00:00', 11, 149),
 
 -- User 12
-('Mobile Developer at Apple', 'Developing and maintaining iOS applications using Swift.', '2023-06-17 18:00:00', 12),
+('Mobile Developer at Apple', 'Developing and maintaining iOS applications using Swift.', '2023-06-17 18:00:00', 12, 137),
 
 -- User 13
-('Machine Learning Specialist at Google', 'Designing machine learning models and deploying them in production.', '2023-06-18 19:00:00', 13),
+('Machine Learning Specialist at Google', 'Designing machine learning models and deploying them in production.', '2023-06-18 19:00:00', 13, 172),
 
 -- User 14
-('System Administrator at LinkedIn', 'Managing servers and ensuring uptime and security.', '2023-06-19 10:00:00', 14),
+('System Administrator at LinkedIn', 'Managing servers and ensuring uptime and security.', '2023-06-19 10:00:00', 14, 128),
 
 -- User 15
-('Cloud Engineer at Google Cloud', 'Building and managing cloud-based solutions.', '2023-06-20 11:00:00', 15),
+('Cloud Engineer at Google Cloud', 'Building and managing cloud-based solutions.', '2023-06-20 11:00:00', 15, 159),
 
 -- User 16
-('Database Administrator at MySQL', 'Managing and optimizing databases using MySQL.', '2023-06-21 12:00:00', 16),
+('Database Administrator at MySQL', 'Managing and optimizing databases using MySQL.', '2023-06-21 12:00:00', 16, 146),
 
 -- User 17
-('Tech Lead at GitHub', 'Leading a team of developers to build and maintain GitHub features.', '2023-06-22 13:00:00', 17),
+('Tech Lead at GitHub', 'Leading a team of developers to build and maintain GitHub features.', '2023-06-22 13:00:00', 17, 161),
 
 -- User 18
-('Full Stack Developer at Airbnb', 'Developing end-to-end web applications using JavaScript and Python.', '2023-06-23 14:00:00', 18),
+('Full Stack Developer at Airbnb', 'Developing end-to-end web applications using JavaScript and Python.', '2023-06-23 14:00:00', 18, 140),
 
 -- User 19
-('Backend Developer at Netflix', 'Creating and maintaining backend services and APIs.', '2023-06-24 15:00:00', 19),
+('Backend Developer at Netflix', 'Creating and maintaining backend services and APIs.', '2023-06-24 15:00:00', 19, 138),
 
 -- User 20
-('UI/UX Designer at Adobe', 'Improving user experience and designing intuitive interfaces.', '2023-06-25 16:00:00', 20),
-('Frontend Developer at Facebook', 'Building responsive web applications using JavaScript and React.', '2023-06-26 17:00:00', 20),
+('UI/UX Designer at Adobe', 'Improving user experience and designing intuitive interfaces.', '2023-06-25 16:00:00', 20, 135),
+('Frontend Developer at Facebook', 'Building responsive web applications using JavaScript and React.', '2023-06-26 17:00:00', 20, 158),
 
 -- User 21
-('Software Architect at IBM', 'Designing and overseeing software architecture and implementation.', '2023-06-27 18:00:00', 21),
+('Software Architect at IBM', 'Designing and overseeing software architecture and implementation.', '2023-06-27 18:00:00', 21, 168),
 
 -- User 22
-('Cybersecurity Specialist at Palo Alto Networks', 'Developing and implementing cybersecurity strategies.', '2023-06-28 19:00:00', 22),
+('Cybersecurity Specialist at Palo Alto Networks', 'Developing and implementing cybersecurity strategies.', '2023-06-28 19:00:00', 22, 174),
 
 -- User 23
-('Machine Learning Engineer at Amazon', 'Building and deploying machine learning models.', '2023-06-29 10:00:00', 23),
+('Machine Learning Engineer at Amazon', 'Building and deploying machine learning models.', '2023-06-29 10:00:00', 23, 173),
 
 -- User 24
-('DevOps Engineer at Microsoft', 'Implementing DevOps practices across multiple teams.', '2023-06-30 11:00:00', 24),
+('DevOps Engineer at Microsoft', 'Implementing DevOps practices across multiple teams.', '2023-06-30 11:00:00', 24, 144),
 
 -- User 25
-('Data Engineer at Palantir', 'Building data pipelines and managing large datasets.', '2023-07-01 12:00:00', 25),
+('Data Engineer at Palantir', 'Building data pipelines and managing large datasets.', '2023-07-01 12:00:00', 25, 151),
 
 -- User 26
-('Network Security Engineer at AT&T', 'Securing network infrastructure and responding to threats.', '2023-07-02 13:00:00', 26),
+('Network Security Engineer at AT&T', 'Securing network infrastructure and responding to threats.', '2023-07-02 13:00:00', 26, 165),
 
 -- User 27
-('Full Stack Developer at Medium', 'Developing and maintaining both frontend and backend components.', '2023-07-03 14:00:00', 27),
+('Full Stack Developer at Medium', 'Developing and maintaining both frontend and backend components.', '2023-07-03 14:00:00', 27, 169),
 
 -- User 28
-('Cloud Architect at AWS', 'Designing and managing scalable cloud solutions.', '2023-07-04 15:00:00', 28),
+('Cloud Architect at AWS', 'Designing and managing scalable cloud solutions.', '2023-07-04 15:00:00', 28, 159),
 
 -- User 29
-('Software Engineer at Google', 'Building scalable web applications.', '2023-07-05 16:00:00', 29),
-('Data Scientist at Microsoft', 'Performing data analysis and building predictive models.', '2023-07-06 17:00:00', 29),
+('Software Engineer at Google', 'Building scalable web applications.', '2023-07-05 16:00:00', 29, 164),
+('Data Scientist at Microsoft', 'Performing data analysis and building predictive models.', '2023-07-06 17:00:00', 29, 154),
 
 -- User 30
-('UI/UX Designer at Adobe', 'Improving user experience for mobile and web apps.', '2023-07-07 18:00:00', 30),
+('UI/UX Designer at Adobe', 'Improving user experience for mobile and web apps.', '2023-07-07 18:00:00', 30, 136),
 
 -- User 31
-('Mobile Developer at Snapchat', 'Developing and maintaining Android and iOS applications.', '2023-07-08 19:00:00', 31),
+('Mobile Developer at Snapchat', 'Developing and maintaining Android and iOS applications.', '2023-07-08 19:00:00', 31, 148),
 
 -- User 32
-('DevOps Engineer at Netflix', 'Automating and managing cloud infrastructure.', '2023-07-09 10:00:00', 32),
+('DevOps Engineer at Netflix', 'Automating and managing cloud infrastructure.', '2023-07-09 10:00:00', 32, 177),
 
 -- User 33
-('Frontend Developer at LinkedIn', 'Building responsive and scalable web applications.', '2023-07-10 11:00:00', 33),
+('Frontend Developer at LinkedIn', 'Building responsive and scalable web applications.', '2023-07-10 11:00:00', 33, 153),
 
 -- User 34
-('Data Engineer at Airbnb', 'Building and managing data pipelines.', '2023-07-11 12:00:00', 34),
+('Data Engineer at Airbnb', 'Building and managing data pipelines.', '2023-07-11 12:00:00', 34, 147),
 
 -- User 35
-('Security Engineer at CrowdStrike', 'Implementing security protocols and managing firewalls.', '2023-07-12 13:00:00', 35),
+('Security Engineer at CrowdStrike', 'Implementing security protocols and managing firewalls.', '2023-07-12 13:00:00', 35, 166),
 
 -- User 36
-('Software Engineer at Microsoft', 'Developing enterprise software solutions.', '2023-07-13 14:00:00', 36),
-('DevOps Specialist at AWS', 'Implementing DevOps practices across cloud infrastructure.', '2023-07-14 15:00:00', 36),
+('Software Engineer at Microsoft', 'Developing enterprise software solutions.', '2023-07-13 14:00:00', 36, 170),
+('DevOps Specialist at AWS', 'Implementing DevOps practices across cloud infrastructure.', '2023-07-14 15:00:00', 36, 162),
 
 -- User 37
-('Backend Developer at Red Hat', 'Developing APIs and managing databases.', '2023-07-15 16:00:00', 37),
+('Backend Developer at Red Hat', 'Developing APIs and managing databases.', '2023-07-15 16:00:00', 37, 152),
 
 -- User 38
-('Cloud Architect at Google Cloud', 'Designing cloud-based solutions.', '2023-07-16 17:00:00', 38),
+('Cloud Architect at Google Cloud', 'Designing cloud-based solutions.', '2023-07-16 17:00:00', 38, 160),
 
 -- User 39
-('Machine Learning Engineer at DeepMind', 'Building machine learning models.', '2023-07-17 18:00:00', 39),
+('Machine Learning Engineer at DeepMind', 'Building machine learning models.', '2023-07-17 18:00:00', 39, 175),
 
 -- User 40
-('Tech Lead at GitHub', 'Leading a team of developers.', '2023-07-18 19:00:00', 40),
+('Tech Lead at GitHub', 'Leading a team of developers.', '2023-07-18 19:00:00', 40, 178),
 
 -- User 41
-('Network Engineer at Cisco', 'Designing and maintaining network infrastructure.', '2023-07-19 10:00:00', 41),
+('Network Engineer at Cisco', 'Designing and maintaining network infrastructure.', '2023-07-19 10:00:00', 41, 163),
 
 -- User 42
-('Cybersecurity Analyst at CrowdStrike', 'Monitoring and responding to security threats.', '2023-07-20 11:00:00', 42),
+('Cybersecurity Analyst at CrowdStrike', 'Monitoring and responding to security threats.', '2023-07-20 11:00:00', 42, 171),
 
 -- User 43
-('Data Scientist at Facebook', 'Analyzing data and building predictive models.', '2023-07-21 12:00:00', 43),
+('Data Scientist at Facebook', 'Analyzing data and building predictive models.', '2023-07-21 12:00:00', 43, 155),
 
 -- User 44
-('Mobile Developer at Google', 'Developing and maintaining Android applications.', '2023-07-22 13:00:00', 44),
+('Mobile Developer at Google', 'Developing and maintaining Android applications.', '2023-07-22 13:00:00', 44, 180),
 
 -- User 45
-('Full Stack Developer at Airbnb', 'Developing end-to-end web applications.', '2023-07-23 14:00:00', 45);
+('Full Stack Developer at Airbnb', 'Developing end-to-end web applications.', '2023-07-23 14:00:00', 45, 167);
+
 /*!40000 ALTER TABLE job ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
 
 --
 -- Table structure for table job_applicants
