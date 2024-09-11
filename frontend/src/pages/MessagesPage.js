@@ -47,7 +47,7 @@ function Chat(){
         }
 
         // Create WebSocket connection
-        const Sock = new SockJS('http://localhost:8080/ws');
+        const Sock = new SockJS('https://localhost:8080/ws');
         stompClientRef.current = new Client({
             webSocketFactory: () => Sock,
             reconnectDelay: 5000,

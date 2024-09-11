@@ -15,7 +15,8 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    margin-left: 2px; 
+    margin-left: 2px;
+    padding-right: 5%;
 }
 
 /* New post settings*/
