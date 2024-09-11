@@ -1,5 +1,5 @@
 import axios from "axios";
-const SERVER_URL =  "http://localhost:8080"
+const SERVER_URL =  "https://localhost:8080"
 class networkService {
     getUsers() {
         const API_URL = SERVER_URL +"/Network/getUsers";

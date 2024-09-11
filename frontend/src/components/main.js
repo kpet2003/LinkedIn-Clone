@@ -20,7 +20,7 @@ import axios from 'axios';
 import JobPage from '../pages/JobsPage';
 import userService from '../service/userService';
 
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "https://localhost:8080";
 
 const authenticate = (token) => {
     const API_URL = SERVER_URL + "/auth/";
