@@ -8,7 +8,28 @@ public class InChatUserDto {
     protected String email;
     protected String image;
     protected long id;
+    protected Boolean hasMessaged;
+    
+    public Boolean getHasMessaged() {
+        return hasMessaged;
+    }
+
+    public void setHasMessaged(Boolean hasMessaged) {
+        this.hasMessaged = hasMessaged;
+    }
+
     protected List<InChatUserDto> connections;
+
+    public InChatUserDto(String first_name, String last_name, String email, String image, long id, Boolean hasMessaged,
+            List<InChatUserDto> connections) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.image = image;
+        this.id = id;
+        this.hasMessaged = hasMessaged;
+        this.connections = connections;
+    }
 
     public InChatUserDto() {
     }

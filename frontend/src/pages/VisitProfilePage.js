@@ -1,7 +1,7 @@
 import React , { useState,useEffect } from "react";
 import NavigationBar from './NavigationBar.js';
 import userService from "../service/userService.js";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../styling/Visit.css';
 import '../styling/Profile.css';
 import placeholder from '../icons/avatar.png';
@@ -78,6 +78,7 @@ function VisitProfile(){
     const [skills,setSkills] = useState([]);
     const [education,setEducation] = useState([]);
     const [experience,setExperience] = useState([]);
+    const navigate = useNavigate();
     console.log('userId is',id);
 
     useEffect(() => {
@@ -163,31 +164,33 @@ function VisitProfile(){
 
     }
 
-    const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
+    const startChat = (userId) => {
+        navigate('/Messages', { state: { userId } });
+    }
 
-    
- 
+    const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
 
     return(
         <div>
             {!isAdmin && (<NavigationBar></NavigationBar>)}
             <br></br>
             <div>
-                <div className="banner">
-                    <div className="start-chat-container">
+                <div className="banner-container" style={{ gap: isConnected ? '10%' : '0' }}>
+                    <div className="banner">
                         <div className="profile-picture-container">
                             <img
                             src={base64Image}
                             alt="Profile"
-                            className="profile-picture"
+                            className="profile-picture" 
                             />
+                        </div>                    
+                        <div>
+                            <h1 className="username">{user.firstName} {user.lastName}</h1>
                         </div>
-                       { isConnected && (<button className="chat-button">Send Message</button>)}
-                       { (isConnected || isAdmin) && (<button className="chat-button" onClick={() => viewNetwork(id)}>View Network</button>)}
                     </div>
-                    
-                    <div>
-                        <h1 className="username">{user.firstName} {user.lastName}</h1>
+                    <div className="connected-buttons">
+                        { isConnected && (<button className="chat-button" style={{margin:0}} onClick={()=> startChat(id)}>Send Message</button>)}
+                        { (isConnected || isAdmin) && (<button className="chat-button" style={{margin:0}} onClick={() => viewNetwork(id)}>View Network</button>)}
                     </div>
                 </div>
                 <br></br>

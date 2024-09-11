@@ -107,14 +107,15 @@ public class JobService {
     public List<JobDto> getConnectionsJobs(List<JobDto> allJobs, String token){
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        List<Long> connectionIds = connectedUsers.stream()
+                                                .map(UserEntity::getID)
+                                                .collect(Collectors.toList());
         List<JobDto> connectedJobs = new ArrayList<>();
         for(JobDto job:allJobs){
             Job j = jobRepo.findById(job.getJobId());
-            for(UserEntity u:connectedUsers){
-                if(job.getAuthorId() == u.getID()){
-                    if(!j.getApplicants().contains(user)){
-                        connectedJobs.add(job);
-                    }
+            if(connectionIds.contains(job.getAuthorId()) && !connectedJobs.contains(job)){
+                if(!j.getApplicants().contains(user)){
+                    connectedJobs.add(job);
                 }
             }
         }
@@ -124,14 +125,15 @@ public class JobService {
     public List<JobDto> getOtherJobs(List<JobDto> allJobs, String token){
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        List<Long> connectionIds = connectedUsers.stream()
+                                                .map(UserEntity::getID)
+                                                .collect(Collectors.toList());
         List<JobDto> otherJobs = new ArrayList<>();
         for(JobDto job:allJobs){
-            for(UserEntity u:connectedUsers){
-                Job j = jobRepo.findById(job.getJobId());
-                if((job.getAuthorId() != u.getID()) && (user.getID() != job.getAuthorId())){
-                    if(!j.getApplicants().contains(user)){
-                        otherJobs.add(job);
-                    }
+            Job j = jobRepo.findById(job.getJobId());
+            if(!connectionIds.contains(job.getAuthorId()) && !otherJobs.contains(job)){
+                if(!j.getApplicants().contains(user)){
+                    otherJobs.add(job);
                 }
             }
         }

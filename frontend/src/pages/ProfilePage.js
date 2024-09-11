@@ -264,7 +264,7 @@ function Pfp(){
         <div>
             <div className="banner">
                 <div className="pic-edit">
-                <div className="profile-picture-container">
+                <div className="profile-picture-container" style={{marginLeft: '20px'}}>
                     <img
                     src={base64Image}
                     alt="Profile"

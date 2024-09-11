@@ -184,7 +184,7 @@ INSERT INTO article (title, content, date_posted, picture, video, author) VALUES
 ('Cybersecurity Trends in 2024', 'An overview of the latest trends in cybersecurity and how to prepare for them.', '2023-10-20 09:00:00', NULL, NULL, 11),
 
 -- User 12
-('Developing iOS Applications with Swift', 'A beginner\'s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12),
+('Developing iOS Applications with Swift', 'A beginner''s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12),
 ('UI Design Principles for Mobile Apps', 'Principles of UI design specifically for mobile applications.', '2023-12-10 16:00:00', NULL, NULL, 12),
 
 -- User 13
@@ -1002,7 +1002,6 @@ INSERT INTO job_applicants (applicant, job_id) VALUES
 UNLOCK TABLES;
 
 
--
 -- Table structure for table skills
 --
 
@@ -2303,8 +2302,6 @@ INSERT INTO request (sender, receiver, date_sent) VALUES
 /*!40000 ALTER TABLE request ENABLE KEYS */;
 UNLOCK TABLES;
 
-
--
 
 
 --

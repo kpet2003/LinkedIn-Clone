@@ -5,7 +5,7 @@ import '../styling/Messages.css';
 import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useState,useEffect,useRef,useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import userService from "../service/userService";
 
 function Chat(){
@@ -26,6 +26,7 @@ function Chat(){
 
     const stompClientRef = useRef(null); // UseRef to hold stompClient
     const navigate = useNavigate(); // Hook to navigate programmatically
+    const location = useLocation(); //to access useNavigate state
 
 
     const onConnected = useCallback(() => {
@@ -65,31 +66,55 @@ function Chat(){
         const fetchUserData = async () => {
             try {
                 const user = await userService.getUserChatData(localStorage.getItem('jwt_token'));
-                setUserData(userData => ({
-                    ...userData,
+                
+                // Check if newUserId exists in location.state and if connections need to be updated
+                const newUserId = location.state?.userId;
+    
+                // Check if connections are already populated and if newUserId exists
+                let updatedConnections = user.connections;
+                console.log(newUserId)
+                console.log(updatedConnections.length)
+                if (newUserId && updatedConnections.length > 0) {
+                    // Find the new user in connections and update hasMessaged to true
+                    console.log('im in')
+                    updatedConnections = updatedConnections.map(conn => {
+                        console.log(`Checking connection with id: ${conn.id} and hasMessaged: ${conn.hasMessaged}`);
+                        console.log(newUserId)
+                        if (conn.id === Number(newUserId) && !conn.hasMessaged) {
+                            console.log("FOUND!")
+                            return { ...conn, hasMessaged: true };
+                        }
+                        return conn;
+                    });
+                    console.log(updatedConnections)
+                }
+    
+                // Set the user data, including updated connections
+                setUserData({
                     id: user.id,
                     first_name: user.first_name,
                     last_name: user.last_name,
                     email: user.email,
                     image: user.image,
-                    connections: user.connections
-                }));
-                connect();
+                    connections: updatedConnections // Set updated connections with hasMessaged changes
+                });
+                connect(); // Call connect function after user data is set
                 console.log(user);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
-
+    
         fetchUserData();
+    
         return () => {
             if (stompClientRef.current) {
                 stompClientRef.current.deactivate();
             }
         };
-    }, [navigate, connect]);
+    }, [navigate, connect, location.state]);
 
-
+    
     const onPrivateMessage = (payload) => {
         const payloadData = JSON.parse(payload.body);
         console.log("Received message: ", payloadData);
@@ -193,12 +218,23 @@ function Chat(){
             <div className="chatbox">
                 <div className="users-chats">
                 <ul className="unordered-list">
-                    {userData.connections.map((connection) => (
-                        <li key={connection.id} className="button-list">
-                            <button className={`user-button ${tab === connection.id ? 'active' : ''}`} onClick={() => fetchChatHistory(connection.id)}><img src={connection.image? `data:image/jpeg;base64,${connection.image}`: `${avatar}`} alt="profile" className="button-image profile-picture"></img> {connection.first_name} {connection.last_name}</button>
-                        </li>
-                    ))}
-                </ul>
+                        {userData.connections
+                            .filter(connection => connection.hasMessaged)
+                            .map((connection) => (
+                                <li key={connection.id} className="button-list">
+                                    <button
+                                        className={`user-button ${tab === connection.id ? 'active' : ''}`}
+                                        onClick={() => fetchChatHistory(connection.id)}>
+                                        <img
+                                            src={connection.image ? `data:image/jpeg;base64,${connection.image}` : `${avatar}`}
+                                            alt="profile"
+                                            className="button-image profile-picture"
+                                        />
+                                        {connection.first_name} {connection.last_name}
+                                    </button>
+                                </li>
+                            ))}
+                    </ul>
                     
                 </div>
                 <div className="right-side-box">

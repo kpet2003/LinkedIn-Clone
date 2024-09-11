@@ -8,7 +8,6 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
-    gap: 10%;
     flex-direction: column;
 }
 

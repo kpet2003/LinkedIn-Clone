@@ -85,12 +85,16 @@ public class MessageController {
                 System.out.println("GOT CONNECTIONS");
                 List<InChatUserDto> temp = new ArrayList<>();
                 for(UserEntity tempUser : connectedUsers){
+                    Boolean messaged = true;
+                    if(messService.getChatHistory(user.getID(), tempUser.getID()).isEmpty()){
+                        messaged = false;
+                    }
                     InChatUserDto tempchatUser = new InChatUserDto();
                     tempchatUser.setId(tempUser.getID());
                     tempchatUser.setFirst_name(tempUser.getFirstName());
                     tempchatUser.setLast_name(tempUser.getLastName());
                     tempchatUser.setEmail(tempUser.getEmail());
-                    
+                    tempchatUser.setHasMessaged(messaged);
                     if (tempUser.getProfilePicture() != null) {
                         String base64Image = Base64.getEncoder().encodeToString(tempUser.getProfilePicture());
                         tempchatUser.setImage(base64Image);
