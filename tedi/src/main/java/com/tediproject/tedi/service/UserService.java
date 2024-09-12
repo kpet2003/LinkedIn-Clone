@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import com.tediproject.tedi.dto.EmailChangeDto;
 import com.tediproject.tedi.dto.PasswordChangeDto;
 import com.tediproject.tedi.exceptions.UserAlreadyExists;
@@ -75,7 +74,7 @@ public class UserService{
         if(pfp!=null) {
             user.setProfilePicture(pfp.getBytes());
         }
-
+        user.setLastChatUserId(Long.valueOf(0));
 
         Role new_role = roleRepo.findByRole("user");
         user.setRoles(new_role);
@@ -276,6 +275,13 @@ public class UserService{
         } catch(Exception e){
             throw new RuntimeException("Error changing bool");
         }
+    }
+
+    public void setTab(String token, long tab){
+        System.out.println("EMAIL IS "+jwtUtil.getEmailFromJWT(token));
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+        user.setLastChatUserId(tab);
+        userRepo.save(user);
     }
 
     public List <Skills> findSkills(String token) {

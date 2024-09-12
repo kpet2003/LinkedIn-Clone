@@ -301,6 +301,18 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PutMapping(value = "/tab/{user}/{tab}")
+    public ResponseEntity<?> setLastChat(@PathVariable String user, @PathVariable long tab){
+        try {
+            jwtUtil.validateToken(user);
+            System.out.println("TAB IS "+tab);
+            userService.setTab(user,tab);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
     
     @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {

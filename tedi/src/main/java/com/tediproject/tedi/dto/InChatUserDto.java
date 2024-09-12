@@ -9,7 +9,16 @@ public class InChatUserDto {
     protected String image;
     protected long id;
     protected Boolean hasMessaged;
+    protected long lastChatUserId;
     
+    public long getLastChatUserId() {
+        return lastChatUserId;
+    }
+
+    public void setLastChatUserId(long lastChatUserId) {
+        this.lastChatUserId = lastChatUserId;
+    }
+
     public Boolean getHasMessaged() {
         return hasMessaged;
     }
@@ -20,7 +29,7 @@ public class InChatUserDto {
 
     protected List<InChatUserDto> connections;
 
-    public InChatUserDto(String first_name, String last_name, String email, String image, long id, Boolean hasMessaged,
+    public InChatUserDto(String first_name, String last_name, String email, String image, long id, Boolean hasMessaged, long lastChatUserId,
             List<InChatUserDto> connections) {
         this.first_name = first_name;
         this.last_name = last_name;
@@ -28,6 +37,7 @@ public class InChatUserDto {
         this.image = image;
         this.id = id;
         this.hasMessaged = hasMessaged;
+        this.lastChatUserId = lastChatUserId;
         this.connections = connections;
     }
 

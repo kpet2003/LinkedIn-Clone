@@ -83,6 +83,19 @@ public class UserEntity {
     @ManyToMany(mappedBy = "experienced_users", fetch = FetchType.EAGER)
     private List <Experience> user_experience;
 
+    @Column
+    protected Long lastChatUserId;
+
+
+    public Long getLastChatUserId() {
+        return lastChatUserId;
+    }
+
+
+    public void setLastChatUserId(Long lastChatUserId) {
+        this.lastChatUserId = lastChatUserId;
+    }
+
 
     public List<Experience> getUser_experience() {
         return user_experience;

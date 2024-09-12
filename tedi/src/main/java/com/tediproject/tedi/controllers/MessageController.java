@@ -1,5 +1,6 @@
 package com.tediproject.tedi.controllers;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -47,7 +48,7 @@ public class MessageController {
     private MessageService messService;
 
     @MessageMapping(value="/chat")
-    public Message receiveMessage(@Payload Message message){
+    public Message receiveMessage(@Payload Message message, Principal principal){
 
         Message mess = new Message();
         mess.setSenderId(message.getSenderId());
@@ -56,7 +57,9 @@ public class MessageController {
         mess.setDate(LocalDateTime.now());
         messRepo.save(mess);
         
-        simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()),"/chat",message);
+        if (!Long.valueOf(message.getSenderId()).equals(Long.parseLong(principal.getName()))) {
+            simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/chat", message);
+        }
         System.out.println(message.toString());
         return message;
     }
@@ -76,6 +79,7 @@ public class MessageController {
                 chatUser.setFirst_name(user.getFirstName());
                 chatUser.setLast_name(user.getLastName());
                 chatUser.setEmail(user.getEmail());
+                chatUser.setLastChatUserId(user.getLastChatUserId());
                 if (user.getProfilePicture() != null) {
                     String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
                     chatUser.setImage(base64Image);
@@ -89,12 +93,8 @@ public class MessageController {
                     if(messService.getChatHistory(user.getID(), tempUser.getID()).isEmpty()){
                         messaged = false;
                     }
-                    InChatUserDto tempchatUser = new InChatUserDto();
-                    tempchatUser.setId(tempUser.getID());
-                    tempchatUser.setFirst_name(tempUser.getFirstName());
-                    tempchatUser.setLast_name(tempUser.getLastName());
-                    tempchatUser.setEmail(tempUser.getEmail());
-                    tempchatUser.setHasMessaged(messaged);
+                    InChatUserDto tempchatUser = new InChatUserDto(tempUser.getFirstName(), tempUser.getLastName(),
+                    tempUser.getEmail(), null, tempUser.getID(), messaged, tempUser.getLastChatUserId(), null);
                     if (tempUser.getProfilePicture() != null) {
                         String base64Image = Base64.getEncoder().encodeToString(tempUser.getProfilePicture());
                         tempchatUser.setImage(base64Image);

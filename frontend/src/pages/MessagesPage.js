@@ -21,6 +21,7 @@ function Chat(){
         last_name: '',
         email: '',
         image: '',
+        lastChatUserId: '',
         connections: []
     });
 
@@ -41,8 +42,8 @@ function Chat(){
     const connect = useCallback(() => {
         const token = localStorage.getItem('jwt_token'); // Retrieve the JWT token from localStorage
 
-        if (!token) {
-            // navigate('/'); // Redirect to login if no token is found
+        if (!token || stompClientRef.current?.connected) {
+            // If no token or already connected, prevent re-subscription
             return;
         }
 
@@ -96,8 +97,11 @@ function Chat(){
                     last_name: user.last_name,
                     email: user.email,
                     image: user.image,
+                    lastChatUserId: user.lastChatUserId,
                     connections: updatedConnections // Set updated connections with hasMessaged changes
                 });
+                fetchChatHistory(user.lastChatUserId);
+                console.log('SET TAB',tab)
                 connect(); // Call connect function after user data is set
                 console.log(user);
             } catch (error) {
@@ -143,6 +147,7 @@ function Chat(){
 
     const sendPrivateValue = () => {
         console.log('SENDING TO ',tab);
+        if (userData.message === ' ' || userData.message === 'undefined') return;
         if (stompClientRef.current && tab) {
             const chatMessage = {
                 senderId: userData.id,
@@ -181,6 +186,7 @@ function Chat(){
         try {
             setReceiverImage("")
             setTab(id);
+            await userService.setTab(id,localStorage.getItem('jwt_token'));
             const messages = await userService.getChatHistory(userData.id, id);
             setPrivateChats(new Map([[id, messages]]));
             const image = await userService.getImage(id);
@@ -210,6 +216,7 @@ function Chat(){
 
     const base64Image = userData.image? `data:image/jpeg;base64,${userData.image}`: `${avatar}`;
     const messagesByDate = tab ? groupMessagesByDate(privateChats.get(tab) || []) : {};
+    console.log(tab)
 
     return(
         <div>

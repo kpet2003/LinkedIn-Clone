@@ -223,6 +223,11 @@ class UserService {
         const response = await axios.get(url);
         return response.data;
     }
+
+    async setTab(tab, user){
+        const url = SERVER_URL + `/tab/${user}/${tab}`;
+        await axios.put(url);
+    }
     
 }
 
