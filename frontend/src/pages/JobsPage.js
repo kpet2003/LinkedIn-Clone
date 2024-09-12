@@ -240,9 +240,9 @@ function Jobs() {
                             value={newSkill} 
                             onChange={handleSkillInput} // Controlled input for skill
                             placeholder="Add a skill" 
-                            style={{borderRadius: 5, border: '1px solid gray', height: 25}}
+                            style={{borderRadius: 5, border: '1px solid gray', height: 25,outline: 'none'}}
                             />
-                            <span onClick={addSkill} style={{ marginLeft: '10px', cursor: 'pointer' }}>&#43;</span>
+                            <span onClick={addSkill} style={{ marginLeft: '10px', cursor: 'pointer',outline: 'none'}}>&#43;</span>
                             
                             <br />
                             <ul>

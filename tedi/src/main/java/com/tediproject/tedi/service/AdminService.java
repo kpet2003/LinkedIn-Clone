@@ -79,6 +79,41 @@ public class AdminService {
 
     }
 
+    public List <AdminDto> findUsers(List<Long> user_ids) {
+
+        List<UserEntity> users =  userRepo.findAllById(user_ids);
+
+
+        List<AdminDto> userData = new ArrayList<>();
+
+        for(int i=0; i<users.size(); i++) {
+            AdminDto user = new AdminDto();
+            user.setFirstName(users.get(i).getFirstName());
+            user.setLastName(users.get(i).getLastName());
+            user.setId(users.get(i).getID());
+            user.setEmail(users.get(i).getEmail());
+            user.setPhone_number(users.get(i).getPhoneNumber());
+            user.setWorkTitle(users.get(i).getWorkTitle());
+            user.setWorkplace(users.get(i).getWorkplace());
+            user.setProfilePicture(users.get(i).getProfilePicture());
+            user.setSkills(this.getUserSkills(users.get(i)));
+            user.setEducation(this.getUserEducation(users.get(i)));
+            user.setExperience(this.getUserExperience(users.get(i)));
+            user.setArticles_posted(this.getUserArticles(users.get(i)));
+            user.setArticles_liked(this.getUserLikes(users.get(i)));
+            user.setComments_posted(this.getUserComments(users.get(i)));
+            user.setJobs_posted(this.getUserJobs(users.get(i)));
+            user.setConnections(this.getUserConnections(users.get(i)));
+           
+
+
+            userData.addLast(user);
+        }
+
+        return userData;
+
+    }
+
     private List<String> getUserLikes(UserEntity user) {
         List<Article> articles = likeRepo.findLikedArticles(user);
         

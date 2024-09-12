@@ -2,6 +2,7 @@ import '../styling/Admin.css';
 import React, { useEffect, useState } from 'react';
 import AdminService from '../service/adminService.js'; 
 import placeholder from '../icons/avatar.png';
+import adminService from '../service/adminService.js';
 
 
 
@@ -16,6 +17,7 @@ function UserList() {
                 const response = await  AdminService.getUsers();
                 const finalUsers = response.filter(user => user.email !== 'admin@gmail.com');
                 setUsers(finalUsers);
+
             } 
             catch (error) {
                 console.error("There was an error getting the user list", error);
@@ -39,7 +41,6 @@ function UserList() {
         }
         
         setSelectedUsers(users.map(user => user.id));
-        
     }
 
     // export the user data in JSON form
@@ -62,47 +63,31 @@ function UserList() {
             document.body.removeChild(link);
     }
 
-    function JSONtoXML(obj) {
-        var xml = '';
-        for (var prop in obj) {
-            if (obj[prop] instanceof Array) {
-                for (var array in obj[prop]) {
-                    xml += '<' + prop + '>';
-                    xml += JSONtoXML(new Object(obj[prop][array]));
-                    xml += '</' + prop + '>';
-                }
-            } else {
-                xml += '<' + prop + '>';
-                typeof obj[prop] == 'object' ? xml += JSONtoXML(new Object(obj[prop])) : xml += obj[prop];
-                xml += '</' + prop + '>';
-            }
-        }
-        xml+="\n";
-        var xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
-        xml+="\n";
-        return xml;
-    }
 
     // export the user data in XML form
-    const exportXML = () => {
-        const excludeAttributes = ['profilePicture'];
+    const exportXML = async() => {
         
-        const finalUsers = users.filter(user => selectedUsers.includes(user.id)).map(user => {
-            const { [excludeAttributes[0]]: _, ...rest } = user;
-            return rest;
-        });
+        try {
+            const response = await adminService.getxmlUsers(selectedUsers);
+            console.log(response);
 
-        const xml = JSONtoXML(finalUsers);
+            
+            const blob = new Blob([response], { type: "application/xml"});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.download = "users.xml";
+            link.href = url;
+            link.click();
+
+            
+        }
+        catch(error) {
+            console.log('error fetching xml data: ',error);
+        }
 
 
-       
-        const xmlString = `<?xml version="1.0" encoding="UTF-8"?>\n<users>\n${xml}\n</users>`;
-        const blob = new Blob([xmlString], { type: "application/xml"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.download = "users.xml";
-        link.href = url;
-        link.click();
+        
+      
     }
 
  
