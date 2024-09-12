@@ -71,9 +71,19 @@ public class ArticleService {
         // find articles that the user's connections have liked
         articles.addAll(commentRepo.findCommentedArticles(connections));
 
+    
+
 
         // sort the articles from newest to oldest
         List<Article> final_articles = new ArrayList<>(articles);
+
+        // add a view for all articles fetched
+        for(int i=0; i<final_articles.size(); i++) {
+            Article article = final_articles.get(i);
+            article.setViews(article.getViews()+1);
+            articleRepo.save(article);
+        }
+
         final_articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
 
 

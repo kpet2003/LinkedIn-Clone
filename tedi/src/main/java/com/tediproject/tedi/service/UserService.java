@@ -222,7 +222,6 @@ public class UserService{
             skillRepo.save(skill);
             userRepo.save(user);
         } catch (Exception e) {
-            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }
@@ -357,52 +356,20 @@ public class UserService{
     @PostConstruct
     public void init() {
        
-        // set admin role
-        if (roleRepo.findById(1) == null) {
-            Role role = new Role();
-            System.out.println("add admin role");
-            role.setRole("admin");
-            roleRepo.save(role);
-        }
-        
-            // set user role
-        if (roleRepo.findById(2) == null) {
-            Role role = new Role();
-            role.setRole("user");
-            roleRepo.save(role);
-        }
-
-        if (userRepo.findByEmail("admin@gmail.com") == null) {
-
-            
+        // encode all passwords
+        UserEntity admin = userRepo.findByEmail("admin@gmail.com");
+  
+        if(admin.getPassword().equals("admin")) {
             List <UserEntity> users = userRepo.findAll();
-            System.out.println("\n\n in here \n\n");
+            
+        
             for(int i=0; i<users.size(); i++) {
                 UserEntity user = users.get(i);
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepo.save(user);
             }
-
-
-            UserEntity user = new UserEntity();
-            user.setEmail("admin@gmail.com");
-            user.setPassword(passwordEncoder.encode("admin"));
-            user.setAdmin();
-
-            Role role = roleRepo.findByRole("admin");
-            user.setRoles(role);
-            role.addUser(user);
-
-            System.out.println("add admin in user table");
-            
-            userRepo.save(user);
-
-
-            
-
-
         }
-        
+       
     }
 
    

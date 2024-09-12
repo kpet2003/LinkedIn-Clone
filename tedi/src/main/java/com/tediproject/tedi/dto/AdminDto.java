@@ -4,15 +4,35 @@ import java.util.List;
 
 import com.tediproject.tedi.types.CommentInfo;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlRootElement
 public class AdminDto {
     
+    @XmlElement
     private String firstName;
+    
+    @XmlElement
     private String lastName;
+    
+    @XmlElement
     private String email;
+    
+    @XmlElement
     private long phone_number;
+
+    @XmlElement
     private String workTitle;
+
+    @XmlElement
     private String workplace;
+
+    @XmlElement
     private Long id;
+
+    @XmlTransient
     private byte[] profilePicture;
 
     public byte[] getProfilePicture() {
@@ -23,13 +43,28 @@ public class AdminDto {
         this.profilePicture = profilePicture;
     }
 
+    @XmlElement
     private List <CommentInfo> comments_posted;
+
+    @XmlElement
     private List <String> articles_liked;
+
+    @XmlElement
     private List <String> articles_posted;
+
+    @XmlElement
     private List <String> jobs_posted;
+
+    @XmlElement
     private List <String> connections;
+
+    @XmlElement
     private List <String> skills;
+
+    @XmlElement
     private List <String> education;
+
+    @XmlElement
     private List <String> experience;
 
     

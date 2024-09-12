@@ -105,19 +105,31 @@ function Jobs() {
         }
     };
 
-    const toggleConnDescription = (i) => {
+    const toggleConnDescription = (i,job_id) => {
         if (showConnJobDesc === i) {
             setShowConnJobDesc(null);
         } else {
             setShowConnJobDesc(i);
+            try {
+                jobService.addView(job_id,localStorage.getItem('jwt_token'));
+            }
+            catch(error) {
+                console.log('error adding view to job: ',error);
+            }
         }
     };
 
-    const toggleOtherDescription = (i) => {
+    const toggleOtherDescription = (i,job_id) => {
         if (showOtherJobDesc === i) {
             setShowOtherJobDesc(null);
         } else {
             setShowOtherJobDesc(i);
+            try {
+                jobService.addView(job_id,localStorage.getItem('jwt_token'));
+            }
+            catch(error) {
+                console.log('error adding view to job: ',error);
+            }
         }
     };
 
@@ -228,9 +240,9 @@ function Jobs() {
                             value={newSkill} 
                             onChange={handleSkillInput} // Controlled input for skill
                             placeholder="Add a skill" 
-                            style={{borderRadius: 5, border: '1px solid gray', height: 25}}
+                            style={{borderRadius: 5, border: '1px solid gray', height: 25,outline: 'none'}}
                             />
-                            <span onClick={addSkill} style={{ marginLeft: '10px', cursor: 'pointer' }}>&#43;</span>
+                            <span onClick={addSkill} style={{ marginLeft: '10px', cursor: 'pointer',outline: 'none'}}>&#43;</span>
                             
                             <br />
                             <ul>
@@ -287,7 +299,7 @@ function Jobs() {
                 connectionsJobs.map((job,i)=>(
                     <>
                     <div className='job-container' key={job.id}>
-                        <h3 className='job-header' onClick={() => toggleConnDescription(i)}>{job.title}</h3>
+                        <h3 className='job-header' onClick={() => toggleConnDescription(i,job.jobId)}>{job.title}</h3>
                         <p className='author'>Posted by {job.author}</p>
                         {showConnJobDesc === i && (
                             <div style={{ marginLeft: '2%' }}>
@@ -312,7 +324,7 @@ function Jobs() {
                 othersJobs.map((job,i)=>(
                     <>
                     <div className='job-container' key={job.id}>
-                        <h3 className='job-header' onClick={() => toggleOtherDescription(i)}>{job.title}</h3>
+                        <h3 className='job-header' onClick={() => toggleOtherDescription(i,job.jobId)}>{job.title}</h3>
                         <p className='author'>Posted by {job.author}</p>
                         {showOtherJobDesc === i && (
                             <div style={{ marginLeft: '2%' }}>

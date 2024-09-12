@@ -26,6 +26,25 @@ public class Job {
     @Column
     private LocalDateTime date_posted;
 
+    @Column
+    private int views;
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setDate_posted(LocalDateTime date_posted) {
+        this.date_posted = date_posted;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
     @Lob 
     @Column(length = 16777216)
     private String job_title;
@@ -64,6 +83,7 @@ public class Job {
 
     public Job() {
         this.date_posted = LocalDateTime.now();
+        this.views = 0;
     }
 
     public long getId() {

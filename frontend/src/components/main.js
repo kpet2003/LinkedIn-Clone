@@ -15,7 +15,7 @@ import Notifications from '../pages/NotificationPage';
 import Network from '../pages/Network';
 import VisitProfile from '../pages/VisitProfilePage';
 import ViewNetwork from '../pages/ViewNetwork';
-import Messages from '../pages/MessagesPage';
+import Chat from '../pages/MessagesPage';
 import axios from 'axios';
 import JobPage from '../pages/JobsPage';
 import userService from '../service/userService';
@@ -105,7 +105,7 @@ const Main=()=>{
                 <Route exact path='/NewPassword' Component={NewPassword}></Route>
                 <Route exact path='/VisitProfile/:id' Component={VisitProfile}></Route>
                 <Route exact path='/ViewNetwork/:id' Component={ViewNetwork}></Route>
-                <Route exact path='/Messages' Component={Messages}></Route>
+                <Route exact path='/Messages' Component={Chat}></Route>
                 <Route exact path='/Jobs' Component={JobPage}></Route>
             </Route>
            
