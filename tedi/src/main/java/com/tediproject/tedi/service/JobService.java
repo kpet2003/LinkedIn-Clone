@@ -132,7 +132,7 @@ public class JobService {
         for(JobDto job:allJobs){
             Job j = jobRepo.findById(job.getJobId());
             if(!connectionIds.contains(job.getAuthorId()) && !otherJobs.contains(job)){
-                if(!j.getApplicants().contains(user)){
+                if(!j.getApplicants().contains(user) && j.getAuthor().getID() != user.getID()){
                     otherJobs.add(job);
                 }
             }

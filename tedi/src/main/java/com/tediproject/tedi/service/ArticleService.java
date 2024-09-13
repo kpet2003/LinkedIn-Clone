@@ -50,10 +50,10 @@ public class ArticleService {
     @Autowired 
     NotificationRepo notificationRepo;
 
-
+    @Autowired
+    RecommendationService recommendationService;
 
     public List<Article> findArticles(String token) {
-        
         UserEntity author = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
 
         Set<Article> articles = new HashSet<>();
@@ -86,6 +86,9 @@ public class ArticleService {
 
         final_articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
 
+        System.out.println('\n');
+        recommendationService.recommendationMatrixArticles();
+        System.out.println('\n');
 
         return final_articles;
     }

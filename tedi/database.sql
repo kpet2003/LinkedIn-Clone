@@ -54,6 +54,7 @@ CREATE TABLE user (
   work_title varchar(255) DEFAULT NULL,
   workplace varchar(255) DEFAULT NULL,
   role_id bigint NOT NULL,
+  last_chat_user_id bigint DEFAULT 0,
   PRIMARY KEY (id),
   KEY FKn82ha3ccdebhokx3a8fgdqeyy (role_id),
   CONSTRAINT FKn82ha3ccdebhokx3a8fgdqeyy FOREIGN KEY (role_id) REFERENCES role (id)
