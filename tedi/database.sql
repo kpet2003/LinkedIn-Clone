@@ -54,11 +54,10 @@ CREATE TABLE user (
   work_title varchar(255) DEFAULT NULL,
   workplace varchar(255) DEFAULT NULL,
   role_id bigint NOT NULL,
-  last_chat_user_id bigint DEFAULT 0,
   PRIMARY KEY (id),
   KEY FKn82ha3ccdebhokx3a8fgdqeyy (role_id),
   CONSTRAINT FKn82ha3ccdebhokx3a8fgdqeyy FOREIGN KEY (role_id) REFERENCES role (id)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
