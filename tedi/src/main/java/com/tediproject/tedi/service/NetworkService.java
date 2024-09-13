@@ -171,6 +171,20 @@ public class NetworkService {
         return connectedUsers;
     }
 
+
+    public List<UserEntity> findUserConnections(UserEntity user) {
+       
+
+        List<UserEntity> user_bs = connectionRepo.findUserB(user);
+        List <UserEntity> user_as = connectionRepo.findUserA(user);
+
+        List<UserEntity> connectedUsers = new ArrayList<>();
+        connectedUsers.addAll(user_bs);
+        connectedUsers.addAll(user_as);
+
+        return connectedUsers;
+    }
+
     // find the connections of a user
     public List<NetworkDto> findConnections(String token) {
         
