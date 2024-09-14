@@ -39,6 +39,70 @@ public class RecommendationService {
     @Autowired
     JobRepo jobRepo;
 
+
+    public Double[][] transpose(Double[][] array) {
+        Double [][] transpose_matrix = new Double[array[0].length][array.length];
+        
+        for(int i=0; i<array.length; i++) {
+            for(int j=0; j<array[0].length; j++) {
+                transpose_matrix[j][i] = array[i][j];
+            }
+        }
+        
+
+        return transpose_matrix;
+    }
+    
+
+    public Double dot(Double[]row, Double[] column) {
+        
+        if(row.length != column.length) {
+            throw new IllegalArgumentException("Vectors must be of the same length.");
+        }
+
+        double product = 0;
+
+        for(int i=0; i<row.length; i++) {
+            product+=row[i]*column[i];
+        }
+
+
+
+        return product;
+    }
+
+
+    public Double[][] arrayMultiplication(Double[][] a, Double[][] b ) {
+        if(a[0].length != b.length) {
+            throw new IllegalArgumentException("Arrays should have matching dimensions.");
+        }
+
+        Double[][] matrix = new Double[a.length][b[0].length];
+
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < b[0].length; j++) {
+                matrix[i][j]=0.0;
+                for (int k = 0; k < b.length; k++)
+                matrix[i][j] += a[i][k] * b[k][j];
+            }
+        }
+
+
+        return matrix;
+    }
+
+    public void print(Double[][] array) {
+        for(int i=0; i<array.length; i++) {
+            for(int j=0; j<array[i].length; j++) {
+                System.out.print(array[i][j] + " ");
+            }
+            System.out.print("\n");
+        }
+        
+    }
+    
+
+
     public Double[][] recommendationMatrixArticles(){
         List<UserEntity> users = userRepo.findAll();
         List<Article> articles = articleRepo.findAll();
@@ -67,13 +131,7 @@ public class RecommendationService {
                 }
             }
         }
-        
-        // for(int i=0; i<users.size(); i++){
-        //     for(int j=0; j<articles.size(); j++){
-        //         System.out.print(matrix[i][j]+" ");
-        //     }
-        //     System.out.print('\n');
-        // }
+      
 
         return matrix;
     }
