@@ -72,6 +72,19 @@ public class Article {
     @OneToMany(mappedBy = "article", orphanRemoval = true,fetch = FetchType.EAGER)
     protected List<Notification> article_notifications;
 
+    @Column
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+
     public Article() {
         this.views = 0;
     }

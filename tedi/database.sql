@@ -134,6 +134,7 @@ CREATE TABLE article (
   views int DEFAULT 0,
   video mediumblob,
   author bigint DEFAULT NULL,
+  category varchar(255) DEFAULT 'Computer Science',
   PRIMARY KEY (id),
   KEY FKdw5d9vdw43e3nvtpqk8l4iitp (author),
   CONSTRAINT FKdw5d9vdw43e3nvtpqk8l4iitp FOREIGN KEY (author) REFERENCES user (id)
@@ -146,153 +147,153 @@ CREATE TABLE article (
 
 LOCK TABLES article WRITE;
 /*!40000 ALTER TABLE article DISABLE KEYS */;
-INSERT INTO article (title, content, date_posted, picture, video, author, views) VALUES 
+INSERT INTO article (title, content, date_posted, picture, video, author, views, category) VALUES 
 -- User 2
-('The Future of Web Development', 'Exploring the latest trends in web development, including the rise of frameworks like React and Angular.', '2023-01-15 10:00:00', NULL, NULL, 2, 34),
-('Python vs. Java: A Comparison', 'A deep dive into the differences between Python and Java, and when to use each language.', '2023-02-20 14:00:00', NULL, NULL, 2, 12),
+('The Future of Web Development', 'Exploring the latest trends in web development, including the rise of frameworks like React and Angular.', '2023-01-15 10:00:00', NULL, NULL, 2, 34, 'Frontend'),
+('Python vs. Java: A Comparison', 'A deep dive into the differences between Python and Java, and when to use each language.', '2023-02-20 14:00:00', NULL, NULL, 2, 12, 'Computer Science'),
 
 -- User 3
-('Data Science in 2024', 'An analysis of the future of data science and how it will impact various industries.', '2023-03-05 09:30:00', NULL, NULL, 3, 87),
-('Machine Learning Basics', 'An introduction to the basics of machine learning, including key concepts and algorithms.', '2023-04-10 11:15:00', NULL, NULL, 3, 123),
-('Big Data Challenges', 'Discussing the challenges faced in handling and processing big data in modern enterprises.', '2023-05-22 13:45:00', NULL, NULL, 3, 26),
+('Data Science in 2024', 'An analysis of the future of data science and how it will impact various industries.', '2023-03-05 09:30:00', NULL, NULL, 3, 87, 'Data Science'),
+('Machine Learning Basics', 'An introduction to the basics of machine learning, including key concepts and algorithms.', '2023-04-10 11:15:00', NULL, NULL, 3, 123, 'Data Science'),
+('Big Data Challenges', 'Discussing the challenges faced in handling and processing big data in modern enterprises.', '2023-05-22 13:45:00', NULL, NULL, 3, 26, 'Data Science'),
 
 -- User 4
-('DevOps Best Practices', 'A guide to implementing DevOps in your organization, including tools and methodologies.', '2023-06-12 08:00:00', NULL, NULL, 4, 1),
+('DevOps Best Practices', 'A guide to implementing DevOps in your organization, including tools and methodologies.', '2023-06-12 08:00:00', NULL, NULL, 4, 1, 'Security'),
 
 -- User 5
-('Frontend Development Trends', 'Exploring the latest trends in frontend development, including the use of modern JavaScript frameworks.', '2023-07-03 16:30:00', NULL, NULL, 5, 69),
-('Building Responsive UIs', 'Tips and tricks for building responsive user interfaces that work across all devices.', '2023-08-15 12:00:00', NULL, NULL, 5, 54),
-('CSS Grid vs. Flexbox', 'A comparison of CSS Grid and Flexbox, and when to use each layout technique.', '2023-09-25 10:00:00', NULL, NULL, 5, 43),
-('JavaScript Performance Optimization', 'How to optimize the performance of your JavaScript code for faster loading times.', '2023-10-05 14:20:00', NULL, NULL, 5, 98),
+('Frontend Development Trends', 'Exploring the latest trends in frontend development, including the use of modern JavaScript frameworks.', '2023-07-03 16:30:00', NULL, NULL, 5, 69, 'Frontend'),
+('Building Responsive UIs', 'Tips and tricks for building responsive user interfaces that work across all devices.', '2023-08-15 12:00:00', NULL, NULL, 5, 54, 'Frontend'),
+('CSS Grid vs. Flexbox', 'A comparison of CSS Grid and Flexbox, and when to use each layout technique.', '2023-09-25 10:00:00', NULL, NULL, 5, 43, 'Frontend'),
+('JavaScript Performance Optimization', 'How to optimize the performance of your JavaScript code for faster loading times.', '2023-10-05 14:20:00', NULL, NULL, 5, 98, 'Frontend'),
 
 -- User 6
-('Designing for User Experience', 'An in-depth look at designing for user experience and how it impacts product success.', '2023-11-01 11:00:00', NULL, NULL, 6, 17),
-('The Importance of Accessibility in Web Design', 'Why accessibility is crucial in web design and how to implement it effectively.', '2023-12-15 13:00:00', NULL, NULL, 6, 73),
+('Designing for User Experience', 'An in-depth look at designing for user experience and how it impacts product success.', '2023-11-01 11:00:00', NULL, NULL, 6, 17, 'Frontend'),
+('The Importance of Accessibility in Web Design', 'Why accessibility is crucial in web design and how to implement it effectively.', '2023-12-15 13:00:00', NULL, NULL, 6, 73, 'Frontend'),
 
 -- User 7
-('Data Engineering Best Practices', 'Key best practices for data engineering, including pipeline design and data quality management.', '2023-12-22 09:00:00', NULL, NULL, 7, 59),
+('Data Engineering Best Practices', 'Key best practices for data engineering, including pipeline design and data quality management.', '2023-12-22 09:00:00', NULL, NULL, 7, 59, 'Data Science'),
 
 -- User 8
-('Building Scalable Applications', 'Strategies for building scalable applications that can handle high traffic and large datasets.', '2023-06-21 15:00:00', NULL, NULL, 8, 86),
+('Building Scalable Applications', 'Strategies for building scalable applications that can handle high traffic and large datasets.', '2023-06-21 15:00:00', NULL, NULL, 8, 86, 'Backend'),
 
 -- User 9
-('Responsive Web Design Techniques', 'Techniques for creating responsive web designs that adapt to different screen sizes.', '2023-07-08 17:00:00', NULL, NULL, 9, 124),
+('Responsive Web Design Techniques', 'Techniques for creating responsive web designs that adapt to different screen sizes.', '2023-07-08 17:00:00', NULL, NULL, 9, 124, 'Frontend'),
 
 -- User 10
-('Analyzing Data with Python', 'A guide to analyzing data using Python libraries such as pandas and NumPy.', '2023-08-03 10:00:00', NULL, NULL, 10, 63),
-('SQL for Data Analysis', 'How to use SQL for data analysis, including advanced query techniques.', '2023-09-12 12:00:00', NULL, NULL, 10, 78),
+('Analyzing Data with Python', 'A guide to analyzing data using Python libraries such as pandas and NumPy.', '2023-08-03 10:00:00', NULL, NULL, 10, 63, 'Data Science'),
+('SQL for Data Analysis', 'How to use SQL for data analysis, including advanced query techniques.', '2023-09-12 12:00:00', NULL, NULL, 10, 78, 'Data Science'),
 
 -- User 11
-('Securing Your Network', 'Best practices for securing your network infrastructure against cyber threats.', '2023-09-30 14:00:00', NULL, NULL, 11, 23),
-('Cybersecurity Trends in 2024', 'An overview of the latest trends in cybersecurity and how to prepare for them.', '2023-10-20 09:00:00', NULL, NULL, 11, 11),
+('Securing Your Network', 'Best practices for securing your network infrastructure against cyber threats.', '2023-09-30 14:00:00', NULL, NULL, 11, 23, 'Security'),
+('Cybersecurity Trends in 2024', 'An overview of the latest trends in cybersecurity and how to prepare for them.', '2023-10-20 09:00:00', NULL, NULL, 11, 11, 'Security'),
 
 -- User 12
-('Developing iOS Applications with Swift', 'A beginner''s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12, 54),
-('UI Design Principles for Mobile Apps', 'Principles of UI design specifically for mobile applications.', '2023-12-10 16:00:00', NULL, NULL, 12, 67),
+('Developing iOS Applications with Swift', 'A beginner''s guide to developing iOS applications using Swift.', '2023-11-15 11:00:00', NULL, NULL, 12, 54, 'Mobile Development'),
+('UI Design Principles for Mobile Apps', 'Principles of UI design specifically for mobile applications.', '2023-12-10 16:00:00', NULL, NULL, 12, 67, 'Mobile Development'),
 
 -- User 13
-('Machine Learning in Healthcare', 'How machine learning is being used to revolutionize healthcare.', '2023-06-28 14:00:00', NULL, NULL, 13, 49),
+('Machine Learning in Healthcare', 'How machine learning is being used to revolutionize healthcare.', '2023-06-28 14:00:00', NULL, NULL, 13, 49, 'Data Science'),
 
 -- User 14
-('System Administration Tips', 'Tips and tricks for effective system administration, including automation and monitoring.', '2023-07-15 13:00:00', NULL, NULL, 14, 78),
+('System Administration Tips', 'Tips and tricks for effective system administration, including automation and monitoring.', '2023-07-15 13:00:00', NULL, NULL, 14, 78, 'Backend'),
 
 -- User 15
-('Cloud Computing Advantages', 'Exploring the advantages of cloud computing for businesses of all sizes.', '2023-08-20 15:00:00', NULL, NULL, 15, 41),
-('AWS vs. Azure: A Comparison', 'Comparing the features and services of AWS and Azure.', '2023-09-18 10:00:00', NULL, NULL, 15, 83),
+('Cloud Computing Advantages', 'Exploring the advantages of cloud computing for businesses of all sizes.', '2023-08-20 15:00:00', NULL, NULL, 15, 41, 'Backend'),
+('AWS vs. Azure: A Comparison', 'Comparing the features and services of AWS and Azure.', '2023-09-18 10:00:00', NULL, NULL, 15, 83, 'Backend'),
 
 -- User 16
-('Managing Databases with MySQL', 'Best practices for managing and optimizing MySQL databases.', '2023-10-25 14:00:00', NULL, NULL, 16, 29),
+('Managing Databases with MySQL', 'Best practices for managing and optimizing MySQL databases.', '2023-10-25 14:00:00', NULL, NULL, 16, 29, 'Data Science'),
 
 -- User 17
-('Leading a Development Team', 'Strategies for effectively leading a development team and ensuring project success.', '2023-11-05 16:00:00', NULL, NULL, 17, 43),
+('Leading a Development Team', 'Strategies for effectively leading a development team and ensuring project success.', '2023-11-05 16:00:00', NULL, NULL, 17, 43, 'Computer Science'),
 
 -- User 18
-('Full Stack Development with JavaScript', 'A guide to full stack development using JavaScript, including both frontend and backend technologies.', '2023-12-01 09:00:00', NULL, NULL, 18, 35),
-('Building RESTful APIs', 'How to design and build RESTful APIs that are secure and scalable.', '2023-12-25 11:00:00', NULL, NULL, 18, 58),
+('Full Stack Development with JavaScript', 'A guide to full stack development using JavaScript, including both frontend and backend technologies.', '2023-12-01 09:00:00', NULL, NULL, 18, 35, 'Frontend'),
+('Building RESTful APIs', 'How to design and build RESTful APIs that are secure and scalable.', '2023-12-25 11:00:00', NULL, NULL, 18, 58, 'Backend'),
 
 -- User 19
-('Backend Development Strategies', 'Key strategies for effective backend development, including architecture and database management.', '2023-06-17 12:00:00', NULL, NULL, 19, 47),
+('Backend Development Strategies', 'Key strategies for effective backend development, including architecture and database management.', '2023-06-17 12:00:00', NULL, NULL, 19, 47, 'Backend'),
 
 -- User 20
-('Designing Intuitive User Interfaces', 'How to design intuitive user interfaces that are easy to use and navigate.', '2023-07-02 14:00:00', NULL, NULL, 20, 52),
-('CSS Grid: A Comprehensive Guide', 'A comprehensive guide to CSS Grid and how to use it for modern web layouts.', '2023-08-05 10:00:00', NULL, NULL, 20, 61),
+('Designing Intuitive User Interfaces', 'How to design intuitive user interfaces that are easy to use and navigate.', '2023-07-02 14:00:00', NULL, NULL, 20, 52, 'Frontend'),
+('CSS Grid: A Comprehensive Guide', 'A comprehensive guide to CSS Grid and how to use it for modern web layouts.', '2023-08-05 10:00:00', NULL, NULL, 20, 61, 'Frontend'),
 
 -- User 21
-('Software Architecture Principles', 'Key principles of software architecture and how to apply them to large-scale projects.', '2023-09-10 13:00:00', NULL, NULL, 21, 74),
+('Software Architecture Principles', 'Key principles of software architecture and how to apply them to large-scale projects.', '2023-09-10 13:00:00', NULL, NULL, 21, 74, 'Computer Science'),
 
 -- User 22
-('Implementing Cybersecurity Strategies', 'How to implement effective cybersecurity strategies to protect your organization.', '2023-10-15 16:00:00', NULL, NULL, 22, 40),
+('Implementing Cybersecurity Strategies', 'How to implement effective cybersecurity strategies to protect your organization.', '2023-10-15 16:00:00', NULL, NULL, 22, 40, 'Security'),
 
 -- User 23
-('Machine Learning Deployment', 'Strategies for deploying machine learning models in production environments.', '2023-11-18 12:00:00', NULL, NULL, 23, 53),
+('Machine Learning Deployment', 'Strategies for deploying machine learning models in production environments.', '2023-11-18 12:00:00', NULL, NULL, 23, 53, 'Data Science'),
 
 -- User 24
-('DevOps in Practice', 'Practical tips for implementing DevOps in your organization.', '2023-12-20 14:00:00', NULL, NULL, 24, 61),
+('DevOps in Practice', 'Practical tips for implementing DevOps in your organization.', '2023-12-20 14:00:00', NULL, NULL, 24, 61, 'Security'),
 
 -- User 25
-('Data Pipeline Optimization', 'How to optimize data pipelines for better performance and reliability.', '2023-06-30 09:00:00', NULL, NULL, 25, 32),
+('Data Pipeline Optimization', 'How to optimize data pipelines for better performance and reliability.', '2023-06-30 09:00:00', NULL, NULL, 25, 32, 'Computer Science'),
 
 -- User 26
-('Securing Network Infrastructure', 'Best practices for securing your network infrastructure.', '2023-07-18 11:00:00', NULL, NULL, 26, 28),
+('Securing Network Infrastructure', 'Best practices for securing your network infrastructure.', '2023-07-18 11:00:00', NULL, NULL, 26, 28, 'Security'),
 
 -- User 27
-('Full Stack Development Tips', 'Tips for full stack developers on managing both frontend and backend tasks effectively.', '2023-08-12 13:00:00', NULL, NULL, 27, 45),
+('Full Stack Development Tips', 'Tips for full stack developers on managing both frontend and backend tasks effectively.', '2023-08-12 13:00:00', NULL, NULL, 27, 45, 'Computer Science'),
 
 -- User 28
-('Architecting for the Cloud', 'Key considerations for architecting applications for the cloud.', '2023-09-22 16:00:00', NULL, NULL, 28, 48),
+('Architecting for the Cloud', 'Key considerations for architecting applications for the cloud.', '2023-09-22 16:00:00', NULL, NULL, 28, 48, 'Backend'),
 
 -- User 29
-('Building Scalable Applications with Python', 'How to build scalable applications using Python.', '2023-10-08 18:00:00', NULL, NULL, 29, 56),
-('Data Science for Beginners', 'An introduction to data science for those new to the field.', '2023-11-11 14:00:00', NULL, NULL, 29, 67),
+('Building Scalable Applications with Python', 'How to build scalable applications using Python.', '2023-10-08 18:00:00', NULL, NULL, 29, 56, 'Backend'),
+('Data Science for Beginners', 'An introduction to data science for those new to the field.', '2023-11-11 14:00:00', NULL, NULL, 29, 67, 'Data Science'),
 
 -- User 30
-('Designing for Mobile First', 'Why and how to design your applications with a mobile-first approach.', '2023-12-05 10:00:00', NULL, NULL, 30, 41),
+('Designing for Mobile First', 'Why and how to design your applications with a mobile-first approach.', '2023-12-05 10:00:00', NULL, NULL, 30, 41, 'Mobile Development'),
 
 -- User 31
-('Developing Mobile Apps with Flutter', 'A guide to developing mobile applications using Flutter.', '2023-06-25 11:00:00', NULL, NULL, 31, 34),
+('Developing Mobile Apps with Flutter', 'A guide to developing mobile applications using Flutter.', '2023-06-25 11:00:00', NULL, NULL, 31, 34, 'Mobile Development'),
 
 -- User 32
-('DevOps Automation Techniques', 'How to automate DevOps processes to increase efficiency.', '2023-07-14 12:00:00', NULL, NULL, 32, 45),
+('DevOps Automation Techniques', 'How to automate DevOps processes to increase efficiency.', '2023-07-14 12:00:00', NULL, NULL, 32, 45, 'Security'),
 
 -- User 33
-('Building Modern Web Applications', 'Tips for building modern web applications using the latest technologies.', '2023-08-10 14:00:00', NULL, NULL, 33, 39),
+('Building Modern Web Applications', 'Tips for building modern web applications using the latest technologies.', '2023-08-10 14:00:00', NULL, NULL, 33, 39, 'Frontend'),
 
 -- User 34
-('Data Engineering Challenges', 'Common challenges faced in data engineering and how to overcome them.', '2023-09-19 16:00:00', NULL, NULL, 34, 58),
+('Data Engineering Challenges', 'Common challenges faced in data engineering and how to overcome them.', '2023-09-19 16:00:00', NULL, NULL, 34, 58, 'Data Science'),
 
 -- User 35
-('Securing Cloud Infrastructure', 'How to secure your cloud infrastructure against threats.', '2023-10-28 18:00:00', NULL, NULL, 35, 47),
+('Securing Cloud Infrastructure', 'How to secure your cloud infrastructure against threats.', '2023-10-28 18:00:00', NULL, NULL, 35, 47, 'Security'),
 
 -- User 36
-('Building Enterprise Software', 'Key considerations when building enterprise software solutions.', '2023-11-22 15:00:00', NULL, NULL, 36, 52),
-('Implementing DevOps with AWS', 'How to implement DevOps practices in AWS environments.', '2023-12-29 13:00:00', NULL, NULL, 36, 63),
+('Building Enterprise Software', 'Key considerations when building enterprise software solutions.', '2023-11-22 15:00:00', NULL, NULL, 36, 52, 'Computer Science'),
+('Implementing DevOps with AWS', 'How to implement DevOps practices in AWS environments.', '2023-12-29 13:00:00', NULL, NULL, 36, 63, 'Backend'),
 
 -- User 37
-('Backend Development with Node.js', 'Using Node.js for backend development, including best practices and performance tips.', '2023-06-13 10:00:00', NULL, NULL, 37, 38),
+('Backend Development with Node.js', 'Using Node.js for backend development, including best practices and performance tips.', '2023-06-13 10:00:00', NULL, NULL, 37, 38, 'Backend'),
 
 -- User 38
-('Architecting Scalable Systems', 'How to architect systems that scale efficiently.', '2023-07-16 17:00:00', NULL, NULL, 38, 41),
+('Architecting Scalable Systems', 'How to architect systems that scale efficiently.', '2023-07-16 17:00:00', NULL, NULL, 38, 41, 'Computer Science'),
 
 -- User 39
-('Machine Learning in Production', 'Challenges and solutions for deploying machine learning models in production.', '2023-08-25 19:00:00', NULL, NULL, 39, 33),
+('Machine Learning in Production', 'Challenges and solutions for deploying machine learning models in production.', '2023-08-25 19:00:00', NULL, NULL, 39, 33, 'Data Science'),
 
 -- User 40
-('Leading Development Teams', 'How to effectively lead a development team and ensure project success.', '2023-09-30 11:00:00', NULL, NULL, 40, 57),
+('Leading Development Teams', 'How to effectively lead a development team and ensure project success.', '2023-09-30 11:00:00', NULL, NULL, 40, 57, 'Computer Science'),
 
 -- User 41
-('Networking Basics', 'An introduction to the basics of networking for IT professionals.', '2023-10-15 13:00:00', NULL, NULL, 41, 50),
+('Networking Basics', 'An introduction to the basics of networking for IT professionals.', '2023-10-15 13:00:00', NULL, NULL, 41, 50, 'Computer Science'),
 
 -- User 42
-('Cybersecurity in the Cloud', 'How to secure cloud environments and protect against threats.', '2023-11-09 15:00:00', NULL, NULL, 42, 39),
+('Cybersecurity in the Cloud', 'How to secure cloud environments and protect against threats.', '2023-11-09 15:00:00', NULL, NULL, 42, 39, 'Security'),
 
 -- User 43
-('Data Science Techniques', 'Advanced techniques in data science for analyzing large datasets.', '2023-12-04 17:00:00', NULL, NULL, 43, 60),
+('Data Science Techniques', 'Advanced techniques in data science for analyzing large datasets.', '2023-12-04 17:00:00', NULL, NULL, 43, 60, 'Data Science'),
 
 -- User 44
-('Developing Android Apps with Kotlin', 'A guide to developing Android applications using Kotlin.', '2023-06-10 09:00:00', NULL, NULL, 44, 31),
+('Developing Android Apps with Kotlin', 'A guide to developing Android applications using Kotlin.', '2023-06-10 09:00:00', NULL, NULL, 44, 31, 'Mobile Development'),
 
 -- User 45
-('Full Stack Development with React and Node.js', 'Building full stack applications using React for the frontend and Node.js for the backend.', '2023-07-07 11:00:00', NULL, NULL, 45, 54);
+('Full Stack Development with React and Node.js', 'Building full stack applications using React for the frontend and Node.js for the backend.', '2023-07-07 11:00:00', NULL, NULL, 45, 54, 'Computer Science');
 /*!40000 ALTER TABLE article ENABLE KEYS */;
 UNLOCK TABLES;
 

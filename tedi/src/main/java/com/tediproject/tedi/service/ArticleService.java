@@ -104,6 +104,7 @@ public class ArticleService {
         new_article.setDate_posted();
         new_article.setPicture(article.getImage());
         new_article.setVideo(article.getVideo());
+        new_article.setCategory("Computer Science");
         articleRepo.save(new_article);
     }
 
