@@ -28,5 +28,11 @@ public interface CommentRepo extends JpaRepository<Comments, Long>{
     @Query("SELECT c.article FROM Comments c WHERE c.poster = ?1")
     public List<Article> findArticles(UserEntity user);
 
+    @Query("SELECT COUNT(c) FROM Comments c JOIN c.article a WHERE c.poster = ?1 AND a.category = ?2")    
+    int findCommentsPerCategory(UserEntity user, String category);
+
+    @Query("SELECT COUNT(c) FROM Comments c JOIN c.article a WHERE c.poster IN ?1 AND a.category = ?2")    
+    int findConnectionCommentsPerCategory(List<UserEntity> connections, String category);
+
 }
 

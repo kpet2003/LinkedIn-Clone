@@ -87,8 +87,13 @@ public class ArticleService {
         final_articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
 
         System.out.println('\n');
-        recommendationService.recommendationMatrixArticles();
+        Double[][] matrix = recommendationService.recommendationMatrixArticles();
+        Double[][] prediction = recommendationService.gradientDescent(matrix, 0.001, 10, 0.001);
+        recommendationService.print(prediction);
         System.out.println('\n');
+
+        double error = recommendationService.costFunction(matrix, prediction);
+        System.out.println("Error is: "+error+"\n");
 
         return final_articles;
     }

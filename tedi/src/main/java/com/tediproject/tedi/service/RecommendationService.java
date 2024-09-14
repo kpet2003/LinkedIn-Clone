@@ -2,6 +2,7 @@ package com.tediproject.tedi.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.lang.Math;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,8 @@ public class RecommendationService {
     }
 
 
+
+
     public Double[][] arrayMultiplication(Double[][] a, Double[][] b ) {
         if(a[0].length != b.length) {
             throw new IllegalArgumentException("Arrays should have matching dimensions.");
@@ -102,6 +105,125 @@ public class RecommendationService {
     }
     
 
+    public Double[][] usersTable(Double w0,Double w1,Double w2,Double w3, Double w4) {
+
+
+        List <UserEntity> users = userRepo.findAll();
+        List <String> categories = articleRepo.findCategories();
+
+        Double[][] matrix = new Double[users.size()][categories.size()];
+
+        for(int i=0; i<users.size(); i++) {
+            List <UserEntity> connections = networkService.findUserConnections(users.get(i));
+            for(int j=0; j<categories.size(); j++) {
+                matrix[i][j] = -1.0;
+                
+                int likes = likeRepo.findLikesPerCategory(users.get(i),categories.get(j));
+                int comments = commentRepo.findCommentsPerCategory(users.get(i),categories.get(j));
+                int views  = articleRepo.findViewsPerCategory(categories.get(j));
+
+                int networkLikes = likeRepo.findConnectionLikesPerCategory(connections,categories.get(j));
+                int networkComments = commentRepo.findConnectionCommentsPerCategory(connections,categories.get(j));
+                
+                matrix[i][j] = w0*likes+w1*comments+w2*views + w3*networkLikes+w4*networkComments;
+
+            }
+        }
+
+        return matrix;
+    }
+
+    public Double[][] postTable() {
+        List<Article> articles = articleRepo.findAll();
+        List <String> categories = articleRepo.findCategories();
+
+        Double[][] matrix = new Double[articles.size()][categories.size()];
+
+        for(int i=0; i<articles.size(); i++) {
+            for(int j=0; j<categories.size();j++) {
+                matrix[i][j] = 0.0;
+                if(articles.get(i).getCategory().equals(categories.get(j))) {
+                    matrix[i][j] = 1.0;
+                }
+            }
+        }
+
+        return matrix;
+
+    }
+
+
+    public double costFunction(Double[][] true_matrix,Double[][] prediction) {
+        double error = 0.0;
+
+        int size = true_matrix.length* true_matrix[0].length;
+        double coefficient = 1.0/size;
+        
+        for(int i=0; i<true_matrix.length; i++) {
+            for(int j=0; j<true_matrix[0].length; j++) {
+                error+= Math.pow((true_matrix[i][j]-prediction[i][j]),2);
+            }
+        }
+
+        error*=coefficient;
+
+        return error;
+    }
+
+    public double derivative(Double[][] true_matrix,Double[][] prediction,Double[][] users_table) {
+        double error = 0.0;
+
+        int size = true_matrix.length* true_matrix[0].length;
+        double coefficient = -2.0/size;
+
+        for(int i=0; i<true_matrix.length; i++) {
+            for(int j=0; j<true_matrix[0].length; j++) {
+            
+                error+= (true_matrix[i][j]-prediction[i][j]);
+            }
+        }
+
+        error*=coefficient;
+
+        return error;
+    }
+
+    public Double[][] gradientDescent(Double[][] matrix,double learning_rate, int iterations, double error) {
+        Double [][] users_table = usersTable(2.0, 1.0, 0.08, 0.5, 0.3);
+        Double[][] post_table = transpose(postTable());
+
+        double precision_error = 100.0;
+
+        Double[][] prediction = prediction = arrayMultiplication(users_table, post_table);
+
+        double w0=2.0;
+        double w1=1.0;
+        double w2 = 0.08;
+        double w3 = 0.5;
+        double w4 = 0.3;
+
+        for(int i=0; i<iterations; i++) {
+            
+            if(precision_error<=error) {
+                break;
+            }
+            
+            w0 -=(learning_rate*derivative(matrix, prediction,users_table));
+            w1 -=(learning_rate*derivative(matrix, prediction,users_table));
+            w2 -=(learning_rate*derivative(matrix, prediction,users_table));
+            w3 -=(learning_rate*derivative(matrix, prediction,users_table));
+            w4 -=(learning_rate*derivative(matrix, prediction,users_table));
+            
+
+            users_table = usersTable(w0, w1, w2, w3, w4);
+            System.out.println("\nIteration: "+ i + "\n");
+            prediction = arrayMultiplication(users_table, post_table);
+            precision_error = costFunction(matrix,prediction);
+        }
+
+        return prediction;
+
+    }
 
     public Double[][] recommendationMatrixArticles(){
         List<UserEntity> users = userRepo.findAll();
@@ -113,6 +235,7 @@ public class RecommendationService {
             List<UserEntity> connections = networkService.findUserConnections(users.get(i));
             List<Article> connectionsLiked = likeRepo.findLikedArticles(connections);
             List<Article> connectionsCommented = commentRepo.findCommentedArticles(connections);
+            
             for(int j=0; j<articles.size(); j++){
                 matrix[i][j] = -1.0;
                 if(likedPosts.contains(articles.get(j))){
