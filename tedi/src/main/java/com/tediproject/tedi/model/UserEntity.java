@@ -168,6 +168,24 @@ public class UserEntity {
     @ManyToMany(mappedBy = "skilled_users", fetch = FetchType.EAGER)
     private List <Skills> user_skills;
 
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(
+    name = "job_views",
+    joinColumns = @JoinColumn(name = "user"),
+    inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
+    protected List<Job> jobs_viewed;
+
+
+    public List<Job> getJobs_viewed() {
+        return jobs_viewed;
+    }
+
+
+    public void setJobs_viewed(List<Job> jobs_viewed) {
+        this.jobs_viewed = jobs_viewed;
+    }
+
 
     public List<Job> getJobs_posted() {
         return jobs_posted;

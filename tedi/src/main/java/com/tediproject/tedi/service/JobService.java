@@ -201,10 +201,21 @@ public class JobService {
         return applicants;
     }
 
-    public void addView(long jobId) {
+    public void addView(long jobId, String token) {
        Job job = jobRepo.findById(jobId);
-       job.setViews(job.getViews()+1);
-       jobRepo.save(job);
+       UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+
+       if (!job.getViews().contains(user)) {
+        job.getViews().add(user);
+        }
+
+        if (!user.getJobs_viewed().contains(job)) {
+            user.getJobs_viewed().add(job);
+        }
+        
+        // Save the updated entities
+        jobRepo.save(job);
+        userRepo.save(user);
     }
 
 }

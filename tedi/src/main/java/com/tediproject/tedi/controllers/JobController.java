@@ -112,7 +112,7 @@ public class JobController {
         try {
             jwtUtil.validateToken(token);
             
-            jobService.addView(jobId);
+            jobService.addView(jobId, token);
 
             return ResponseEntity.ok(HttpStatus.OK);
         } 
