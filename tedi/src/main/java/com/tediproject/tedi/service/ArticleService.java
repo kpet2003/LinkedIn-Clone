@@ -75,7 +75,7 @@ public class ArticleService {
 
         
         Double[][] matrix = recommendationService.recommendationMatrixArticles();
-        Double[][] prediction = recommendationService.gradientDescent(matrix, 0.001, 10000, 0.001);
+        Double[][] prediction = recommendationService.gradientDescentPosts(matrix, 0.001, 10000, 0.001);
 
 
         long id = author.getID();

@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.tediproject.tedi.model.Article;
 import com.tediproject.tedi.model.Job;
+import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.ArticleRepo;
 import com.tediproject.tedi.repo.CommentRepo;
-import com.tediproject.tedi.repo.ConnectionRepo;
 import com.tediproject.tedi.repo.JobRepo;
 import com.tediproject.tedi.repo.LikeRepo;
+import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
 
 @Service
@@ -23,9 +24,6 @@ public class RecommendationService {
     
     @Autowired
     CommentRepo commentRepo;
-
-    @Autowired
-    ConnectionRepo connectionRepo;
 
     @Autowired
     NetworkService networkService;
@@ -38,6 +36,9 @@ public class RecommendationService {
 
     @Autowired
     JobRepo jobRepo;
+
+    @Autowired
+    SkillsRepo skillsRepo;
 
 
     public Double[][] transpose(Double[][] array) {
@@ -140,6 +141,40 @@ public class RecommendationService {
 
     }
 
+    public Double[][] usersTableJobs() {
+
+        List <UserEntity> users = userRepo.findAllByOrderByIdAsc();
+        List <Skills> skills = skillsRepo.findAll();
+
+        Double[][] matrix = new Double[users.size()][skills.size()];
+
+        for(int i=0; i<users.size(); i++) {
+            for(int j=0; j<skills.size(); j++) {
+                matrix[i][j] = Math.random();
+            }
+        }
+
+        return matrix;
+    }
+
+    public Double[][] jobsTable() {
+        List<Job> jobs =  jobRepo.findAllByOrderByIdAsc();
+        List <Skills> skills = skillsRepo.findAll();
+
+        Double[][] matrix = new Double[jobs.size()][skills.size()];
+
+        for(int i=0; i<jobs.size(); i++) {
+            for(int j=0; j<skills.size();j++) {
+                matrix[i][j] = 0.0;
+                if(jobs.get(i).getRelevant_skills().contains(skills.get(j))){
+                    matrix[i][j] = 1.0;
+                }
+            }
+        }
+        return matrix;
+
+    }
+
 
     public double costFunction(Double[][] ratings,Double[][] users_table,Double[][] post_table) {
         double error = 0.0;
@@ -178,7 +213,7 @@ public class RecommendationService {
 
 
 
-    public Double[][] gradientDescent(Double[][] matrix,double learning_rate, int iterations,double max_error) {
+    public Double[][] gradientDescentPosts(Double[][] matrix,double learning_rate, int iterations,double max_error) {
         Double [][] users_table = usersTable();
         Double[][] post_table = postTable();
 
@@ -211,6 +246,41 @@ public class RecommendationService {
         }
 
         return arrayMultiplication(users_table, transpose(post_table));
+
+    }
+
+    public Double[][] gradientDescentJobs(Double[][] matrix,double learning_rate, int iterations,double max_error) {
+        Double [][] users_table = usersTableJobs();
+        Double[][] jobs_table = jobsTable();
+
+
+        double precision_error = 100.0;
+
+        for(int i=0; i<iterations; i++) {
+            
+            if(precision_error<=max_error) {
+                break;
+            }
+ 
+
+            for(int j=0; j<users_table.length;j++) {
+                for(int k=0; k<jobs_table.length; k++) {
+                    
+                    double prediction = dot(users_table[j],jobs_table[k]);
+                    double error = matrix[j][k]-prediction;
+
+                    for(int f = 0; f<users_table[0].length; f++) {
+                        users_table[j][f] += learning_rate*error*jobs_table[k][f];
+                        jobs_table[k][f] += learning_rate*error*users_table[j][f];
+                    }
+
+                }
+            }
+
+            precision_error = costFunction(matrix,users_table ,jobs_table);
+
+        }
+        return arrayMultiplication(users_table, transpose(jobs_table));
 
     }
 
@@ -253,12 +323,21 @@ public class RecommendationService {
         List<Job> jobs = jobRepo.findAll();
         Double[][] matrix = new Double[users.size()][jobs.size()];
         for(int i=0; i<users.size(); i++){
-            List<UserEntity> connections = networkService.findUserConnections(users.get(i));
-            
+            List<Skills> userSkills = users.get(i).getUser_skills();
+            List<Job> jobsViewed = users.get(i).getJobs_viewed();
             for(int j=0; j<jobs.size(); j++){
-                
+                matrix[i][j] = -1.0;
+                List<Skills> jobSkills = jobs.get(j).getRelevant_skills();
+                for(Skills skill:userSkills){
+                    if(jobSkills.contains(skill)){
+                        matrix[i][j] += 2.0;
+                    }
+                }
+                int views = Collections.frequency(jobsViewed, jobs.get(j));
+                matrix[i][j] += 0.5*views;
             }
         }
+
         return matrix;
     }
 }

@@ -11,4 +11,5 @@ public interface  JobRepo extends JpaRepository<Job, Long> {
     List <Job> findByAuthor(UserEntity author);
     List <Job> findByAuthorIn(List<UserEntity> connections);
     Job findById(long id);
+    List<Job> findAllByOrderByIdAsc();
 }

@@ -2,9 +2,8 @@ package com.tediproject.tedi.service;
 
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import com.tediproject.tedi.repo.JobRepo;
 import com.tediproject.tedi.repo.SkillsRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
+import com.tediproject.tedi.types.ArticlePair;
 
 import jakarta.transaction.Transactional;
 
@@ -40,6 +40,9 @@ public class JobService {
 
     @Autowired
     NetworkService networkService;
+
+    @Autowired
+    RecommendationService recommendationService;
 
     public void createJob(NewJobDto job) {
         Job j = new Job();
@@ -63,44 +66,42 @@ public class JobService {
     public List<JobDto> getJobs(String token){
         List<JobDto> jobs = new ArrayList<>();
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<Job> allJobs = jobRepo.findAll();
-        List<String> userSkills = user.getUser_skills().stream()
-                                  .map(Skills::getSkill)
-                                  .collect(Collectors.toList());
+        List<UserEntity> connections = networkService.findUserConnections(token);
+        Double[][] matrix = recommendationService.recommendationMatrixJobs();
+        Double[][] recommendation = recommendationService.gradientDescentJobs(matrix, 0.001, 10000, 0.001);
 
-        Map<Job, Integer> jobSkillCountMap = new HashMap<>();
+        long id = user.getID();
 
-        for(Job job: allJobs){
-            List<String> jobSkills = job.getRelevant_skills().stream()
-                                    .map(Skills::getSkill)
-                                    .collect(Collectors.toList());
-            
-            long matchingSkillsCount = jobSkills.stream()
-                                        .filter(userSkills::contains)
-                                        .count();
-            
-            jobSkillCountMap.put(job, (int) matchingSkillsCount);
-            
+        Double[] user_jobs = recommendation[(int)(id-1)];
+
+        List<ArticlePair> job_data = new ArrayList<>();
+
+        for(int i=0; i<user_jobs.length; i++) {
+            ArticlePair pair = new ArticlePair();
+            pair.setId(i+1);
+            pair.setRating(user_jobs[i]);
+            job_data.addLast(pair);
         }
-        List<Job> sortedJobs = jobSkillCountMap.entrySet().stream()
-        .sorted((entry1, entry2) -> {
-            // First, compare by matching skills (descending)
-            int skillCompare = entry2.getValue().compareTo(entry1.getValue());
-            
-            // If skill counts are equal, compare by date posted (descending)
-            if (skillCompare == 0) {
-                return entry2.getKey().getDate_posted().compareTo(entry1.getKey().getDate_posted());
-            }
-            return skillCompare;
-        })
-        .map(Map.Entry::getKey)
+        
+         List<ArticlePair> topRatedJobs = job_data.stream()
+        .sorted(Comparator.comparingDouble(ArticlePair::getRating).reversed())
         .collect(Collectors.toList());
 
-        for (Job job : sortedJobs) {
-            String author = job.getAuthor().getFirstName() + " " + job.getAuthor().getLastName();
-            JobDto j = new JobDto(author, job.getJob_title(), job.getJob_description(), job.getDate_posted(), job.getId(), job.getAuthor().getID());
-            jobs.add(j);
+        int count = 0;
+        for(ArticlePair job:topRatedJobs){
+            Job j = jobRepo.findById(job.getId());
+            String author = j.getAuthor().getFirstName()+" "+j.getAuthor().getLastName();
+            JobDto jobDto = new JobDto(author, j.getJob_title(), j.getJob_description(), j.getDate_posted(), j.getId(), j.getAuthor().getID());
+            jobs.add(jobDto);
+            if(connections.contains(j.getAuthor()) || (j.getAuthor().getID() == id)){
+                continue;
+            }
+            count++;
+            if(count >= 40){
+                break;
+            }
         }
+
         return jobs;
     }
 
@@ -144,9 +145,7 @@ public class JobService {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<JobDto> myJobs = new ArrayList<>();
         for(JobDto job:allJobs){
-            System.out.println("WHEN JOB AUTHOR IS "+job.getAuthorId());
             if(job.getAuthorId() == user.getID()){
-                System.out.println("MYJOBS: ADDED "+user.getID());
                 myJobs.add(job);
             }
         }

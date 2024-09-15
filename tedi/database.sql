@@ -690,7 +690,6 @@ CREATE TABLE job (
   date_posted datetime(6) DEFAULT NULL,
   job_description longtext,
   job_title longtext,
-  views int DEFAULT 0,
   author bigint DEFAULT NULL,
   PRIMARY KEY (id),
   KEY FKtg5s4mk68rj7q34232olppj1h (author),
@@ -703,147 +702,147 @@ CREATE TABLE job (
 --
 LOCK TABLES job WRITE;
 /*!40000 ALTER TABLE job DISABLE KEYS */;
-INSERT INTO job (job_title, job_description, date_posted, author, views) VALUES 
+INSERT INTO job (job_title, job_description, date_posted, author) VALUES 
 -- User 2
-('Software Engineer at Google', 'Developing scalable web applications using Python and Java.', '2023-06-01 10:00:00', 2, 125),
-('Backend Developer at Red Hat', 'Developing RESTful APIs using Java and managing databases with SQL.', '2023-06-05 14:00:00', 2, 156),
+('Software Engineer at Google', 'Developing scalable web applications using Python and Java.', '2023-06-01 10:00:00', 2),
+('Backend Developer at Red Hat', 'Developing RESTful APIs using Java and managing databases with SQL.', '2023-06-05 14:00:00', 2),
 
 -- User 3
-('Data Scientist at Microsoft', 'Performing data analysis and building predictive models using Python and Machine Learning techniques.', '2023-06-02 11:00:00', 3, 142),
+('Data Scientist at Microsoft', 'Performing data analysis and building predictive models using Python and Machine Learning techniques.', '2023-06-02 11:00:00', 3),
 
 -- User 4
-('DevOps Engineer at Netflix', 'Managing and automating cloud infrastructure using AWS and DevOps practices.', '2023-06-03 12:00:00', 4, 187),
-('Cloud Architect at AWS', 'Designing cloud-based solutions and managing cloud infrastructure on AWS.', '2023-06-06 15:00:00', 4, 198),
-('Security Engineer at CrowdStrike', 'Implementing and managing security protocols and firewalls.', '2023-06-10 19:00:00', 4, 176),
+('DevOps Engineer at Netflix', 'Managing and automating cloud infrastructure using AWS and DevOps practices.', '2023-06-03 12:00:00', 4),
+('Cloud Architect at AWS', 'Designing cloud-based solutions and managing cloud infrastructure on AWS.', '2023-06-06 15:00:00', 4),
+('Security Engineer at CrowdStrike', 'Implementing and managing security protocols and firewalls.', '2023-06-10 19:00:00', 4),
 
 -- User 5
-('Frontend Developer at Facebook', 'Building responsive user interfaces using React and JavaScript.', '2023-06-04 13:00:00', 5, 132),
+('Frontend Developer at Facebook', 'Building responsive user interfaces using React and JavaScript.', '2023-06-04 13:00:00', 5),
 
 -- User 6
-('UI/UX Designer at Adobe', 'Designing user interfaces and improving user experience for web applications.', '2023-06-08 17:00:00', 6, 154),
-('Machine Learning Engineer at DeepMind', 'Building and deploying machine learning models using Python and TensorFlow.', '2023-06-07 16:00:00', 6, 163),
+('UI/UX Designer at Adobe', 'Designing user interfaces and improving user experience for web applications.', '2023-06-08 17:00:00', 6),
+('Machine Learning Engineer at DeepMind', 'Building and deploying machine learning models using Python and TensorFlow.', '2023-06-07 16:00:00', 6),
 
 -- User 7
-('Data Engineer at Palantir', 'Building data pipelines and managing data warehouses using SQL and Big Data tools.', '2023-06-09 18:00:00', 7, 148),
+('Data Engineer at Palantir', 'Building data pipelines and managing data warehouses using SQL and Big Data tools.', '2023-06-09 18:00:00', 7),
 
 -- User 8
-('Software Engineer at Microsoft', 'Developing and maintaining enterprise software solutions.', '2023-06-11 10:00:00', 8, 134),
-('DevOps Specialist at AWS', 'Implementing DevOps practices and managing cloud infrastructure on AWS.', '2023-06-12 12:00:00', 8, 174),
+('Software Engineer at Microsoft', 'Developing and maintaining enterprise software solutions.', '2023-06-11 10:00:00', 8),
+('DevOps Specialist at AWS', 'Implementing DevOps practices and managing cloud infrastructure on AWS.', '2023-06-12 12:00:00', 8),
 
 -- User 9
-('Frontend Developer at Shopify', 'Creating responsive web interfaces with JavaScript and React.', '2023-06-13 14:00:00', 9, 141),
+('Frontend Developer at Shopify', 'Creating responsive web interfaces with JavaScript and React.', '2023-06-13 14:00:00', 9),
 
 -- User 10
-('Data Analyst at Oracle', 'Analyzing data and generating reports using SQL and Python.', '2023-06-14 15:00:00', 10, 157),
+('Data Analyst at Oracle', 'Analyzing data and generating reports using SQL and Python.', '2023-06-14 15:00:00', 10),
 
 -- User 11
-('Cybersecurity Analyst at Cisco', 'Monitoring and responding to security threats in a large enterprise environment.', '2023-06-15 16:00:00', 11, 165),
-('Network Engineer at IBM', 'Designing and maintaining network infrastructure.', '2023-06-16 17:00:00', 11, 149),
+('Cybersecurity Analyst at Cisco', 'Monitoring and responding to security threats in a large enterprise environment.', '2023-06-15 16:00:00', 11),
+('Network Engineer at IBM', 'Designing and maintaining network infrastructure.', '2023-06-16 17:00:00', 11),
 
 -- User 12
-('Mobile Developer at Apple', 'Developing and maintaining iOS applications using Swift.', '2023-06-17 18:00:00', 12, 137),
+('Mobile Developer at Apple', 'Developing and maintaining iOS applications using Swift.', '2023-06-17 18:00:00', 12),
 
 -- User 13
-('Machine Learning Specialist at Google', 'Designing machine learning models and deploying them in production.', '2023-06-18 19:00:00', 13, 172),
+('Machine Learning Specialist at Google', 'Designing machine learning models and deploying them in production.', '2023-06-18 19:00:00', 13),
 
 -- User 14
-('System Administrator at LinkedIn', 'Managing servers and ensuring uptime and security.', '2023-06-19 10:00:00', 14, 128),
+('System Administrator at LinkedIn', 'Managing servers and ensuring uptime and security.', '2023-06-19 10:00:00', 14),
 
 -- User 15
-('Cloud Engineer at Google Cloud', 'Building and managing cloud-based solutions.', '2023-06-20 11:00:00', 15, 159),
+('Cloud Engineer at Google Cloud', 'Building and managing cloud-based solutions.', '2023-06-20 11:00:00', 15),
 
 -- User 16
-('Database Administrator at MySQL', 'Managing and optimizing databases using MySQL.', '2023-06-21 12:00:00', 16, 146),
+('Database Administrator at MySQL', 'Managing and optimizing databases using MySQL.', '2023-06-21 12:00:00', 16),
 
 -- User 17
-('Tech Lead at GitHub', 'Leading a team of developers to build and maintain GitHub features.', '2023-06-22 13:00:00', 17, 161),
+('Tech Lead at GitHub', 'Leading a team of developers to build and maintain GitHub features.', '2023-06-22 13:00:00', 17),
 
 -- User 18
-('Full Stack Developer at Airbnb', 'Developing end-to-end web applications using JavaScript and Python.', '2023-06-23 14:00:00', 18, 140),
+('Full Stack Developer at Airbnb', 'Developing end-to-end web applications using JavaScript and Python.', '2023-06-23 14:00:00', 18),
 
 -- User 19
-('Backend Developer at Netflix', 'Creating and maintaining backend services and APIs.', '2023-06-24 15:00:00', 19, 138),
+('Backend Developer at Netflix', 'Creating and maintaining backend services and APIs.', '2023-06-24 15:00:00', 19),
 
 -- User 20
-('UI/UX Designer at Adobe', 'Improving user experience and designing intuitive interfaces.', '2023-06-25 16:00:00', 20, 135),
-('Frontend Developer at Facebook', 'Building responsive web applications using JavaScript and React.', '2023-06-26 17:00:00', 20, 158),
+('UI/UX Designer at Adobe', 'Improving user experience and designing intuitive interfaces.', '2023-06-25 16:00:00', 20),
+('Frontend Developer at Facebook', 'Building responsive web applications using JavaScript and React.', '2023-06-26 17:00:00', 20),
 
 -- User 21
-('Software Architect at IBM', 'Designing and overseeing software architecture and implementation.', '2023-06-27 18:00:00', 21, 168),
+('Software Architect at IBM', 'Designing and overseeing software architecture and implementation.', '2023-06-27 18:00:00', 21),
 
 -- User 22
-('Cybersecurity Specialist at Palo Alto Networks', 'Developing and implementing cybersecurity strategies.', '2023-06-28 19:00:00', 22, 174),
+('Cybersecurity Specialist at Palo Alto Networks', 'Developing and implementing cybersecurity strategies.', '2023-06-28 19:00:00', 22),
 
 -- User 23
-('Machine Learning Engineer at Amazon', 'Building and deploying machine learning models.', '2023-06-29 10:00:00', 23, 173),
+('Machine Learning Engineer at Amazon', 'Building and deploying machine learning models.', '2023-06-29 10:00:00', 23),
 
 -- User 24
-('DevOps Engineer at Microsoft', 'Implementing DevOps practices across multiple teams.', '2023-06-30 11:00:00', 24, 144),
+('DevOps Engineer at Microsoft', 'Implementing DevOps practices across multiple teams.', '2023-06-30 11:00:00', 24),
 
 -- User 25
-('Data Engineer at Palantir', 'Building data pipelines and managing large datasets.', '2023-07-01 12:00:00', 25, 151),
+('Data Engineer at Palantir', 'Building data pipelines and managing large datasets.', '2023-07-01 12:00:00', 25),
 
 -- User 26
-('Network Security Engineer at AT&T', 'Securing network infrastructure and responding to threats.', '2023-07-02 13:00:00', 26, 165),
+('Network Security Engineer at AT&T', 'Securing network infrastructure and responding to threats.', '2023-07-02 13:00:00', 26),
 
 -- User 27
-('Full Stack Developer at Medium', 'Developing and maintaining both frontend and backend components.', '2023-07-03 14:00:00', 27, 169),
+('Full Stack Developer at Medium', 'Developing and maintaining both frontend and backend components.', '2023-07-03 14:00:00', 27),
 
 -- User 28
-('Cloud Architect at AWS', 'Designing and managing scalable cloud solutions.', '2023-07-04 15:00:00', 28, 159),
+('Cloud Architect at AWS', 'Designing and managing scalable cloud solutions.', '2023-07-04 15:00:00', 28),
 
 -- User 29
-('Software Engineer at Google', 'Building scalable web applications.', '2023-07-05 16:00:00', 29, 164),
-('Data Scientist at Microsoft', 'Performing data analysis and building predictive models.', '2023-07-06 17:00:00', 29, 154),
+('Software Engineer at Google', 'Building scalable web applications.', '2023-07-05 16:00:00', 29),
+('Data Scientist at Microsoft', 'Performing data analysis and building predictive models.', '2023-07-06 17:00:00', 29),
 
 -- User 30
-('UI/UX Designer at Adobe', 'Improving user experience for mobile and web apps.', '2023-07-07 18:00:00', 30, 136),
+('UI/UX Designer at Adobe', 'Improving user experience for mobile and web apps.', '2023-07-07 18:00:00', 30),
 
 -- User 31
-('Mobile Developer at Snapchat', 'Developing and maintaining Android and iOS applications.', '2023-07-08 19:00:00', 31, 148),
+('Mobile Developer at Snapchat', 'Developing and maintaining Android and iOS applications.', '2023-07-08 19:00:00', 31),
 
 -- User 32
-('DevOps Engineer at Netflix', 'Automating and managing cloud infrastructure.', '2023-07-09 10:00:00', 32, 177),
+('DevOps Engineer at Netflix', 'Automating and managing cloud infrastructure.', '2023-07-09 10:00:00', 32),
 
 -- User 33
-('Frontend Developer at LinkedIn', 'Building responsive and scalable web applications.', '2023-07-10 11:00:00', 33, 153),
+('Frontend Developer at LinkedIn', 'Building responsive and scalable web applications.', '2023-07-10 11:00:00', 33),
 
 -- User 34
-('Data Engineer at Airbnb', 'Building and managing data pipelines.', '2023-07-11 12:00:00', 34, 147),
+('Data Engineer at Airbnb', 'Building and managing data pipelines.', '2023-07-11 12:00:00', 34),
 
 -- User 35
-('Security Engineer at CrowdStrike', 'Implementing security protocols and managing firewalls.', '2023-07-12 13:00:00', 35, 166),
+('Security Engineer at CrowdStrike', 'Implementing security protocols and managing firewalls.', '2023-07-12 13:00:00', 35),
 
 -- User 36
-('Software Engineer at Microsoft', 'Developing enterprise software solutions.', '2023-07-13 14:00:00', 36, 170),
-('DevOps Specialist at AWS', 'Implementing DevOps practices across cloud infrastructure.', '2023-07-14 15:00:00', 36, 162),
+('Software Engineer at Microsoft', 'Developing enterprise software solutions.', '2023-07-13 14:00:00', 36),
+('DevOps Specialist at AWS', 'Implementing DevOps practices across cloud infrastructure.', '2023-07-14 15:00:00', 36),
 
 -- User 37
-('Backend Developer at Red Hat', 'Developing APIs and managing databases.', '2023-07-15 16:00:00', 37, 152),
+('Backend Developer at Red Hat', 'Developing APIs and managing databases.', '2023-07-15 16:00:00', 37),
 
 -- User 38
-('Cloud Architect at Google Cloud', 'Designing cloud-based solutions.', '2023-07-16 17:00:00', 38, 160),
+('Cloud Architect at Google Cloud', 'Designing cloud-based solutions.', '2023-07-16 17:00:00', 38),
 
 -- User 39
-('Machine Learning Engineer at DeepMind', 'Building machine learning models.', '2023-07-17 18:00:00', 39, 175),
+('Machine Learning Engineer at DeepMind', 'Building machine learning models.', '2023-07-17 18:00:00', 39),
 
 -- User 40
-('Tech Lead at GitHub', 'Leading a team of developers.', '2023-07-18 19:00:00', 40, 178),
+('Tech Lead at GitHub', 'Leading a team of developers.', '2023-07-18 19:00:00', 40),
 
 -- User 41
-('Network Engineer at Cisco', 'Designing and maintaining network infrastructure.', '2023-07-19 10:00:00', 41, 163),
+('Network Engineer at Cisco', 'Designing and maintaining network infrastructure.', '2023-07-19 10:00:00', 41),
 
 -- User 42
-('Cybersecurity Analyst at CrowdStrike', 'Monitoring and responding to security threats.', '2023-07-20 11:00:00', 42, 171),
+('Cybersecurity Analyst at CrowdStrike', 'Monitoring and responding to security threats.', '2023-07-20 11:00:00', 42),
 
 -- User 43
-('Data Scientist at Facebook', 'Analyzing data and building predictive models.', '2023-07-21 12:00:00', 43, 155),
+('Data Scientist at Facebook', 'Analyzing data and building predictive models.', '2023-07-21 12:00:00', 43),
 
 -- User 44
-('Mobile Developer at Google', 'Developing and maintaining Android applications.', '2023-07-22 13:00:00', 44, 180),
+('Mobile Developer at Google', 'Developing and maintaining Android applications.', '2023-07-22 13:00:00', 44),
 
 -- User 45
-('Full Stack Developer at Airbnb', 'Developing end-to-end web applications.', '2023-07-23 14:00:00', 45, 167);
+('Full Stack Developer at Airbnb', 'Developing end-to-end web applications.', '2023-07-23 14:00:00', 45);
 
 /*!40000 ALTER TABLE job ENABLE KEYS */;
 UNLOCK TABLES;
