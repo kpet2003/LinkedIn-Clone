@@ -57,9 +57,9 @@ public class MessageController {
         mess.setDate(LocalDateTime.now());
         messRepo.save(mess);
         
-        if (!Long.valueOf(message.getSenderId()).equals(Long.parseLong(principal.getName()))) {
-            simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/chat", message);
-        }
+
+        simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/chat", message);
+      
         System.out.println(message.toString());
         return message;
     }

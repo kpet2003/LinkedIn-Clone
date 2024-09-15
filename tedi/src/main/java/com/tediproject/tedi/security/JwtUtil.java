@@ -15,8 +15,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long EXPIRATION_TIME = 43200; // half an hour
-
+    private final long EXPIRATION_TIME = 43200000; 
     public String getEmailFromJWT(String token){
 		Claims claims = Jwts.parserBuilder()
 				.setSigningKey(key)

@@ -20,4 +20,6 @@ public interface ArticleRepo extends JpaRepository<Article, Long> {
     @Query("select sum(views) from Article where category = ?1 group by category ")
     int findViewsPerCategory(String category);
 
+    List<Article> findAllByOrderByIdAsc();
+
 }

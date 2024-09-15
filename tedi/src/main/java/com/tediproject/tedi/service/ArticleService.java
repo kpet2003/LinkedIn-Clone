@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import com.tediproject.tedi.repo.LikeRepo;
 import com.tediproject.tedi.repo.NotificationRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
+import com.tediproject.tedi.types.ArticlePair;
 
 import jakarta.transaction.Transactional;
 
@@ -71,8 +73,34 @@ public class ArticleService {
         // find articles that the user's connections have liked
         articles.addAll(commentRepo.findCommentedArticles(connections));
 
-    
+        
+        Double[][] matrix = recommendationService.recommendationMatrixArticles();
+        Double[][] prediction = recommendationService.gradientDescent(matrix, 0.001, 10000, 0.001);
 
+
+        long id = author.getID();
+
+        Double[] user_articles = prediction[(int)(id-1)];
+
+        List<ArticlePair> article_data = new ArrayList<>();
+
+        for(int i=0; i<user_articles.length; i++) {
+            ArticlePair pair = new ArticlePair();
+            pair.setId(i+1);
+            pair.setRating(user_articles[i]);
+            article_data.addLast(pair);
+        }
+        
+         List<ArticlePair> topRatedArticles = article_data.stream()
+        .sorted(Comparator.comparingDouble(ArticlePair::getRating).reversed())
+        .limit(40)
+        .collect(Collectors.toList());
+
+
+        for(int i=0; i<topRatedArticles.size(); i++) {
+            Article article = articleRepo.findById(topRatedArticles.get(i).getId());
+            articles.add(article);
+        }
 
         // sort the articles from newest to oldest
         List<Article> final_articles = new ArrayList<>(articles);
@@ -86,14 +114,7 @@ public class ArticleService {
 
         final_articles.sort(Comparator.comparing(Article::getDate_posted).reversed());
 
-        System.out.println('\n');
-        Double[][] matrix = recommendationService.recommendationMatrixArticles();
-        Double[][] prediction = recommendationService.gradientDescent(matrix, 0.001, 10, 0.001);
-        recommendationService.print(prediction);
-        System.out.println('\n');
 
-        double error = recommendationService.costFunction(matrix, prediction);
-        System.out.println("Error is: "+error+"\n");
 
         return final_articles;
     }

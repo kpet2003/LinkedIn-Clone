@@ -2,7 +2,6 @@ package com.tediproject.tedi.service;
 
 import java.util.Collections;
 import java.util.List;
-import java.lang.Math;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,28 +104,17 @@ public class RecommendationService {
     }
     
 
-    public Double[][] usersTable(Double w0,Double w1,Double w2,Double w3, Double w4) {
+    public Double[][] usersTable() {
 
 
-        List <UserEntity> users = userRepo.findAll();
+        List <UserEntity> users = userRepo.findAllByOrderByIdAsc();
         List <String> categories = articleRepo.findCategories();
 
         Double[][] matrix = new Double[users.size()][categories.size()];
 
         for(int i=0; i<users.size(); i++) {
-            List <UserEntity> connections = networkService.findUserConnections(users.get(i));
             for(int j=0; j<categories.size(); j++) {
-                matrix[i][j] = -1.0;
-                
-                int likes = likeRepo.findLikesPerCategory(users.get(i),categories.get(j));
-                int comments = commentRepo.findCommentsPerCategory(users.get(i),categories.get(j));
-                int views  = articleRepo.findViewsPerCategory(categories.get(j));
-
-                int networkLikes = likeRepo.findConnectionLikesPerCategory(connections,categories.get(j));
-                int networkComments = commentRepo.findConnectionCommentsPerCategory(connections,categories.get(j));
-                
-                matrix[i][j] = w0*likes+w1*comments+w2*views + w3*networkLikes+w4*networkComments;
-
+                matrix[i][j] = Math.random();
             }
         }
 
@@ -134,7 +122,7 @@ public class RecommendationService {
     }
 
     public Double[][] postTable() {
-        List<Article> articles = articleRepo.findAll();
+        List<Article> articles = articleRepo.findAllByOrderByIdAsc();
         List <String> categories = articleRepo.findCategories();
 
         Double[][] matrix = new Double[articles.size()][categories.size()];
@@ -153,15 +141,17 @@ public class RecommendationService {
     }
 
 
-    public double costFunction(Double[][] true_matrix,Double[][] prediction) {
+    public double costFunction(Double[][] ratings,Double[][] users_table,Double[][] post_table) {
         double error = 0.0;
 
-        int size = true_matrix.length* true_matrix[0].length;
+        int size = ratings.length* ratings[0].length;
         double coefficient = 1.0/size;
         
-        for(int i=0; i<true_matrix.length; i++) {
-            for(int j=0; j<true_matrix[0].length; j++) {
-                error+= Math.pow((true_matrix[i][j]-prediction[i][j]),2);
+        for(int i=0; i<ratings.length; i++) {
+            for(int j=0; j<ratings[0].length; j++) {
+                double prediction = dot(users_table[i], post_table[j]);
+                double cost = ratings[i][j] - prediction;
+                error += cost * cost;
             }
         }
 
@@ -170,58 +160,57 @@ public class RecommendationService {
         return error;
     }
 
-    public double derivative(Double[][] true_matrix,Double[][] prediction,Double[][] users_table) {
+    public double finalCost(Double[][] ratings, Double[][] matrix) {
+        int size = ratings.length * ratings[0].length;
+
+        double coefficient = 1.0/size;
+
         double error = 0.0;
-
-        int size = true_matrix.length* true_matrix[0].length;
-        double coefficient = -2.0/size;
-
-        for(int i=0; i<true_matrix.length; i++) {
-            for(int j=0; j<true_matrix[0].length; j++) {
-            
-                error+= (true_matrix[i][j]-prediction[i][j]);
+        for(int i=0; i<ratings.length; i++) {
+            for(int j=0; j<ratings[0].length; j++) {
+                error+= (matrix[i][j]-ratings[i][j])* (matrix[i][j]-ratings[i][j]);
             }
         }
 
-        error*=coefficient;
 
-        return error;
+        return error*coefficient;
     }
 
-    public Double[][] gradientDescent(Double[][] matrix,double learning_rate, int iterations, double error) {
-        Double [][] users_table = usersTable(2.0, 1.0, 0.08, 0.5, 0.3);
-        Double[][] post_table = transpose(postTable());
+
+
+    public Double[][] gradientDescent(Double[][] matrix,double learning_rate, int iterations,double max_error) {
+        Double [][] users_table = usersTable();
+        Double[][] post_table = postTable();
+
 
         double precision_error = 100.0;
 
-        Double[][] prediction = prediction = arrayMultiplication(users_table, post_table);
-
-        double w0=2.0;
-        double w1=1.0;
-        double w2 = 0.08;
-        double w3 = 0.5;
-        double w4 = 0.3;
-
         for(int i=0; i<iterations; i++) {
             
-            if(precision_error<=error) {
+            if(precision_error<=max_error) {
                 break;
             }
-            
-            w0 -=(learning_rate*derivative(matrix, prediction,users_table));
-            w1 -=(learning_rate*derivative(matrix, prediction,users_table));
-            w2 -=(learning_rate*derivative(matrix, prediction,users_table));
-            w3 -=(learning_rate*derivative(matrix, prediction,users_table));
-            w4 -=(learning_rate*derivative(matrix, prediction,users_table));
-            
+ 
 
-            users_table = usersTable(w0, w1, w2, w3, w4);
-            System.out.println("\nIteration: "+ i + "\n");
-            prediction = arrayMultiplication(users_table, post_table);
-            precision_error = costFunction(matrix,prediction);
+            for(int j=0; j<users_table.length;j++) {
+                for(int k=0; k<post_table.length; k++) {
+                    
+                    double prediction = dot(users_table[j],post_table[k]);
+                    double error = matrix[j][k]-prediction;
+
+                    for(int f = 0; f<users_table[0].length; f++) {
+                        users_table[j][f] += learning_rate*error*post_table[k][f];
+                        post_table[k][f] += learning_rate*error*users_table[j][f];
+                    }
+
+                }
+            }
+
+            precision_error = costFunction(matrix,users_table ,post_table);
+
         }
 
-        return prediction;
+        return arrayMultiplication(users_table, transpose(post_table));
 
     }
 
