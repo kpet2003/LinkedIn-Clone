@@ -19,6 +19,14 @@ class ArticleService {
         }).then(response => response.data);
     }
 
+    fetchCategories(cancel) {
+        const API_URL = SERVER_URL + "/HomePage/GetCategories";
+        return axios.get(API_URL,{
+            signal: cancel.signal,
+            responseType: 'json'
+        }).then(response => response.data);
+    }
+
     newArticle(article) {
         const API_URL = SERVER_URL + "/HomePage/newArticle";
         return axios.post(API_URL,article, {
@@ -72,6 +80,8 @@ class ArticleService {
         const API_URL = SERVER_URL + `/HomePage/GetComments/${article_id}`;
         return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
     }
+
+    
     
 }
 

@@ -15,6 +15,16 @@ public class NewArticleDto {
 
     private String title;
 
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public NewArticleDto() {}
     
     public String getTitle() {

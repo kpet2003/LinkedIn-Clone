@@ -80,6 +80,24 @@ body {
     outline: none;
 }
 
+.categories {
+    display: flex;
+    flex-direction: row;
+    color: #888;
+    border-style: none;
+    padding: 10px;
+    resize: none;
+    font-family: 'Arial';
+    border-top: 1px solid grey;
+}
+
+.categories select {
+    height: 50%;
+    margin-top: 3%;
+    float: right;
+    margin-left: 40%;
+}
+
 .image_container p,
 .video_container p {
     margin: 0;

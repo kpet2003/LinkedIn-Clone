@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -130,7 +131,11 @@ public class ArticleService {
         new_article.setDate_posted();
         new_article.setPicture(article.getImage());
         new_article.setVideo(article.getVideo());
-        new_article.setCategory("Computer Science");
+
+       
+      
+        new_article.setCategory(article.getCategory());
+        
         articleRepo.save(new_article);
     }
 
@@ -266,6 +271,10 @@ public class ArticleService {
 
 
         return articles_data;
+    }
+
+    public List<String> getCategories() {
+        return articleRepo.findCategories();
     }
 
     
