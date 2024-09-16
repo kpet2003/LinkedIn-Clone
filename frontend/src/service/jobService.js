@@ -7,23 +7,29 @@ class JobService{
         return (await axios.post(API_URL, data)).data;
     }
 
-    async getConnectionJobs(user){
+    async getConnectionJobs(user, cancel){
         const url = SERVER_URL + `/connectionjobs/${user}`
-        const response = await axios.get(url);
+        const response = await axios.get(url,{
+            signal: cancel.signal
+        });
         console.log( 'CONNECTIONS',response.data);
         return response.data;
     }
 
-    async getOtherJobs(user){
+    async getOtherJobs(user, cancel){
         const url = SERVER_URL + `/otherjobs/${user}`
-        const response = await axios.get(url);
+        const response = await axios.get(url,{
+            signal: cancel.signal
+        });
         console.log('OTHERS', response.data);
         return response.data;
     }
 
-    async getMyJobs(user){
+    async getMyJobs(user, cancel){
         const url = SERVER_URL + `/myjobs/${user}`
-        const response = await axios.get(url);
+        const response = await axios.get(url,{
+            signal: cancel.signal
+        });
         console.log('THIS USER', response.data);
         return response.data;
     }

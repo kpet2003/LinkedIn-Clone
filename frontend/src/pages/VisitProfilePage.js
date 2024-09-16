@@ -79,12 +79,12 @@ function VisitProfile(){
     const [education,setEducation] = useState([]);
     const [experience,setExperience] = useState([]);
     const navigate = useNavigate();
-    console.log('userId is',id);
 
     useEffect(() => {
+        const cancelProfile = new AbortController();
         const fetchUserData = async () => {
             try {
-                const data = await userService.getProfile(id);
+                const data = await userService.getProfile(id, cancelProfile);
                 setUser((user) => ({
                     ...user,
                     ...data
@@ -99,10 +99,11 @@ function VisitProfile(){
             }
         };
 
+        const cancelConnected = new AbortController();
         const checkIfConnected = async() => {
             try {
                 const token = localStorage.getItem('jwt_token');
-                const response = await userService.checkConnection(token,id);
+                const response = await userService.checkConnection(token, id, cancelConnected);
                 console.log('is user connected: ',response);
                 setIsConnected(response)
             }   
@@ -111,10 +112,11 @@ function VisitProfile(){
             }
         }
 
+        const cancelSkills = new AbortController();
         const fetchSkills = async() => {
             try{
                
-                const response = await userService.getSkillsById(id);
+                const response = await userService.getSkillsById(id, cancelSkills);
                 setSkills(response);
                 console.log("skills are: ",response);
             }
@@ -123,10 +125,11 @@ function VisitProfile(){
             }
         }
 
+        const cancelEdu = new AbortController();
         const fetchEducation = async() => {
             try{
                
-                const response = await userService.getEducationById(id);
+                const response = await userService.getEducationById(id, cancelEdu);
                 setEducation(response);
                 console.log("education is: ",response);
             }
@@ -135,12 +138,13 @@ function VisitProfile(){
             }
         }
 
+        const cancelExp = new AbortController();
         const fetchExperience = async() => {
             try{
                
-                const response = await userService.getExperienceById(id);
+                const response = await userService.getExperienceById(id, cancelExp);
                 setExperience(response);
-                console.log("skills are: ",response);
+                console.log("experience is: ",response);
             }
             catch(error) {
                 console.error("Error fetching the user's experience: ",error)
@@ -152,6 +156,13 @@ function VisitProfile(){
         fetchSkills();
         fetchEducation();
         fetchExperience();
+        return()=>{
+            cancelProfile.abort();
+            cancelConnected.abort();
+            cancelSkills.abort();
+            cancelEdu.abort();
+            cancelExp.abort();
+        }
     }, [id]);
 
     const viewNetwork = (id) => {

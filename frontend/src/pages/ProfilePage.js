@@ -83,13 +83,17 @@ function Pfp(){
     const [experience,setExperience] = useState([]);
 
     useEffect(() => {
+        const cancelUser = new AbortController();
+        const cancelEdu = new AbortController();
+        const cancelExp = new AbortController();
+        const cancelSkills = new AbortController();
         const fetchData = async () => {
             try {
                 const [user, education, experience,skills] = await Promise.all([
-                    userService.getUserData(localStorage.getItem('jwt_token')),
-                    userService.getEducation(localStorage.getItem('jwt_token')),
-                    userService.getExperience(localStorage.getItem('jwt_token')),
-                    userService.getSkills(localStorage.getItem('jwt_token'))
+                    userService.getUserData(localStorage.getItem('jwt_token'), cancelUser),
+                    userService.getEducation(localStorage.getItem('jwt_token'), cancelEdu),
+                    userService.getExperience(localStorage.getItem('jwt_token'), cancelExp),
+                    userService.getSkills(localStorage.getItem('jwt_token'), cancelSkills)
                 ]);
                 setUser(user);
                 setEducation(education);
@@ -102,6 +106,12 @@ function Pfp(){
             }
         }
         fetchData();
+        return()=>{
+            cancelUser.abort();
+            cancelEdu.abort();
+            cancelExp.abort();
+            cancelSkills.abort();
+        }
     },[]);
 
 

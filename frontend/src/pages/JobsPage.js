@@ -34,12 +34,15 @@ function Jobs() {
     const [applicants, setApplicants] = useState([]);
 
     useEffect(() => {
+        const cancelJobs = new AbortController();
+        const cancelConnections = new AbortController();
+        const cancelOthers = new AbortController();
         const fetchData = async () => {
             try {
                 const [myJobs, connectionsJobs, othersJobs] = await Promise.all([
-                    jobService.getMyJobs(localStorage.getItem('jwt_token')),
-                    jobService.getConnectionJobs(localStorage.getItem('jwt_token')),
-                    jobService.getOtherJobs(localStorage.getItem('jwt_token'))
+                    jobService.getMyJobs(localStorage.getItem('jwt_token'), cancelJobs),
+                    jobService.getConnectionJobs(localStorage.getItem('jwt_token'), cancelConnections),
+                    jobService.getOtherJobs(localStorage.getItem('jwt_token'), cancelOthers)
                 ]);
                 setMyJobs(myJobs);
                 setConnectionsJobs(connectionsJobs);
@@ -50,6 +53,11 @@ function Jobs() {
             }
         }
         fetchData();
+        return()=>{
+            cancelJobs.abort();
+            cancelConnections.abort();
+            cancelOthers.abort();
+        }
     },[]);
 
     const handleChange = (event) => {

@@ -63,10 +63,11 @@ function Chat(){
     },[onConnected]);
 
     useEffect(() => {
+        const cancel = new AbortController();
         // Fetch user data when the component mounts
         const fetchUserData = async () => {
             try {
-                const user = await userService.getUserChatData(localStorage.getItem('jwt_token'));
+                const user = await userService.getUserChatData(localStorage.getItem('jwt_token'), cancel);
                 
                 // Check if newUserId exists in location.state and if connections need to be updated
                 const newUserId = location.state?.userId;
@@ -77,7 +78,6 @@ function Chat(){
                 console.log(updatedConnections.length)
                 if (newUserId && updatedConnections.length > 0) {
                     // Find the new user in connections and update hasMessaged to true
-                    console.log('im in')
                     updatedConnections = updatedConnections.map(conn => {
                         console.log(`Checking connection with id: ${conn.id} and hasMessaged: ${conn.hasMessaged}`);
                         console.log(newUserId)
@@ -112,6 +112,7 @@ function Chat(){
         fetchUserData();
     
         return () => {
+            cancel.abort();
             if (stompClientRef.current) {
                 stompClientRef.current.deactivate();
             }
@@ -216,7 +217,6 @@ function Chat(){
 
     const base64Image = userData.image? `data:image/jpeg;base64,${userData.image}`: `${avatar}`;
     const messagesByDate = tab ? groupMessagesByDate(privateChats.get(tab) || []) : {};
-    console.log(tab)
 
     return(
         <div>

@@ -25,9 +25,10 @@ class UserService {
 
     }
 
-    checkConnection(token, id) {
+    checkConnection(token, id, cancel) {
         const API_URL = SERVER_URL +"/ViewProfile";
         return axios.get(API_URL, {
+            signal: cancel.signal,
             params: {
                 user_id: id,
                 token:token
@@ -66,17 +67,21 @@ class UserService {
     }
     
     
-    getEducation(token) {
+    getEducation(token, cancel) {
         const API_URL = SERVER_URL + "/Profile/GetEducation";
         return axios.get(API_URL,{
+            signal: cancel.signal,
             params: {token : token},
             responseType: 'json'
         }).then(response => response.data);
     }
 
-    getEducationById(id) {
+    getEducationById(id, cancel) {
         const API_URL = SERVER_URL + `/VisitProfile/getEducation/${id}`;
-        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+        return axios.get(API_URL,{
+            signal: cancel.signal,
+            responseType: 'json' 
+        }).then(response => response.data);
     }
 
     removeEdu(education_id,token) {
@@ -93,17 +98,21 @@ class UserService {
         }).data;
     }
 
-    getExperience(token) {
+    getExperience(token, cancel) {
         const API_URL = SERVER_URL + "/Profile/GetExperience";
         return axios.get(API_URL,{
+            signal: cancel.signal,
             params: {token : token},
             responseType: 'json'
         }).then(response => response.data);
     }
 
-    getExperienceById(id) {
+    getExperienceById(id, cancel) {
         const API_URL = SERVER_URL +`/VisitProfile/getExperience/${id}`;
-        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+        return axios.get(API_URL,{
+            signal: cancel.signal,
+            responseType: 'json'
+        }).then(response => response.data);
     }
 
     removeExp(experience_id,token) {
@@ -120,17 +129,21 @@ class UserService {
         }).data;
     }
 
-    getSkills(token) {
+    getSkills(token, cancel) {
         const API_URL = SERVER_URL + "/Profile/GetSkills";
         return axios.get(API_URL,{
+            signal: cancel.signal,
             params: {token : token},
             responseType: 'json'
         }).then(response => response.data);
     }
 
-    getSkillsById(id) {
+    getSkillsById(id, cancel) {
         const API_URL = SERVER_URL + `/VisitProfile/getSkills/${id}`;
-        return axios.get(API_URL, {responseType: 'json' }).then(response => response.data);
+        return axios.get(API_URL,{
+            signal: cancel.signal,
+            responseType: 'json'
+        }).then(response => response.data);
     }
 
 
@@ -194,18 +207,20 @@ class UserService {
         return response.data;
     }
 
-    async getProfile(id){
+    async getProfile(id, cancel){
         const url = SERVER_URL + `/VisitProfile/${id}`;
         const response = await axios.get(url, {
+            signal: cancel.signal,
             responseType: 'json'
         });
         console.log(response.data);
         return response.data;
     }
 
-    async getUserChatData(token){
+    async getUserChatData(token, cancel){
         const url = SERVER_URL + '/Messages';
         const response = await axios.get(url, {
+            signal: cancel.signal,
             params: {token: token},
             responseType: 'json'
         });
