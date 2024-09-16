@@ -128,13 +128,17 @@ function MyNetwork() {
         useEffect(() => {
             const token = localStorage.getItem('jwt_token');
             const email = UserService.decodeToken(token).sub;
+
+            const usersCancel = new AbortController();
+            const requestsCancel = new AbortController();
+            const connectionsCancel = new AbortController();
     
             const fetchData = async () => {
                 try {
                     const [usersResponse, requestsResponse, connectionsResponse] = await Promise.all([
-                        networkService.getUsers(),
-                        networkService.fetchRequests(token),
-                        networkService.fetchConnections(token)
+                        networkService.getUsers(usersCancel),
+                        networkService.fetchRequests(token,requestsCancel),
+                        networkService.fetchConnections(token,connectionsCancel)
                     ]);
                     const finalUsers = usersResponse.filter(user => user.email !== 'admin@gmail.com' && 
                         user.email !== email &&
@@ -149,6 +153,12 @@ function MyNetwork() {
                 }
             }
             fetchData();
+
+            return () => {
+                usersCancel.abort();  
+                requestsCancel.abort(); 
+                connectionsCancel.abort();
+              };
         },[]);
 
 

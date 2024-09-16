@@ -110,13 +110,15 @@ function Notifications(){
    
     
     useEffect(() => {
-       
+        
+        const requestCancel = new AbortController();
+        const notificationCancel = new AbortController();
 
         const fetchData = async () => {
             try {
                 const [users, Notifications] = await Promise.all([
-                    notificationService.getRequests(token),
-                    notificationService.getNotifications(token)
+                    notificationService.getRequests(token,requestCancel),
+                    notificationService.getNotifications(token,notificationCancel)
                 ]);
                 setUsers(users);
                 setNotifications(Notifications);
@@ -126,6 +128,13 @@ function Notifications(){
             }
         }
         fetchData();
+
+        return () => {
+            requestCancel.abort(); 
+            notificationCancel.abort();  
+          };
+
+
     },[]);
 
 

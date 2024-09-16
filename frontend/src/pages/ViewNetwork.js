@@ -21,10 +21,12 @@ function Network() {
             setAdmin(true);
         }
 
+        const cancelConnections = new AbortController();
+
         const getConnections = async () => {
             try {
                 console.log(id);
-                const response = await networkService.fetchConnectionsById(id);
+                const response = await networkService.fetchConnectionsById(id,cancelConnections);
                 const finalUsers = response;
                 setConnectedUsers(finalUsers);
                 console.log(finalUsers);
@@ -35,6 +37,10 @@ function Network() {
             }
         };
         getConnections();
+
+        return () => {
+            cancelConnections.abort(); 
+        };
     }, [id]);
 
 

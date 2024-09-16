@@ -10,11 +10,15 @@ function UserList() {
     const [users, setUsers] = useState([]);
     let [selectedUsers,setSelectedUsers] = useState([]);
 
+
     // renders the list of existing users, except for the admin 
     useEffect(() => {
+
+        const cancelUser = new AbortController();
+
         const fetchUsers = async() => {
             try {
-                const response = await  AdminService.getUsers();
+                const response = await  AdminService.getUsers(cancelUser);
                 const finalUsers = response.filter(user => user.email !== 'admin@gmail.com');
                 setUsers(finalUsers);
 
@@ -24,6 +28,11 @@ function UserList() {
             }
         };
         fetchUsers();
+
+        return () => {
+            cancelUser.abort();  
+          };
+
     }, []);
 
      

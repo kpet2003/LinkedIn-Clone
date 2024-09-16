@@ -1,9 +1,9 @@
 import axios from "axios";
 const SERVER_URL =  "https://localhost:8080"
 class networkService {
-    getUsers() {
+    getUsers(cancel) {
         const API_URL = SERVER_URL +"/Network/getUsers";
-        return axios.get(API_URL).then(response => response.data);
+        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
     }
 
     newRequest(user_id, sender_token) {
@@ -42,19 +42,19 @@ class networkService {
         });
     }
 
-    fetchRequests(token) {
+    fetchRequests(token,cancel) {
         const API_URL = SERVER_URL +`/Network/Requests?token=${encodeURIComponent(token)}`;
-        return axios.get(API_URL).then(response => response.data);
+        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
     }
 
-    fetchConnections(token) {
+    fetchConnections(token,cancel) {
         const API_URL = SERVER_URL +`/Network/Connections?token=${encodeURIComponent(token)}`;
-        return axios.get(API_URL).then(response => response.data);
+        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
     }
 
-    fetchConnectionsById(id) {
+    fetchConnectionsById(id,cancel) {
         const API_URL = SERVER_URL + `/ViewNetwork/getConnections/${id}`;
-        return axios.get(API_URL).then(response => response.data);
+        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
     }
 }
 

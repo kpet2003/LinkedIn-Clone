@@ -2,9 +2,9 @@ import axios from "axios";
 const SERVER_URL =  "https://localhost:8080"
 class AdminService {
 
-    getUsers() {
+    getUsers(cancel) {
         const API_URL = SERVER_URL + "/AdminPage/";
-        return axios.get(API_URL).then(response => response.data);
+        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
     }
 
     getxmlUsers(user_ids) {
