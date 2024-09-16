@@ -10,9 +10,10 @@ class ArticleService {
         }).then(response => response.data);
     }
     
-    fetchArticleData(token) {
+    fetchArticleData(token, cancel) {
         const API_URL = SERVER_URL + "/HomePage/ArticleData";
         return axios.get(API_URL,{
+            signal: cancel.signal,
             params: {token : token},
             responseType: 'json'
         }).then(response => response.data);

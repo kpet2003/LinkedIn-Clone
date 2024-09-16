@@ -180,17 +180,17 @@ class UserService {
         return email;
     }
 
-    async getUserData(token) {
+    async getUserData(token, cancel) {
         if (!token) {
             console.error("Invalid token");
             return;
         }
         const url = SERVER_URL +"/Profile";
         const response = await axios.get(url,{
+            signal: cancel.signal,
             params: {token: token},
             responseType: 'json'
         });
-        console.log(response.data);
         return response.data;
     }
 

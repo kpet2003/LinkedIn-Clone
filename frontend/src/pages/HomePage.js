@@ -1,5 +1,6 @@
 import '../styling/HomePage.css';
 import React, { useEffect, useState,Suspense } from 'react';
+import axios from 'axios';
 import userService from "../service/userService.js";
 import image_upload from '../icons/image_upload.png';
 import video_upload from '../icons/video_upload.png';
@@ -356,11 +357,15 @@ function HomePage() {
     const [user, setUser] = useState([]);
 
     useEffect(() => {
+
+        const cancelArticle = new AbortController();
+        const cancelUser = new AbortController();
+
         const fetchData = async () => {
             try {
                 const [articleData, user] = await Promise.all([
-                    articleService.fetchArticleData(localStorage.getItem('jwt_token')),
-                    userService.getUserData(localStorage.getItem('jwt_token')),
+                    articleService.fetchArticleData(localStorage.getItem('jwt_token'), cancelArticle),
+                    userService.getUserData(localStorage.getItem('jwt_token'), cancelUser),
                 ]);
                 console.log("Fetched user data: ",user);
                 console.log("Fetched article data: ",articleData)
@@ -372,6 +377,10 @@ function HomePage() {
         };
 
         fetchData();
+        return () => {
+            cancelArticle.abort();  // Cancel request 1
+            cancelUser.abort();  // Cancel request 2
+          };
     }, []);
 
     return (
