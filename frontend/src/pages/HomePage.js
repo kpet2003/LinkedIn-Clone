@@ -1,6 +1,5 @@
 import '../styling/HomePage.css';
 import React, { useEffect, useState,Suspense } from 'react';
-import axios from 'axios';
 import userService from "../service/userService.js";
 import image_upload from '../icons/image_upload.png';
 import video_upload from '../icons/video_upload.png';
@@ -13,16 +12,18 @@ import blue_like from '../icons/blue_like.jpg';
 import placeholder from '../icons/avatar.png';
 
 
-function NewPost({ onNewPost }) {
+function NewPost({ onNewPost,categories }) {
 
     const token = localStorage.getItem('jwt_token');
+    
     
     const initialState = {
         author_token:token,
         title:'',
         article_content:'',
         image: null,
-        video:null
+        video:null,
+        category:null
     };
 
 
@@ -37,12 +38,13 @@ function NewPost({ onNewPost }) {
         formData.append('article_content', article.article_content);
         formData.append('image', article.image || null);
         formData.append('video', article.video || null);
+        formData.append('category',article.category || 'Computer Science');
        
+        console.log(formData);
         
         try {
             const response =  await ArticleService.newArticle(formData);
             console.log(response.data); 
-            onNewPost(response.data);
             setArticle(initialState);
         } 
         
@@ -71,7 +73,8 @@ function NewPost({ onNewPost }) {
     const triggerFileInput = (input_id) => {
         document.getElementById(input_id).click();
     };
-   
+    
+    
 
 
 
@@ -83,8 +86,22 @@ function NewPost({ onNewPost }) {
                     <div className='text-input'>
                         <textarea required value = {article.title} placeholder='Article Title' className='article_title' onChange={handleChange} id='title' rows={1}/>
                         <textarea required value = {article.article_content} placeholder= "What's on your mind? " onChange={handleChange} id='article_content' className='content' rows={1}/>
-                    </div>
                     
+                        <div className='categories'>
+                            <p >Choose the article's category:</p>
+                            <select onChange={handleChange} value={article.category} id='category'>
+                                {categories.map((category, index) => (
+                                        <option key={index} value={category} id='category'>
+                                            {category}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                    </div>
+
+                   
+
+
                     <div className='article_buttons'>
 
                         <div className='image_container'onClick={() => triggerFileInput('input_image')}>
@@ -179,7 +196,7 @@ function Comments({comments}) {
 
 
 
-function Timeline({articleData,setArticleData}) {
+function Timeline({articleData,setArticleData,categories}) {
 
     
     const [NewComment,setNewComment] = useState({});
@@ -280,24 +297,11 @@ function Timeline({articleData,setArticleData}) {
         );
     }
 
-    const handleNewPost = () => {
-        const getArticles = async () => {
-            try {
-                const token = localStorage.getItem('jwt_token');
-                
-                //fetch articles and their data
-                const articleDataArray = await ArticleService.fetchArticleData(token);
-                setArticleData(articleDataArray);
-            } catch (error) {
-                console.error("There was an error getting the article list", error);
-            }
-        };
-        getArticles();
-    };
+  
 
     return (
         <div>
-        <NewPost onNewPost={handleNewPost} />
+        <NewPost  categories={categories} />
        {
         articleData.map(article=>(
             <span  key = {article.id} className='article'>
@@ -355,22 +359,28 @@ function HomePage() {
     
     const [articleData, setArticleData] = useState([]);
     const [user, setUser] = useState([]);
+    const [categories,setCategories] = useState([]);
 
     useEffect(() => {
 
         const cancelArticle = new AbortController();
         const cancelUser = new AbortController();
+        const cancelCategory = new AbortController();
 
         const fetchData = async () => {
             try {
-                const [articleData, user] = await Promise.all([
-                    articleService.fetchArticleData(localStorage.getItem('jwt_token'), cancelArticle),
-                    userService.getUserData(localStorage.getItem('jwt_token'), cancelUser),
-                ]);
+                const user =  await userService.getUserData(localStorage.getItem('jwt_token'), cancelUser);
                 console.log("Fetched user data: ",user);
-                console.log("Fetched article data: ",articleData)
                 setUser(user);
+                
+                const categories = await articleService.fetchCategories(cancelCategory);
+                console.log("Fetched categories: ",categories);
+                setCategories(categories);
+
+                const articleData = await articleService.fetchArticleData(localStorage.getItem('jwt_token'), cancelArticle);
+                console.log("Fetched article data: ",articleData)
                 setArticleData(articleData);
+
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -378,8 +388,11 @@ function HomePage() {
 
         fetchData();
         return () => {
-            cancelArticle.abort();  // Cancel request 1
-            cancelUser.abort();  // Cancel request 2
+            cancelUser.abort();
+            cancelCategory.abort();
+            cancelArticle.abort();  
+             
+            
           };
     }, []);
 
@@ -389,7 +402,7 @@ function HomePage() {
             <div className='homepage'>
                 <Profile user={user}/>
                 <div className='main_content'>
-                    <Timeline articleData={articleData} setArticleData={setArticleData}/>
+                    <Timeline articleData={articleData} setArticleData={setArticleData} categories={categories}/>
                 </div>
                 
             </div>

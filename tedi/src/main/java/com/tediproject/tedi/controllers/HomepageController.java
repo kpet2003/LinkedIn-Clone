@@ -37,13 +37,18 @@ public class HomepageController {
         return articleService.fetchArticles(token);
     }
 
-
+    @GetMapping(value="/HomePage/GetCategories")
+    public List<String> getCategories() {
+        return articleService.getCategories();
+    }
     @PostMapping(value = "/HomePage/newArticle")
     public ResponseEntity<?> newArticle(  @RequestParam("author_token") String authorToken,
             @RequestParam("title") String title,
             @RequestParam("article_content") String articleContent,
             @RequestPart(value = "image", required = false) MultipartFile image,
-            @RequestPart(value = "video", required = false) MultipartFile video) {
+            @RequestPart(value = "video", required = false) MultipartFile video,
+            @RequestParam(value="category", required = false) String category
+            ) {
 
 
         try {
@@ -51,6 +56,7 @@ public class HomepageController {
             article.setAuthor_token(authorToken);
             article.setTitle(title);
             article.setArticle_content(articleContent);
+            article.setCategory(category);
             
             if(image!=null) {
                 article.setImage(image.getBytes());
