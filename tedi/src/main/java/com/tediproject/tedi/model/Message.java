@@ -1,6 +1,6 @@
 package com.tediproject.tedi.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +20,7 @@ public class Message {
     @Column
     private String message;
     @Column
-    private LocalDateTime date;
+    private Instant date;
     @Column
     private Status status;
     
@@ -51,11 +51,11 @@ public class Message {
         this.message = message;
     }
 
-    public LocalDateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

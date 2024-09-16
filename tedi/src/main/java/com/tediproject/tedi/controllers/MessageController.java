@@ -1,7 +1,6 @@
 package com.tediproject.tedi.controllers;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -54,7 +53,7 @@ public class MessageController {
         mess.setSenderId(message.getSenderId());
         mess.setReceiverId(message.getReceiverId());
         mess.setMessage(message.getMessage());
-        mess.setDate(LocalDateTime.now());
+        mess.setDate(message.getDate());
         messRepo.save(mess);
         
 

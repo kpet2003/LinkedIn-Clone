@@ -128,7 +128,19 @@ function Chat(){
             if (!newChats.has(payloadData.senderId)) {
                 newChats.set(payloadData.senderId, []);
             }
-            newChats.get(payloadData.senderId).push(payloadData);
+            const existingMessages = newChats.get(payloadData.senderId);
+            console.log("Existing messages: ", existingMessages);
+            console.log("Payload data: ", payloadData);
+            
+            // Check if the message is a duplicate
+            const isDuplicate = existingMessages.some(msg => msg.date === payloadData.date);
+            if (!isDuplicate) {
+                // Add the new message to the chat history
+                existingMessages.push(payloadData);
+                newChats.set(payloadData.senderId, existingMessages);
+            } else {
+                console.log("Duplicate message detected, not adding to chat.");
+            }
             return newChats;
         });
     };
@@ -150,11 +162,14 @@ function Chat(){
         console.log('SENDING TO ',tab);
         if (userData.message === ' ' || userData.message === 'undefined') return;
         if (stompClientRef.current && tab) {
+            const tempId = Date.now();
             const chatMessage = {
                 senderId: userData.id,
                 receiverId: tab,
                 message: userData.message,
-                status: "MESSAGE"
+                status: "MESSAGE",
+                date: new Date().toISOString(),
+                tempId
             };
     
             setPrivateChats(prev => {
@@ -166,7 +181,15 @@ function Chat(){
                 }
     
                 // Now we are sure that newChats.get(tab) will return an array
-                newChats.get(tab).push(chatMessage);
+                const existingMessages = newChats.get(tab);
+
+                // Check if the message already exists (by its id)
+                const isDuplicate = existingMessages.some(msg => msg.tempId === chatMessage.tempId);
+                if (!isDuplicate) {
+                    // Only add the message if it's not a duplicate
+                    existingMessages.push(chatMessage);
+                    newChats.set(tab, existingMessages);
+                }
     
                 return newChats;
             });
@@ -185,17 +208,19 @@ function Chat(){
 
     const fetchChatHistory = async (id) => {
         try {
-            setReceiverImage("")
-            setTab(id);
-            await userService.setTab(id,localStorage.getItem('jwt_token'));
-            const messages = await userService.getChatHistory(userData.id, id);
-            setPrivateChats(new Map([[id, messages]]));
-            const image = await userService.getImage(id);
-            if (image && image !== "undefined") {
-                console.log('got image');
-                setReceiverImage(`data:image/jpeg;base64,${image}`);
-            } else {
-                console.error("Invalid image data", image);
+            if(userData.id){
+                setReceiverImage("")
+                setTab(id);
+                await userService.setTab(id,localStorage.getItem('jwt_token'));
+                const messages = await userService.getChatHistory(userData.id, id);
+                setPrivateChats(new Map([[id, messages]]));
+                const image = await userService.getImage(id);
+                if (image && image !== "undefined") {
+                    console.log('got image');
+                    setReceiverImage(`data:image/jpeg;base64,${image}`);
+                } else {
+                    console.error("Invalid image data", image);
+                }
             }
             
         } catch (error) {
