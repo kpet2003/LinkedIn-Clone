@@ -17,12 +17,14 @@ function Network() {
     useEffect(() => {
         const token =  UserService.decodeToken(localStorage.getItem('jwt_token'));
 
+        // check whether the viewer is the admin
         if(token.sub === 'admin@gmail.com') {
             setAdmin(true);
         }
 
         const cancelConnections = new AbortController();
 
+        // fetch the user's connections
         const getConnections = async () => {
             try {
                 console.log(id);
@@ -46,8 +48,11 @@ function Network() {
 
     return(
         <div >
+            {/* display navigation bar only if  the user viewing the page is not the admin */}
             {!isAdmin && (<NavigationBar></NavigationBar>)}
             <div className='net'>
+
+            {/* display the user's connections in grid format */}
             {connectedUsers.map(connectedUser => (
                     <span key={connectedUser.id} className='ConnectedUser' >
                          <img src={connectedUser.profilePicture?`data:image/jpeg;base64,${connectedUser.profilePicture}`:placeholder } alt = 'profile'className='picture'/>

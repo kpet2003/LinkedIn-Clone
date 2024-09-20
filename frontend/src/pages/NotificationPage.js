@@ -5,12 +5,12 @@ import networkService  from '../service/networkService.js';
 import "../styling/Notifications.css"
 import placeholder from '../icons/avatar.png';
 
-
+// display the connection requests for the user
 function Requests({users,setUsers}) {
 
    
 
-
+    // accepts the connection request and removes the requester from the request list 
     const addConnection = async (userID) => {
         const token = localStorage.getItem('jwt_token');
         try {
@@ -24,6 +24,7 @@ function Requests({users,setUsers}) {
         }
     }
 
+    // rejects the connection request and removes the requester from the request list 
     const decline = async (userID) => {
         const token = localStorage.getItem('jwt_token');
         try {
@@ -64,11 +65,12 @@ function Requests({users,setUsers}) {
 
 }
 
+// display the notifications regarding the likes and comments of posts that the user has written  
 function PostNotifications({Notifications}) {
     
 
 
-
+    // link to the profile of the user that made a comment or liked an article by the user
     const gotoProfile = (user_id) => {
         console.log(user_id);
         const link = document.createElement('a');
@@ -114,6 +116,7 @@ function Notifications(){
         const requestCancel = new AbortController();
         const notificationCancel = new AbortController();
 
+        // fetch the requests and the notifications
         const fetchData = async () => {
             try {
                 const [users, Notifications] = await Promise.all([
@@ -135,7 +138,7 @@ function Notifications(){
           };
 
 
-    },[]);
+    },[token]);
 
 
     

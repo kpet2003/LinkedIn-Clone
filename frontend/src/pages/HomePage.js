@@ -11,12 +11,13 @@ import white_like from '../icons/white_like.jpg';
 import blue_like from '../icons/blue_like.jpg';
 import placeholder from '../icons/avatar.png';
 
-
+// handles the posting of a new article
 function NewPost({ onNewPost,categories }) {
 
+    // jwt token of the user
     const token = localStorage.getItem('jwt_token');
     
-    
+    // initial state of new articles
     const initialState = {
         author_token:token,
         title:'',
@@ -29,9 +30,12 @@ function NewPost({ onNewPost,categories }) {
 
     const [article,setArticle] = useState(initialState);
 
+    // send the new article data to the backend and clear the new article state
     const handlePost = async(event) => {
 
         event.preventDefault();
+        
+        // the data sent to the backend via the axios request
         const formData = new FormData();
         formData.append('author_token', article.author_token);
         formData.append('title', article.title);
@@ -62,6 +66,7 @@ function NewPost({ onNewPost,categories }) {
         });
     };
 
+    // handle the upload of images or videos
     const handleFiles = (event) => {
         const { id, files } = event.target;
         setArticle(prevState => ({
@@ -70,6 +75,7 @@ function NewPost({ onNewPost,categories }) {
         }));
     };
 
+    // trigger the upload of picture of video when the user clicks on the upload area
     const triggerFileInput = (input_id) => {
         document.getElementById(input_id).click();
     };
@@ -82,11 +88,12 @@ function NewPost({ onNewPost,categories }) {
         <div>
             <div className='new_post'>
                 <form onSubmit={handlePost}>
-
+                    {/* input for the article title and text content */}
                     <div className='text-input'>
                         <textarea required value = {article.title} placeholder='Article Title' className='article_title' onChange={handleChange} id='title' rows={1}/>
                         <textarea required value = {article.article_content} placeholder= "What's on your mind? " onChange={handleChange} id='article_content' className='content' rows={1}/>
-                    
+
+                        {/* dropdown menu for the article's category, which is used for the recommendation system */}
                         <div className='categories'>
                             <p >Choose the article's category:</p>
                             <select onChange={handleChange} value={article.category} id='category'>
@@ -101,11 +108,11 @@ function NewPost({ onNewPost,categories }) {
 
                    
 
-
+                    {/* buttons for uploading image and video content and submitting the new article */}
                     <div className='article_buttons'>
 
                         <div className='image_container'onClick={() => triggerFileInput('input_image')}>
-                            <img src={image_upload} alt='upload image' className='upload'  />
+                            <img src={image_upload} alt='upload ' className='upload'  />
                             <p>Upload image </p>
                             <input type='file' onChange={handleFiles} className='article-image ' id='input_image'/> 
                         </div>
@@ -129,13 +136,14 @@ function NewPost({ onNewPost,categories }) {
     );  
 }
 
+// displays the name and profile picture of user and buttons for viewing the user's profile and network
 function Profile({user}) {
     
     const navigate = useNavigate();
   
 
 
-
+    // handle the navigation depending on the button pressed
     const handleClick = (event) => {
         const {id} = event.target;
 
@@ -147,7 +155,9 @@ function Profile({user}) {
         }
     };
 
+    // base64 encoding of the user's profile picture 
     const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
+    
     return (
         <div className='user_profile'>
             <img src={base64Image} alt='profile' className='user_pic' />
@@ -159,11 +169,11 @@ function Profile({user}) {
 
 }
 
-
+// displays the comment section of the article
 function Comments({comments}) {
 
 
-    // link to profile
+    // link to the commenter's profile page
     const gotoProfile = (user_id) => {
         console.log(user_id);
         const link = document.createElement('a');
@@ -175,6 +185,7 @@ function Comments({comments}) {
 
     return (
         <div className='comments_section'>
+            {/* displays the comments of the article and the name and profile picture of the user who posted the comment */}
             {comments.length ? (
                     comments.map(comment => (
                         <span key={comment.id} className='comment' >
@@ -188,6 +199,7 @@ function Comments({comments}) {
                             </div>
 
                         </span>))) : (
+                // if no comments are posted in the article display no comments message
                 <p>No comments yet</p>)}
             
         </div>
@@ -195,13 +207,13 @@ function Comments({comments}) {
 }
 
 
-
+// displays the articles and their related data, and handles the logic related to likes and comments
 function Timeline({articleData,setArticleData,categories}) {
 
-    
+    // map of the form {article_id:comment}
     const [NewComment,setNewComment] = useState({});
  
-
+    // link for navigating to the article's author profile page
     const gotoProfile = (user_id) => {
         console.log(user_id);
         const link = document.createElement('a');
@@ -213,11 +225,11 @@ function Timeline({articleData,setArticleData,categories}) {
 
 
 
-     // like an article
+     // handle the liking of the article; if the user has already liked the article, remove the like, else add it
      const AddLike = async(article_id,previous_state) => {
         try {
             const token = localStorage.getItem('jwt_token');
-            const response = await articleService.addLike(token,article_id);
+           await articleService.addLike(token,article_id);
             
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
@@ -239,7 +251,7 @@ function Timeline({articleData,setArticleData,categories}) {
     }
 
 
-
+    // handle the input for a new comment
     const handleChange = (event,article_id) => {
         setNewComment({
             ...NewComment,
@@ -248,11 +260,12 @@ function Timeline({articleData,setArticleData,categories}) {
       
     };
 
+    // post a new comment to the article with article_id and clear the new comment after the axios request
     const postComment = async(article_id) => {
 
         try {
             const token = localStorage.getItem('jwt_token');
-            const response = await articleService.addComment(token,article_id,NewComment[article_id]);
+           await articleService.addComment(token,article_id,NewComment[article_id]);
             const comment_response =  await  ArticleService.getComments(article_id);
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
@@ -281,7 +294,7 @@ function Timeline({articleData,setArticleData,categories}) {
        
     }
 
-
+    // handle whether the comment section of the article is displayed
     const toggleVisibility = (article_id,previous_state) => {
         setArticleData((prevArticleData) =>
             prevArticleData.map((article) => {
@@ -301,17 +314,19 @@ function Timeline({articleData,setArticleData,categories}) {
 
     return (
         <div>
+        {/* area for uploading new articles     */}
         <NewPost  categories={categories} />
        {
         articleData.map(article=>(
             <span  key = {article.id} className='article'>
-                {console.log('article data = ',article)}
+               {/* display the article's title and the authors name and profile picture */}
                 <div className='intro'>
                             <p className='title'>{article.title} by    </p> 
                             <img src={article.profilePicture?`data:image/jpeg;base64,${article.profilePicture}`:placeholder } alt = 'author'className='author_pfp'/>
                             <p className='author_name'  onClick={() => gotoProfile(article.authorId)}> {article.authorFirstName} {article.authorLastName}  </p>
                 </div>
 
+                {/* the article's text and media content */}
                 <div className='article_content'>
                     <p className='description'>{article.content}</p> 
                 </div>
@@ -321,11 +336,13 @@ function Timeline({articleData,setArticleData,categories}) {
                     {article.video &&(<video src={`data:image/jpeg;base64,${article.video}`} alt='profile' className='article_video' controls />) }
                 </div>
 
+                {/* likes and comments counter */}
                 <div className='likes_display'>
                             <p>{article.likes_count} likes</p>
                             <p className='display_comments' onClick={()=>toggleVisibility(article.id,article.showComments)}> {article.comments_count} comments</p>
                 </div>
 
+                {/* button and input for new like and comment */}
                 <div className='add'>
                     <div >
                         {article.isLikedByUser && (<img src={blue_like} onClick={() => AddLike(article.id,article.isLikedByUser)}  alt='blue' className='like_button'/>  ) }
@@ -336,6 +353,7 @@ function Timeline({articleData,setArticleData,categories}) {
                         <input type='button' value="Post comment" className='post_button' onClick={()=>postComment(article.id)} />
                     </div>
                 </div>
+                {/* comment section of the article*/ }
                 <Suspense fallback={<div>Loading comments...</div>}>
                     {article.showComments && <Comments  comments={article.comments} />}
                 </Suspense>
@@ -363,6 +381,7 @@ function HomePage() {
 
     useEffect(() => {
 
+        // controllers that prevent axios from making the same request multiple times when the page is rendered
         const cancelArticle = new AbortController();
         const cancelUser = new AbortController();
         const cancelCategory = new AbortController();
@@ -387,6 +406,7 @@ function HomePage() {
         };
 
         fetchData();
+        // cancellation process
         return () => {
             cancelUser.abort();
             cancelCategory.abort();
@@ -400,8 +420,10 @@ function HomePage() {
         <div  >
             <NavigationBar/>
             <div className='homepage'>
+                {/* display of the user's profile */}
                 <Profile user={user}/>
                 <div className='main_content'>
+                     {/* submit new article area and display of the articles posted in chronological order */}
                     <Timeline articleData={articleData} setArticleData={setArticleData} categories={categories}/>
                 </div>
                 

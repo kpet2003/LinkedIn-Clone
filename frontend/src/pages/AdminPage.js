@@ -14,12 +14,19 @@ function UserList() {
     // renders the list of existing users, except for the admin 
     useEffect(() => {
 
+
+        // prevents axios from making the same request multiple times when the page is rendered
         const cancelUser = new AbortController();
 
+
+        // fetch user list
         const fetchUsers = async() => {
             try {
+                // make axios request
                 const response = await  AdminService.getUsers(cancelUser);
                 const finalUsers = response.filter(user => user.email !== 'admin@gmail.com');
+
+                // save the users list
                 setUsers(finalUsers);
 
             } 
@@ -29,20 +36,22 @@ function UserList() {
         };
         fetchUsers();
 
+        // cancellation process
         return () => {
             cancelUser.abort();  
           };
 
     }, []);
 
-     
+    
+    // handles selected users; if the user is already in the selectedUsers list, it removes them
     const handleSelect = (userId) => {
         setSelectedUsers(prevSelectedUsers => 
             prevSelectedUsers.includes(userId) ? prevSelectedUsers.filter(id => id !== userId) : [...prevSelectedUsers, userId]
         );
     };
 
-    // handle the select all checkbox
+    // handle the select all checkbox; if all users are selected, the selectedUsers list is emptied
     const selectAll = ()=>{
         if(selectedUsers.length===users.length) {
             setSelectedUsers([]);
@@ -93,22 +102,21 @@ function UserList() {
         catch(error) {
             console.log('error fetching xml data: ',error);
         }
-
-
-        
       
     }
 
  
     return (
         <div className='admin'>
-           
+
+            {/* select and export buttons */}
             <div className='buttons'>
                 <input type='button' value={'Export in JSON '}className='button'onClick={exportJSON}/>
                 <input type='button' value={'Export in XML '}className='button'onClick={exportXML}/>
                 <input type='button' value={'Select All '}className='button'onClick={selectAll}/>
             </div>
 
+            {/* user list displayed in grid format, similar to network */}
             <div className='userlist'> 
                 {users.map(user => (
             

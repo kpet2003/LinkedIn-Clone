@@ -5,7 +5,7 @@ import message from '../icons/text-bubble.png';
 import bell from '../icons/bell.png';
 import settings from '../icons/settings.png'
 import profile from '../icons/profile.png';
-import {useNavigate,NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "../styling/NavigationBar.css"
 
 function NavigationBar() {
