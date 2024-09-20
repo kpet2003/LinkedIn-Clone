@@ -23,11 +23,13 @@ public class NetworkController {
     @Autowired
     NetworkService networkService;
 
+    // return a list of all users to the frontend
     @GetMapping(value = "/Network/getUsers")
     public List<NetworkDto> getUsers() {
         return networkService.getUsers();
     }
 
+    // add the new connection request to the database
     @PostMapping(value = "/Network/newRequest")
     public ResponseEntity<?> newRequest(@RequestBody NewRequestDto request) {
 
@@ -42,6 +44,7 @@ public class NetworkController {
         }
     }
 
+    // add the connection to the database and remove the request that contains the users from the database
     @PostMapping(value = "/Notifications/newConnection")
     public ResponseEntity<?> newConnection(@RequestBody NewRequestDto connection) {
         try {
@@ -53,6 +56,8 @@ public class NetworkController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    // remove the request from the database
     @PostMapping(value="/Notifications/declineRequest")
     public ResponseEntity<?> declineRequest(@RequestBody NewRequestDto request) {
         try {
@@ -65,16 +70,19 @@ public class NetworkController {
         }
     }
 
+    // fetch the requests for the user
     @GetMapping(value = "/Network/Requests")
     public List<NetworkDto> getRequests(@RequestParam(value="token", required = false)String token ) {
         return networkService.findUsers(token);
     }
-
+    
+    // fetch the connections of the user
     @GetMapping(value = "/Network/Connections")
     public List<NetworkDto> getConnections(@RequestParam(value="token", required = false)String token ) {
         return networkService.findConnections(token);
     }
 
+    // fetch the connections of the user with specified id
     @GetMapping(value = "/ViewNetwork/getConnections/{id}")
     public List<NetworkDto> getNetwork(@PathVariable Long id) {
 

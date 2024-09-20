@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
+// Class Representation of the comments table
 @Entity
 public class Comments {
     @Id
@@ -25,12 +26,12 @@ public class Comments {
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "poster") 
-    private UserEntity poster;
+    private UserEntity poster;      // user that posted the comment
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "article") 
-    private Article article;
+    private Article article;    // the article to which the comment was posted
 
     
 

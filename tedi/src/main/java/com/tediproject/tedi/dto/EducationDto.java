@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// info about the user's education returned to the frontend
 public class EducationDto {
     private  long id;
     private String education;

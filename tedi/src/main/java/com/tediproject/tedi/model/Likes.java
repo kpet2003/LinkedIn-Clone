@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+// Class Representation of the likes table
 @Entity
 public class Likes {
     
@@ -18,12 +19,12 @@ public class Likes {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "article") 
-    private Article article;
+    private Article article;        // the article that was liked
 
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user") 
-    private UserEntity user;
+    private UserEntity user;    // user who liked the article
 
 
     public Likes() {}

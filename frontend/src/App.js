@@ -1,6 +1,6 @@
 import './styling/App.css';
 import Main from './components/main';
-import React, { useState } from 'react'
+import React from 'react'
 
 function App() {
   return (

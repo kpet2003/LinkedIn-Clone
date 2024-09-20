@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// info about the user's experience returned to the frontend
 public class ExperienceDto {
     private long id;
     private String experience;

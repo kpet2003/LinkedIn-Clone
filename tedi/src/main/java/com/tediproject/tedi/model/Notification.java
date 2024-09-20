@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
+// Class Representation of the Notification table
 @Entity
 public class Notification {
     @Id

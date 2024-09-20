@@ -1,4 +1,5 @@
 package com.tediproject.tedi.controllers;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tediproject.tedi.dto.ArticleDto;
 import com.tediproject.tedi.dto.CommentDto;
 import com.tediproject.tedi.dto.NewArticleDto;
-import com.tediproject.tedi.model.Article;
-import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.service.ArticleService;
 
 
@@ -27,20 +26,20 @@ public class HomepageController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping(value="/HomePage/Articles")
-    public List<Article> getRequests(@RequestParam(value="token", required = false)String token) {
-        return articleService.findArticles(token);
-    }
 
+    // send the article data back to the frontend
     @GetMapping(value="/HomePage/ArticleData")
     public List<ArticleDto> getArticles(@RequestParam(value="token", required = false)String token) {
         return articleService.fetchArticles(token);
     }
 
+    // send the article categories to the frontend
     @GetMapping(value="/HomePage/GetCategories")
     public List<String> getCategories() {
         return articleService.getCategories();
     }
+
+    // fetch the new article and store it to the database 
     @PostMapping(value = "/HomePage/newArticle")
     public ResponseEntity<?> newArticle(  @RequestParam("author_token") String authorToken,
             @RequestParam("title") String title,
@@ -73,21 +72,12 @@ public class HomepageController {
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
     
-        catch (Exception e) {
+        catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }   
     }
 
-    @GetMapping(value="/HomePage/LikesPerArticle/{article_id}")
-    public long AmountOfLikes(@PathVariable Long article_id) {
-        return articleService.findAmountofLikes(article_id);
-    }
-
-    @GetMapping(value="/HomePage/Likes/{article_id}")
-    public List<UserEntity> UserLikes(@PathVariable Long article_id) {
-        return articleService.findLikeUsersArticle(article_id);
-    }
-
+    // add a new like to the article
     @PostMapping("/HomePage/AddLike")
     public ResponseEntity<?> newLike(@RequestParam("token") String token, @RequestParam("article_id") Long article_id) {
         try {
@@ -98,11 +88,8 @@ public class HomepageController {
         }
     }
 
-    @GetMapping(value="/HomePage/CommentsPerPost/{article_id}")
-    public long AmountOfComments(@PathVariable Long article_id) {
-        return articleService.findAmountofComments(article_id);
-    }
-
+    
+    // add a new comment to the article
     @PostMapping("/HomePage/AddComment")
     public ResponseEntity<?> newComment(@RequestParam("token") String token, @RequestParam("article_id") Long article_id,@RequestParam("comment") String comment) {
         try {
@@ -113,6 +100,7 @@ public class HomepageController {
         }
     }
 
+    // fetch comments of article
     @GetMapping(value="/HomePage/GetComments/{article_id}")
     public List<CommentDto> GetComments(@PathVariable Long article_id) {
         return articleService.findComments(article_id);

@@ -16,6 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 
+// Class Representation of the skills table
 @Entity
 public class Skills {
     @Id

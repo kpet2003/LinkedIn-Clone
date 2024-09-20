@@ -45,7 +45,7 @@ public class AdminService {
 
 
 
-
+    // fetch data for all users
     public List<AdminDto> findAllUsers() {
         List<UserEntity> users =  userRepo.findAll();  
 
@@ -79,6 +79,7 @@ public class AdminService {
 
     }
 
+    // fetch data for the users specified in the list
     public List <AdminDto> findUsers(List<Long> user_ids) {
 
         List<UserEntity> users =  userRepo.findAllById(user_ids);
@@ -114,6 +115,7 @@ public class AdminService {
 
     }
 
+    // fetch the titles of the articles that the user has liked
     private List<String> getUserLikes(UserEntity user) {
         List<Article> articles = likeRepo.findLikedArticles(user);
         
@@ -126,6 +128,7 @@ public class AdminService {
         return titles;
     }
 
+    // fetch the titles of the articles that the user has written
     private List<String> getUserArticles(UserEntity user) {
         List<Article> articles = articleRepo.findByAuthor(user);
 
@@ -140,6 +143,7 @@ public class AdminService {
 
     }
 
+    // fetch the titles of the job postings the user has written
     private List<String> getUserJobs(UserEntity user) {
         List<Job> jobs  = jobRepo.findByAuthor(user);
         List<String> job_titles = new ArrayList<>();
@@ -152,6 +156,7 @@ public class AdminService {
         return job_titles;
     }
 
+    // fetch the names of the users connected to the user
     private List<String> getUserConnections(UserEntity user) {
         List <NetworkDto> connections = networkService.findConnectionsById(user.getID());
         List <String> connection_names = new ArrayList<>();
@@ -164,6 +169,7 @@ public class AdminService {
         return connection_names;
     }
 
+    // fetch the skills of the user
     private List<String> getUserSkills(UserEntity user) {
         List<Skills> skills =  user.getUser_skills();
         List <String> user_skills = new ArrayList<>();
@@ -172,7 +178,8 @@ public class AdminService {
         }
         return user_skills;
     }
-
+    
+    // fetch the education of the user
     private List<String> getUserEducation(UserEntity user) {
         List<Education> edu = user.getUser_education();
 
@@ -182,7 +189,8 @@ public class AdminService {
         }
         return user_education;
     }
-
+    
+    // fetch the experience of the user
     private List<String> getUserExperience(UserEntity user) {
         List<Experience> exp = user.getUser_experience();
         List <String> experience = new ArrayList<>();
@@ -194,6 +202,7 @@ public class AdminService {
 
     }
 
+    // fetch the comment and the title of the article to which a user has commented
     private List<CommentInfo> getUserComments(UserEntity user) {
         List<Comments> comments =  commentRepo.findByPoster(user);
 

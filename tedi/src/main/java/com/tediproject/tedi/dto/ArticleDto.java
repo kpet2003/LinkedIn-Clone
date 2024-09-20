@@ -3,7 +3,7 @@ import java.util.List;
 
 
 
-
+// data about articles returned to the frontend
 public class ArticleDto {
     
     Long id;

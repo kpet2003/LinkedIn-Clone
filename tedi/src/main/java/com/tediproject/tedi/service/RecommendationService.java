@@ -93,18 +93,7 @@ public class RecommendationService {
 
         return matrix;
     }
-
-    public void print(Double[][] array) {
-        for(int i=0; i<array.length; i++) {
-            for(int j=0; j<array[i].length; j++) {
-                System.out.print(array[i][j] + " ");
-            }
-            System.out.print("\n");
-        }
-        
-    }
     
-
     public Double[][] usersTable() {
 
 

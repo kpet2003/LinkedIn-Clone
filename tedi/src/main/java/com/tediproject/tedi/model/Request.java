@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDateTime;
 
+// Class Representation of the Request table
 @Entity
 public class Request {
     

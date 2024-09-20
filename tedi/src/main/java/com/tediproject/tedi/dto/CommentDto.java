@@ -1,6 +1,6 @@
 package com.tediproject.tedi.dto;
 
-
+// comment data returned to the frontend
 public class CommentDto {
     private String firstName;
     private String lastName;

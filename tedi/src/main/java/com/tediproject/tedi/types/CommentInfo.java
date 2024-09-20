@@ -1,5 +1,6 @@
 package com.tediproject.tedi.types;
 
+// comment and the title of the article to which it was posted (Used in adminService)
 public class CommentInfo {
     private String comment;
     private String article_title;

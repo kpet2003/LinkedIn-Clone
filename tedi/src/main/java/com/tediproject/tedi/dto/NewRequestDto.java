@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// data sent from the frontend for making a new request
 public class NewRequestDto {
     String token;
     long user_id;

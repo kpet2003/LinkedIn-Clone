@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// info about the connections returned to the frontend
 public class NetworkDto {
     private Long id;
     private String firstName;

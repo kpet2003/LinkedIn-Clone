@@ -1,7 +1,7 @@
 
 package com.tediproject.tedi.dto;
 
-
+// data sent from the frontend when a new article is written
 public class NewArticleDto {
     
     private String author_token;

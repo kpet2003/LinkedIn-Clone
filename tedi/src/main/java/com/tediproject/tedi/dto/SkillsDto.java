@@ -1,5 +1,7 @@
 package com.tediproject.tedi.dto;
 
+
+// info about the user's skills returned to the frontend
 public class SkillsDto {
     private long id;
     private String skill;

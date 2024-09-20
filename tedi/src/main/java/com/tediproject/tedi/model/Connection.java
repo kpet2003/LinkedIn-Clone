@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+// Class Representation of the connection table
 @Entity
 @Table(name = "connection")
 public class Connection {

@@ -31,6 +31,7 @@ public class NetworkService {
     @Autowired 
     ConnectionRepo connectionRepo;
 
+    // fetch info for all users
     public List<NetworkDto> getUsers() {
         List <UserEntity> users = userRepo.findAll();
         List <NetworkDto> final_users = new ArrayList<>();
@@ -55,7 +56,7 @@ public class NetworkService {
 
 
 
-    // make a friend request
+    // make a connection request
     public void createRequest(long receiver_id, String token) {
 
         UserEntity sender = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
@@ -71,7 +72,7 @@ public class NetworkService {
     }
 
 
-    // add a new connection to the connections table
+    // add a new connection to the connections table and delete the request containing the two connected users
     public void addConnection(long user_id, String token) {
         
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
@@ -89,7 +90,7 @@ public class NetworkService {
     }
 
 
-    // handle declining of requests
+    // handle declining of requests by deleting the request containing the two users
     public void removeRequest(long user_id, String token) {
         UserEntity user_a = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         UserEntity user_b = userRepo.findById(user_id);
@@ -98,7 +99,7 @@ public class NetworkService {
         requestRepo.delete(request);
     }
 
-    // find users that have made a friend request
+    // find users that have made a friend request to the user
     public List<NetworkDto> findUsers(String token) {
         UserEntity myuser = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<UserEntity> receivers = requestRepo.findReceivers(myuser);
@@ -128,7 +129,7 @@ public class NetworkService {
 
     }
     
-
+    // find the connections of a user and return them to the user
     private List<NetworkDto> getConnectedUsers(UserEntity myuser) {
         List<UserEntity> user_bs = connectionRepo.findUserB(myuser);
         List <UserEntity> user_as = connectionRepo.findUserA(myuser);
@@ -158,6 +159,7 @@ public class NetworkService {
         
     }
 
+    // find the connections of a user
     public List<UserEntity> findUserConnections(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
 
@@ -171,7 +173,7 @@ public class NetworkService {
         return connectedUsers;
     }
 
-
+    // find the connections of a user
     public List<UserEntity> findUserConnections(UserEntity user) {
        
 
@@ -185,7 +187,7 @@ public class NetworkService {
         return connectedUsers;
     }
 
-    // find the connections of a user
+    // find the connections of a user and return them to the frontend
     public List<NetworkDto> findConnections(String token) {
         
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
@@ -195,7 +197,7 @@ public class NetworkService {
         return connections;
         
     }
-    // find the connections of a user
+    // find the connections of a user with id and return them to the frontend
     public List<NetworkDto> findConnectionsById(Long id ) {
         
         UserEntity user = userRepo.findById(id).get();

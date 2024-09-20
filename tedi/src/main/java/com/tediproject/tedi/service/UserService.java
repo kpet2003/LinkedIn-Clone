@@ -1,5 +1,6 @@
 package com.tediproject.tedi.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +138,7 @@ public class UserService{
             UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
             user.setProfilePicture(img.getBytes());
             userRepo.save(user);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("File save failed");
          }
     }
@@ -164,7 +165,6 @@ public class UserService{
             eduRepo.save(education);
             userRepo.save(user);
         } catch (Exception e) {
-            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }
@@ -191,7 +191,6 @@ public class UserService{
             expRepo.save(exp);
             userRepo.save(user);
         } catch (Exception e) {
-            e.printStackTrace(); 
             throw new RuntimeException("File save failed");
          }
     }

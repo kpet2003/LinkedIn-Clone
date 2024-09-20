@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// info about the request sent to the frontend
 public class RequestDto {
 
     private Long sender_id;

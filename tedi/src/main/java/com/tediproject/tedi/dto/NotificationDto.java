@@ -1,5 +1,6 @@
 package com.tediproject.tedi.dto;
 
+// Post notification info returned to the frontend
 public class NotificationDto {
     private Long id;
     private Long sender_id;

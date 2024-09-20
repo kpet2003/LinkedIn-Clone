@@ -31,7 +31,7 @@ public class NotificationService {
     private NotificationRepo notificationRepo;
 
 
-    // find users that made a friend request
+    // find users that made a friend request to the user
     public List<RequestDto> findRequests(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
         List<UserEntity> senders = requestRepo.findSenders(user);
@@ -50,6 +50,7 @@ public class NotificationService {
         return requests;
     }
 
+    // find users that have made comments or likes to articles written by the user (sorted from newest to oldest)
     public List<NotificationDto> findNotifications(String token) {
         UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
 
