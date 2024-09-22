@@ -4,43 +4,47 @@ import React, { useState } from 'react';
 import NavigationBar from './NavigationBar.js';
 
 function ChangePassword(){
-    const [pass, setPass] = useState('');
-    const [passrep, setPassRep] = useState('');
+    const [pass, setPass] = useState(''); //to keep new password
+    const [passrep, setPassRep] = useState(''); //to keep new password repeated
 
+    //handle password change
     const handleSubmit = async(event) => {
-        event.preventDefault();
+        event.preventDefault(); //prevent default get request
         
-        if(pass !== passrep){
+        if(pass !== passrep){ //if passwords don't match return
             alert("Passwords don't match");
             return;
         }
 
+        //make data to be sent to database
         const data = {
             token: localStorage.getItem('jwt_token'),
             newPassword: pass
         };
   
         try {
-            await UserService.changePassword(data);
-            alert("Password changed successfully");
+            await UserService.changePassword(data); //change password
+            alert("Password changed successfully"); //message to user
         } 
-        catch (error) {
-            console.error("There was an error changing password", error);
-            alert("There was an error changing your password");
+        catch (error) { //if error occurs
+            console.error("There was an error changing password", error); //write to console
+            alert("There was an error changing your password"); //message to user
         }
     }
 
+    //handle user inputting password
     const handleChange1 = (event) => {
-        setPass(event.target.value);
+        setPass(event.target.value); //save value
     };
 
+    //handle user inputting password repeated
     const handleChange2 = (event) => {
-        setPassRep(event.target.value);
+        setPassRep(event.target.value); //save value
     };
 
     return(
         <div>
-           <div className='password-table'>
+           <div className='password-table'> {/* box with inputs for the new password and a submit button */}
             <h1>Change Password</h1><br></br>
             <form onSubmit={handleSubmit}>
                 <label>New Password: </label>
@@ -59,6 +63,7 @@ function NewPassword() {
     return(
         <div>
             <NavigationBar></NavigationBar>
+            <br></br>
             <ChangePassword></ChangePassword>
         </div>
     );

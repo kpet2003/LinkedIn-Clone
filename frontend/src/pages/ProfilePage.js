@@ -9,7 +9,7 @@ import ToggleSwitch from "../components/ToggleSwitch.js";
 import placeholder from '../icons/avatar.png'
 import trash from '../icons/trash.png';
 
-
+//function that shows the user's skills and an icon to delete them next to each skill
 function Skills({skills,deleteSkill}) {
 
     return (
@@ -25,6 +25,7 @@ function Skills({skills,deleteSkill}) {
     );
 }
 
+//function that shows the user's education in a list and an icon next to each point to delete it
 function Education({education,deleteEdu}) {
 
     return (
@@ -40,6 +41,7 @@ function Education({education,deleteEdu}) {
     );
 }
 
+//function that shows the user's experience in a list and an icon next to each point to delete it
 function Experience({experience,deleteExperience}) {
     return (
         <div>
@@ -57,6 +59,7 @@ function Experience({experience,deleteExperience}) {
 
 
 function Pfp(){
+    //initial state for the user's data
     const initialState = {
         firstName: '',
         lastName: '',
@@ -75,38 +78,45 @@ function Pfp(){
        
     };
 
-    const [user, setUser] = useState(initialState);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [changedField, setChangedField] = useState('');
-    const [skills,setSkills] = useState([]);
-    const [education,setEducation] = useState([]);
-    const [experience,setExperience] = useState([]);
+    const [user, setUser] = useState(initialState); //to keep user data
+    const [selectedFile, setSelectedFile] = useState(null); //to keep file selected for the profile picture
+    const [changedField, setChangedField] = useState(''); //to keep which profile field was changed by the user
+    const [skills,setSkills] = useState([]); //to keep user's skills
+    const [education,setEducation] = useState([]); //to keep user's education
+    const [experience,setExperience] = useState([]); //to keep user's experience
 
+    //on page load
     useEffect(() => {
+        //useEffect runs multiple times due to react strict mode, use abort controllers so requests happen only once
         const cancelUser = new AbortController();
         const cancelEdu = new AbortController();
         const cancelExp = new AbortController();
         const cancelSkills = new AbortController();
+
+        //function to get the user's data
         const fetchData = async () => {
             try {
-                const [user, education, experience,skills] = await Promise.all([
-                    userService.getUserData(localStorage.getItem('jwt_token'), cancelUser),
-                    userService.getEducation(localStorage.getItem('jwt_token'), cancelEdu),
-                    userService.getExperience(localStorage.getItem('jwt_token'), cancelExp),
-                    userService.getSkills(localStorage.getItem('jwt_token'), cancelSkills)
+                const [user, education, experience,skills] = await Promise.all([ //wait for all requests to be made
+                    userService.getUserData(localStorage.getItem('jwt_token'), cancelUser), //get user's data
+                    userService.getEducation(localStorage.getItem('jwt_token'), cancelEdu), //get user's education
+                    userService.getExperience(localStorage.getItem('jwt_token'), cancelExp), //get user's experience
+                    userService.getSkills(localStorage.getItem('jwt_token'), cancelSkills) //get user's skills
                 ]);
+                //save the data retrieved in the corrsponding constant
                 setUser(user);
                 setEducation(education);
                 setExperience(experience);
                 setSkills(skills);
                 
             } 
-            catch (error) {
-                console.error("There was an error getting the user list", error);
+            catch (error) { //if error occurs
+                console.error("There was an error getting the user list", error); //write it to console
             }
         }
-        fetchData();
-        return()=>{
+
+        fetchData();//get user's data
+
+        return()=>{ //after function completes stop any requests from happening again
             cancelUser.abort();
             cancelEdu.abort();
             cancelExp.abort();
@@ -114,46 +124,50 @@ function Pfp(){
         }
     },[]);
 
-
+    //function to delete a skill
     const deleteSkill = async(skill_id) => {
         try {
-            await userService.removeSkill(skill_id,localStorage.getItem('jwt_token'));
-            const response = await userService.getSkills(localStorage.getItem('jwt_token'));
-            setSkills(response);
+            await userService.removeSkill(skill_id,localStorage.getItem('jwt_token')); //remove skill from database
+            const response = await userService.getSkills(localStorage.getItem('jwt_token')); //get the updated list of skills
+            setSkills(response); //save the new skills
         }
-        catch(error) {
-            console.error('error deleting the skill: ',error);
+        catch(error) { //if error occurs
+            console.error('error deleting the skill: ',error); //write it to console
         }
     }
 
+    //function to delete education point
     const deleteEducation = async(edu_id) =>{
         try {
-            await userService.removeEdu(edu_id,localStorage.getItem('jwt_token'));
-            const response = await userService.getEducation(localStorage.getItem('jwt_token'));
-            setEducation(response);
+            await userService.removeEdu(edu_id,localStorage.getItem('jwt_token')); //remove from database
+            const response = await userService.getEducation(localStorage.getItem('jwt_token')); //get the updated list of education points
+            setEducation(response); //save them
         }
-        catch(error) {
-            console.error('error deleting the education: ',error);
+        catch(error) { //if error occurs
+            console.error('error deleting the education: ',error); //write it to console
         }
     }
 
+    //function to delete experience point
     const deleteExperience = async(exp_id) => {
         try {
-            await userService.removeExp(exp_id,localStorage.getItem('jwt_token'));
-            const response = await userService.getExperience(localStorage.getItem('jwt_token'));
-            setExperience(response);
+            await userService.removeExp(exp_id,localStorage.getItem('jwt_token')); //remove from database
+            const response = await userService.getExperience(localStorage.getItem('jwt_token')); //get the updated list of experience points
+            setExperience(response); //save them
         }
-        catch(error) {
-            console.error('error deleting the experience: ',error);
+        catch(error) { //if error occurs
+            console.error('error deleting the experience: ',error); //write it to console
         }
     }
 
+    //handle new profile picture being chosen
     const handleChange = (event) => {
         setChangedField('profilePicture');
         const file = event.target.files[0];
         setSelectedFile(file);
     };
 
+    //handle user changing a field in their profile
     const handleChangedText = (event) => {
         const { id, value } = event.target;
         setChangedField(id);
@@ -163,115 +177,116 @@ function Pfp(){
         });
     }
     
+    //function to handle submitting a change to the user's profile
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault(); //prevent default get request from happening
         try {
-            if(changedField === 'profilePicture'){
-                const formData = new FormData();
+            if(changedField === 'profilePicture'){ //if profile picture was changed
+                const formData = new FormData(); //prepare data to be sent to database
                 formData.append('profilePicture', selectedFile);
                 formData.append('token', localStorage.getItem('jwt_token'));
-                await userService.changeProfilePicture(formData);
-                alert('Profile picture changed successfully');
+                await userService.changeProfilePicture(formData); //change profile picture in database
+                alert('Profile picture changed successfully'); //message to user
             }
             else {
-                if(changedField === 'education'){
-                    const data = {
+                if(changedField === 'education'){ //if education was changed
+                    const data = { //prepare data to be sent
                         token: localStorage.getItem('jwt_token'),
                         info:user.education
                     }
-                    console.log('user education is: ',user.education)
-                    await userService.changeEducation(data);
-                    alert('Education info changed successfully');
-                    const response = await userService.getEducation(localStorage.getItem('jwt_token'));
-                    setEducation(response);
+
+                    await userService.changeEducation(data); //change education in database
+                    alert('Education info changed successfully'); //message to user
+                    const response = await userService.getEducation(localStorage.getItem('jwt_token')); //get updated education
+                    setEducation(response); //save it
                 }
-                else if(changedField === 'workExperience'){
-                    const data = {
+                else if(changedField === 'workExperience'){ //if experience was changed
+                    const data = { //prepare data to be sent
                         token: localStorage.getItem('jwt_token'),
                         info: user.workExperience
                     }
-                    await userService.changeWork(data);
-                    alert('Work experience changed successfully');
-                    const response = await userService.getExperience(localStorage.getItem('jwt_token'));
-                    setExperience(response);
+                    await userService.changeWork(data); //change experience in database
+                    alert('Work experience changed successfully'); //message to user
+                    const response = await userService.getExperience(localStorage.getItem('jwt_token')); //get updated experience
+                    setExperience(response); //save it
                 }
-                else if(changedField === 'skills'){
-                    const data = {
+                else if(changedField === 'skills'){ //if skills were changed
+                    const data = { //prepare data to be sent
                         token: localStorage.getItem('jwt_token'),
                         info: user.skills
                     }
-                    await userService.changeSkills(data);
-                    alert('Skills changed successfully');
-                    const response = await userService.getSkills(localStorage.getItem('jwt_token'));
-                    setSkills(response);
+                    await userService.changeSkills(data); //change skills in database
+                    alert('Skills changed successfully'); //message to user
+                    const response = await userService.getSkills(localStorage.getItem('jwt_token'),null); //get updated skills
+                    setSkills(response); //save them
                 }
-                else if(changedField === 'workTitle'){
-                    const data = {
+                else if(changedField === 'workTitle'){ //if work title was changed
+                    const data = { //prepare data to be sent
                         token: localStorage.getItem('jwt_token'),
                         info: user.workTitle
                     }
-                    await userService.changeWorkTitle(data);
-                    alert('Work title changed successfully');
+                    await userService.changeWorkTitle(data); //change work title in database
+                    alert('Work title changed successfully'); //message to user
                 }
-                else if(changedField === 'workplace'){
-                    const data = {
+                else if(changedField === 'workplace'){ //if workplace was changed
+                    const data = { //prepare data to be sent
                         token: localStorage.getItem('jwt_token'),
                         info: user.workplace
                     }
-                    await userService.changeWorkplace(data);
-                    alert('Workplace changed successfully');
+                    await userService.changeWorkplace(data); //change workplace in database
+                    alert('Workplace changed successfully'); //message to user
                 }
                 else{
-                    alert('Nothing was changed');
+                    alert('Nothing was changed'); //otherwise tell user nothing has been changed
                     return;
                 }
             }
         
-            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'));
-            setUser((user) => ({
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token')); //get updated user data
+            setUser((user) => ({ //save it
                 ...user,
                 ...updatedUser,
             }));
-        } catch (error) {
-            console.error('There was an error changing data', error);
-            alert('There was an error changing your data');
+        } catch (error) { //if error occurs
+            console.error('There was an error changing data', error); //write to console
+            alert('There was an error changing your data'); //message to user
         }
-        setChangedField('');
+        setChangedField(''); //reset the input of the changed field
     };
 
+    //function to handle the user making information private/public
     const handleBool = async (event) => {
-        event.preventDefault();
+        event.preventDefault(); //prevent the default get request from happening
         const id = event.target.id;
-        console.log('id is ', id);
-        const data={
+        const data={ //data to be sent
             token: localStorage.getItem('jwt_token'),
         };
         try{
-            if(id === 'edu'){
-                console.log('changing education');
-                await userService.changeEduState(data);
+            if(id === 'edu'){ //if education state changed
+                await userService.changeEduState(data); //change it in the database
             }
-            else if(id === 'work'){
-                await userService.changeWorkState(data);
+            else if(id === 'work'){ //if work state changed
+                await userService.changeWorkState(data); //change it in the database
             }
             else{
-                await userService.changeSkillsState(data);
+                await userService.changeSkillsState(data);//otherwise skills state has changed, change it
             }
-            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'));
-            setUser((user) => ({
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token')); //get updated user data
+            setUser((user) => ({ //save user data
                 ...user,
                 ...updatedUser,
             }));
-        } catch(error){
-            console.error('Could not change bool', error);
-            alert('Could not change the state of your information');
+        } catch(error){ //if error occurs
+            console.error('Could not change bool', error); //write to console
+            alert('Could not change the state of your information'); //message to user
         }
     }
 
-    const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`;
+    const base64Image = user.profilePicture? `data:image/jpeg;base64,${user.profilePicture}`: `${placeholder}`; //if user has profile picture display it otherwise display default
 
     return (
         <div>
+            {/*on top goes the user's picture with their name underneath */}
             <div className="banner">
                 <div className="pic-edit">
                 <div className="profile-picture-container" style={{marginLeft: '20px'}}>
@@ -281,6 +296,7 @@ function Pfp(){
                     className="profile-picture"
                     />
                 </div>
+                {/* popup triggered by a pen icon next to profile picture to change it */}
                 <Popup
                     trigger={
                     <div className="pen-icon" title="Edit Profile Picture">
@@ -311,6 +327,7 @@ function Pfp(){
             </div>
             <br></br>
             <br></br>
+            {/* boxes with different types of user information and a pen icon popup to change each type of info */}
             <div className="cards-container">
                 <div className="card">
                     <h2>
@@ -469,6 +486,7 @@ function Pfp(){
 
                 </div>
                 <br></br>
+                {/* underneath the user info a contact information card */}
                 <div className="card">
                     <h2><i>Contact Info</i></h2>
                     <p><b>Email:</b> {user.email}</p>

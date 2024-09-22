@@ -4,6 +4,7 @@ import NavigationBar from "./NavigationBar";
 import userService from "../service/userService";
 
 function Settings() {
+    //settings page is a box with a title and 2 links to pages for changing email and password
     return(
         <div className="table">
             <h1><b>Settings</b></h1><br></br>
@@ -22,6 +23,7 @@ function SettingsPage() {
     return (
         <div>
             <NavigationBar></NavigationBar>
+            <br></br>
             <Settings></Settings>
         </div>
     )
