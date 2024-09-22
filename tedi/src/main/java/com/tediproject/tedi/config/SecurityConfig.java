@@ -25,10 +25,10 @@ import com.tediproject.tedi.security.JwtEntryPoint;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private JwtEntryPoint jwtEntryPoint;
+    private final JwtEntryPoint jwtEntryPoint;
 
 
     @Autowired

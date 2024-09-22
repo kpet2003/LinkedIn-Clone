@@ -7,11 +7,12 @@ import UserService from '../service/userService.js';
 const WelcomePage = ({ onLoginSuccess }) => {
     const navigate = useNavigate();
     
+    // button for navigating to signup page
     const SignUpPage=()=>{
       navigate('/SignUp');
     };
 
-
+    // initial login form
     const initialState = {
         email: '',
         password: '',
@@ -20,6 +21,7 @@ const WelcomePage = ({ onLoginSuccess }) => {
     const [user, setUser] = useState(initialState);
 
     
+    // handles the login process
     const handleSubmit = async(event) => {
       event.preventDefault();
       
@@ -29,14 +31,16 @@ const WelcomePage = ({ onLoginSuccess }) => {
       };
 
       try {
+
+          // sends login request
           const response =  await UserService.loginUser(data);
 
+          // stores jwt token that was received from the backend
           localStorage.setItem('jwt_token',response.data);
           
           const token_data = UserService.decodeToken(localStorage.getItem('jwt_token'));
 
-          onLoginSuccess();
-          
+          // redirect admin to admin page and user to their homepage      
           if(token_data.sub === 'admin@gmail.com'){
             onLoginSuccess(true);
           }
@@ -45,11 +49,12 @@ const WelcomePage = ({ onLoginSuccess }) => {
           }
       } 
       catch (error) {
+        // if login fails alert the user
         console.error("Login error:", error);
         alert("Wrong email or password");
       }
   }
-    
+    // handler of user input
     const handleChange = (event) => {
         setUser({
             ...user,

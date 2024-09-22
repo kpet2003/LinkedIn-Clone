@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+// User Roles in the app(Admin and User)
 @Entity
 public class Role {
     @Id

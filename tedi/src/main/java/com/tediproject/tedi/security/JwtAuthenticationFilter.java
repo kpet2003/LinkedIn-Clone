@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tediproject.tedi.repo.UserRepo;
-import com.tediproject.tedi.service.UserService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,15 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
-
-    @Autowired
-    private UserRepo userRepo;
 
     @Autowired
     private JwtUtil jwtUtil;

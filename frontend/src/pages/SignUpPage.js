@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 function SignUpPage(){
 
+    // initial user state
     const initialState = {
         first_name: '',
         last_name: '',
@@ -18,6 +19,8 @@ function SignUpPage(){
     const [user, setUser] = useState(initialState);
 
     const navigate = useNavigate();
+
+    // handles the user sign-up
     const handleSubmit = async(event) => {
         event.preventDefault();
         
@@ -36,11 +39,15 @@ function SignUpPage(){
 
 
         try {
+            // sends user data to backend to save it
             const response =  await UserService.saveUser(formData);
             alert("User registered successfully");
             console.log(response.data);
+
+            // redirects user to welcome page to login
             navigate(-1);  
         } catch (error) {
+            // in case of error alerts the user
             console.error("There was an error registering the user:", error.response.data);
             const errorMessage = `There was an error registering the user: ${error.response.data}`;
             alert(errorMessage);
@@ -62,11 +69,10 @@ function SignUpPage(){
         }));
     };
     
-
+    // clears sign-up form
     const Reset = () => {
         setUser(initialState);  
         document.getElementById('profile_picture').value = '';
-        document.getElementById('cv').value = '';
     };
 
 

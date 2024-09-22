@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +37,6 @@ import com.tediproject.tedi.model.Education;
 import com.tediproject.tedi.model.Experience;
 import com.tediproject.tedi.model.Skills;
 import com.tediproject.tedi.model.UserEntity;
-import com.tediproject.tedi.repo.RoleRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
 import com.tediproject.tedi.service.UserService;
@@ -54,14 +54,13 @@ public class UserControllers {
 
     @Autowired
     private UserRepo userRepo;
-    @Autowired
-    private RoleRepo roleRepo;
+    
 
 
     @Autowired
     private JwtUtil jwtUtil;
 
-
+    // authenticate the user
     @GetMapping(value="/auth/")
     public ResponseEntity<?> authenticate(@RequestParam(value="token", required = false)String token) {
         try {
@@ -73,7 +72,7 @@ public class UserControllers {
         }
     }
 
-
+    // create a new UserEntity
     @PostMapping(value = "/SignUp/signup")
     public ResponseEntity<?> createUser(
         @RequestParam(value="email", required = false) String email,
@@ -105,7 +104,7 @@ public class UserControllers {
         }
         
         try {
-            Long id = userService.loginUser(user.getEmail(), user.getPassword());
+            userService.loginUser(user.getEmail(), user.getPassword());
             String token = jwtUtil.generateToken(auth);
             return ResponseEntity.ok(token);
         } 
@@ -141,7 +140,7 @@ public class UserControllers {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }
             
-        } catch (Exception e) {
+        } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

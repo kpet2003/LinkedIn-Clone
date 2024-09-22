@@ -22,6 +22,7 @@ import userService from '../service/userService';
 
 const SERVER_URL = "https://localhost:8080";
 
+// checks whether the user is authenticated
 const authenticate = (token) => {
     const API_URL = SERVER_URL + "/auth/";
     return axios.get(API_URL,{
@@ -39,12 +40,14 @@ const Main=()=>{
 
     const checkAuthentication = async () => {
         const token = localStorage.getItem('jwt_token');
+        
         if (token !== null) {
-
+            // authenticate user
             try {
-                const response = await authenticate(token);
+                await authenticate(token);
                 setIsAuthenticated(true);
             }
+            // if authentication fails, display message and redirect to welcome page
             catch(error) {
                 console.error('Token validation failed:', error.response);
                 setIsAuthenticated(false);
@@ -53,6 +56,7 @@ const Main=()=>{
             }
             
         } 
+        // if there is no token, the user is not authenticated, show messaage and redirect them to welcome page
         else {
             console.log('User not authenticated');
             alert('User not authenticated')
@@ -63,9 +67,15 @@ const Main=()=>{
     };
 
     useEffect(() => {
+
+        // user doesn't have to be authenticated to access the welcome page and the sign-up page
         if (location.pathname !== '/SignUp' && location.pathname !== '/') {
+            
+            // check if user is authenticated
             checkAuthentication();
             const token = userService.decodeToken(localStorage.getItem('jwt_token'));
+            
+            // prevent admin from reaching homepage and redirect him
             if(location.pathname === '/HomePage' && token.sub === 'admin@gmail.com') {
                 navigate(-1);
             }
@@ -76,6 +86,7 @@ const Main=()=>{
 
     },  [location.pathname]);
 
+    // if login is successful, navigate admin to admin page and users to their homepage
     const handleLoginSuccess = (isAdmin) => {
         setIsAuthenticated(true);
         if(isAdmin) {
@@ -86,11 +97,13 @@ const Main=()=>{
         }
     };
 
+    // Show a loading state until auth status is determined
     if (isLoading) {
-        return <div>Loading...</div>; // Show a loading state until auth status is determined
+        return <div>Loading...</div>; 
     }
 
     return(
+        // all app routes
         <Routes>
             <Route exact path='/' element={<WelcomePage onLoginSuccess={handleLoginSuccess} />} ></Route>
             <Route exact path='/SignUp' Component={SignUpPage}></Route>

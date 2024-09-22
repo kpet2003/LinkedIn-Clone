@@ -40,7 +40,7 @@ public class RecommendationService {
     @Autowired
     SkillsRepo skillsRepo;
 
-
+    // find the transpose of a matrix
     public Double[][] transpose(Double[][] array) {
         Double [][] transpose_matrix = new Double[array[0].length][array.length];
         
@@ -54,7 +54,7 @@ public class RecommendationService {
         return transpose_matrix;
     }
     
-
+    // calculate the dot product of two vectors
     public Double dot(Double[]row, Double[] column) {
         
         if(row.length != column.length) {
@@ -74,7 +74,7 @@ public class RecommendationService {
 
 
 
-
+    // perform matrix multiplication
     public Double[][] arrayMultiplication(Double[][] a, Double[][] b ) {
         if(a[0].length != b.length) {
             throw new IllegalArgumentException("Arrays should have matching dimensions.");
@@ -94,6 +94,7 @@ public class RecommendationService {
         return matrix;
     }
     
+    // build the users table(rows:users, columns: article categories); 
     public Double[][] usersTable() {
 
 
@@ -111,6 +112,7 @@ public class RecommendationService {
         return matrix;
     }
 
+    // build the post table(rows:posts, columns: article categories) if the post i has j category set matrix[i][j] = 1, else matrix[i][j]=0
     public Double[][] postTable() {
         List<Article> articles = articleRepo.findAllByOrderByIdAsc();
         List <String> categories = articleRepo.findCategories();
@@ -130,6 +132,7 @@ public class RecommendationService {
 
     }
 
+    // build the users table(rows:users, columns: skills)
     public Double[][] usersTableJobs() {
 
         List <UserEntity> users = userRepo.findAllByOrderByIdAsc();
@@ -146,6 +149,8 @@ public class RecommendationService {
         return matrix;
     }
 
+
+    // build the jobs table(rows:jobs, columns: skills) if the job i has j relevant skill set matrix[i][j] = 1, else matrix[i][j]=0
     public Double[][] jobsTable() {
         List<Job> jobs =  jobRepo.findAllByOrderByIdAsc();
         List <Skills> skills = skillsRepo.findAll();
@@ -164,7 +169,7 @@ public class RecommendationService {
 
     }
 
-
+    // calculate the error of the gradient descent function
     public double costFunction(Double[][] ratings,Double[][] users_table,Double[][] post_table) {
         double error = 0.0;
 
@@ -184,24 +189,7 @@ public class RecommendationService {
         return error;
     }
 
-    public double finalCost(Double[][] ratings, Double[][] matrix) {
-        int size = ratings.length * ratings[0].length;
-
-        double coefficient = 1.0/size;
-
-        double error = 0.0;
-        for(int i=0; i<ratings.length; i++) {
-            for(int j=0; j<ratings[0].length; j++) {
-                error+= (matrix[i][j]-ratings[i][j])* (matrix[i][j]-ratings[i][j]);
-            }
-        }
-
-
-        return error*coefficient;
-    }
-
-
-
+    // approximate the post ratings matrix using gradient descent algorithm
     public Double[][] gradientDescentPosts(Double[][] matrix,double learning_rate, int iterations,double max_error) {
         Double [][] users_table = usersTable();
         Double[][] post_table = postTable();
@@ -209,6 +197,7 @@ public class RecommendationService {
 
         double precision_error = 100.0;
 
+        // the algorithm runs for a specified number of iterations, or until the error is less or equal to max_error
         for(int i=0; i<iterations; i++) {
             
             if(precision_error<=max_error) {
@@ -234,10 +223,12 @@ public class RecommendationService {
 
         }
 
+        // the approximated ratings table is calculated by multiplying the users table and the post table after gradient descent 
         return arrayMultiplication(users_table, transpose(post_table));
 
     }
 
+     // approximate the job ratings matrix using gradient descent algorithm
     public Double[][] gradientDescentJobs(Double[][] matrix,double learning_rate, int iterations,double max_error) {
         Double [][] users_table = usersTableJobs();
         Double[][] jobs_table = jobsTable();
@@ -245,6 +236,7 @@ public class RecommendationService {
 
         double precision_error = 100.0;
 
+        // the algorithm runs for a specified number of iterations, or until the error is less or equal to max_error
         for(int i=0; i<iterations; i++) {
             
             if(precision_error<=max_error) {
@@ -269,14 +261,18 @@ public class RecommendationService {
             precision_error = costFunction(matrix,users_table ,jobs_table);
 
         }
+        // the approximated ratings table is calculated by multiplying the users table and the job table after gradient descent 
         return arrayMultiplication(users_table, transpose(jobs_table));
 
     }
 
+    // populate the ratings table(with users for rows and articles for columns)
     public Double[][] recommendationMatrixArticles(){
         List<UserEntity> users = userRepo.findAll();
         List<Article> articles = articleRepo.findAll();
         Double[][] matrix = new Double[users.size()][articles.size()];
+
+        
         for(int i=0; i<users.size(); i++){
             List<Article> likedPosts = likeRepo.findLikedArticles(users.get(i));
             List<Article> commentedPosts = commentRepo.findArticles(users.get(i));
@@ -285,17 +281,24 @@ public class RecommendationService {
             List<Article> connectionsCommented = commentRepo.findCommentedArticles(connections);
             
             for(int j=0; j<articles.size(); j++){
+                // every cell is initialized to -1
                 matrix[i][j] = -1.0;
+
+                // if the article j is liked by user i, matrix[i][j] += 2.0
                 if(likedPosts.contains(articles.get(j))){
                     matrix[i][j] += 2.0;
                 }
+                // if the article j has comments posted by user i, matrix[i][j] += 1.0
                 if(commentedPosts.contains(articles.get(j))){
                     matrix[i][j] += 1.0;
                 }
+
+                // matrix[i][j]+= #(connections_who_liked_article_j)*0.5;
                 if(connectionsLiked.contains(articles.get(j))){
                     int occurrencies = Collections.frequency(connectionsLiked, articles.get(j));
                     matrix[i][j] += (occurrencies*0.5);
                 }
+                // matrix[i][j]+= #(connection_comments_on_article_j)*0.2;
                 if(connectionsCommented.contains(articles.get(j))){
                     int occurrencies = Collections.frequency(connectionsCommented, articles.get(j));
                     matrix[i][j] += (occurrencies*0.2);
@@ -307,22 +310,28 @@ public class RecommendationService {
         return matrix;
     }
 
+    //  populate the ratings table(with users for rows and jobs for columns)
     public Double[][] recommendationMatrixJobs(){
         List<UserEntity> users = userRepo.findAll();
         List<Job> jobs = jobRepo.findAll();
         Double[][] matrix = new Double[users.size()][jobs.size()];
+
         for(int i=0; i<users.size(); i++){
             List<Skills> userSkills = users.get(i).getUser_skills();
             List<Job> jobsViewed = users.get(i).getJobs_viewed();
             for(int j=0; j<jobs.size(); j++){
+                // every cell is initialized to -1
                 matrix[i][j] = -1.0;
                 List<Skills> jobSkills = jobs.get(j).getRelevant_skills();
+                // if user i has skill j, matrix[i][j]+=2
                 for(Skills skill:userSkills){
                     if(jobSkills.contains(skill)){
                         matrix[i][j] += 2.0;
                     }
                 }
+                // find how many times user i has viewed job j
                 int views = Collections.frequency(jobsViewed, jobs.get(j));
+
                 matrix[i][j] += 0.5*views;
             }
         }
