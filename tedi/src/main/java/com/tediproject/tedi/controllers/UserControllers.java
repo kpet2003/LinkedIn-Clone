@@ -90,6 +90,7 @@ public class UserControllers {
         }
     }
 
+    // login the user
     @PostMapping(value= "/Login")
     public ResponseEntity<?> login( @RequestBody LoginDto user) {
         Authentication auth;
@@ -115,7 +116,7 @@ public class UserControllers {
         
     }
   
-
+    // change the user's email
     @PutMapping(value= "/NewEmail")
     public ResponseEntity<?> changeEmail(@RequestBody EmailChangeDto change){
         try {
@@ -145,7 +146,7 @@ public class UserControllers {
         }
     }
 
-
+    // change the user's password
     @PutMapping(value= "/NewPassword")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDto change){
         try {
@@ -161,6 +162,7 @@ public class UserControllers {
         }
     }
 
+    // change the user's profile picture
     @PutMapping(value= "/Profile/pfpchange")
     public ResponseEntity<?> changePfp(
         @RequestParam(value="profilePicture", required = false) MultipartFile image,
@@ -179,12 +181,14 @@ public class UserControllers {
         }
     }
 
+    // change the user's education
     @PutMapping(value= "/Profile/educhange")
     public void changeEdu(@RequestBody InfoChangeDto change) {
         jwtUtil.validateToken(change.getToken());
         userService.changeUserEdu(change.getToken(), change.getInfo());
-    }
+    }   
 
+     // change the user's work experience
     @PutMapping(value= "/Profile/workchange")
     public ResponseEntity<?> changeWork(@RequestBody InfoChangeDto change){
 
@@ -202,6 +206,7 @@ public class UserControllers {
         }
     }
 
+     // change the user's skills
     @PutMapping(value= "/Profile/skillchange")
     public ResponseEntity<?> changeSkill(@RequestBody InfoChangeDto change){
         try {
@@ -218,6 +223,7 @@ public class UserControllers {
         }
     }
 
+    // change the user's education status (public or private)
     @PutMapping(value= "/Profile/edubool")
     public ResponseEntity<?> changeEduBool(@RequestBody BoolChangeDto change){
         try {
@@ -233,6 +239,7 @@ public class UserControllers {
         }
     }
 
+    // change the user's work experience status (public or private)
     @PutMapping(value = "/Profile/workbool")
     public ResponseEntity<?> changeWorkBool(@RequestBody BoolChangeDto change){
         try {
@@ -248,6 +255,7 @@ public class UserControllers {
         }
     }
 
+    // change the user's skills status (public or private)
     @PutMapping(value= "/Profile/skillsbool")
     public ResponseEntity<?> changeSkillsBool(@RequestBody BoolChangeDto change){
         try {
@@ -263,6 +271,7 @@ public class UserControllers {
         }
     }
 
+    // change the user's work title
     @PutMapping(value= "/Profile/worktitle")
     public ResponseEntity<?> changeWorkTitle(@RequestBody InfoChangeDto change){
         try {
@@ -281,7 +290,8 @@ public class UserControllers {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
+    
+    // change the user's work place
     @PutMapping(value= "/Profile/workplace")
     public ResponseEntity<?> changeWorkplace(@RequestBody InfoChangeDto change){
         try {
@@ -301,6 +311,7 @@ public class UserControllers {
         }
     }
 
+    // find the last person with whom the user has chatted
     @PutMapping(value = "/tab/{user}/{tab}")
     public ResponseEntity<?> setLastChat(@PathVariable String user, @PathVariable long tab){
         try {
@@ -313,6 +324,7 @@ public class UserControllers {
         }
     }
     
+    // returns user info to the frontend
     @GetMapping(value = "/NewEmail", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@RequestParam(value="id", required = false) Long id) {
         try{
@@ -331,6 +343,7 @@ public class UserControllers {
         }
     }
 
+    // Return user's profile information to the frontend
     @GetMapping(value = "/Profile", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserProfile(@RequestParam(value="token", required = false) String token) {
         try{
@@ -369,12 +382,14 @@ public class UserControllers {
         }
     }
 
+
+    // check if the user viewing the profile is connected to the profile's owner
     @GetMapping(value = "/ViewProfile")
     public Boolean checkConnection(@RequestParam(value="user_id", required = false)Long id,@RequestParam(value="token", required = false)String token) {
         return userService.checkIfConnected(id,token);
     }
 
-
+    // Return user's skills to the frontend
     @GetMapping(value = "/Profile/GetSkills")
     public List<SkillsDto> getUserSkills(String token) {
         List<Skills> skills =  userService.findSkills(token);
@@ -391,6 +406,7 @@ public class UserControllers {
         return user_skills;
     }
 
+    // Return user's education to the frontend
     @GetMapping(value="/Profile/GetEducation")
     public List<EducationDto> getUserEducation(String token) {
         List<Education> edu =  userService.findEducation(token);
@@ -407,6 +423,7 @@ public class UserControllers {
         return education;
     }
 
+    // Return user's experience to the frontend
     @GetMapping(value="/Profile/GetExperience")
     public List<ExperienceDto> getUserExperience(String token) {
         List<Experience> exp = userService.findExperience(token);
@@ -423,6 +440,7 @@ public class UserControllers {
         return user_exp;
     }
 
+    // Return user with id=id profile information to the frontend
     @GetMapping(value = "/VisitProfile/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProfile(@PathVariable Long id) {
 
@@ -462,6 +480,7 @@ public class UserControllers {
         }
     }
 
+    // Return user's skills to the frontend
     @GetMapping(value = "/VisitProfile/getSkills/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<SkillsDto> getSkillsByID(@PathVariable Long id) {
         List <Skills> skills =  userService.findSkillsByID(id);
@@ -478,6 +497,7 @@ public class UserControllers {
         return user_skills;
     }
 
+    // Return user's education to the frontend
     @GetMapping(value = "/VisitProfile/getEducation/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<EducationDto> getEducationByID(@PathVariable Long id) {
    
@@ -495,6 +515,7 @@ public class UserControllers {
         return education;
     }
 
+    // Return user's experience to the frontend
     @GetMapping(value = "/VisitProfile/getExperience/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<ExperienceDto> getExperienceByID(@PathVariable Long id) {
         List<Experience> exp =  userService.findExperienceByID(id);
@@ -509,7 +530,7 @@ public class UserControllers {
 
         return user_exp;
     }
-
+    // remove a skill from the user's skill list 
     @DeleteMapping(value = "/Profile/DeleteSkill")
     public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {
         try {
@@ -521,6 +542,7 @@ public class UserControllers {
         }
     }
 
+    // remove education from user's education list
     @DeleteMapping(value = "/Profile/DeleteEdu")
     public ResponseEntity<?> removeEducation(@RequestParam(value="education_id") Long education_id,@RequestParam(value="token") String token) {
         try {
@@ -531,7 +553,7 @@ public class UserControllers {
             return ResponseEntity.badRequest().body("ID is required");
         }
     }
-
+    // remove experience from user's experience list
     @DeleteMapping(value = "/Profile/DeleteExp")
     public ResponseEntity<?> removeExperience(@RequestParam(value="experience_id") Long experience_id,@RequestParam(value="token") String token) {
         try {

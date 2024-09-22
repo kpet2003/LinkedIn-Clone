@@ -1,6 +1,6 @@
 import axios from "axios";
 const SERVER_URL =  "https://localhost:8080"
-
+// functions relating to job data that handle the requests to the backend 
 class JobService{
     async newJob(data){
         const API_URL = SERVER_URL +"/newJob";

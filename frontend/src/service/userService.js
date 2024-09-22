@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 const SERVER_URL =  "https://localhost:8080"
 
 
+// functions relating to user data that handle the requests to the backend 
 class UserService {
     saveUser(user) {
         const API_URL = SERVER_URL +"/SignUp/signup";
