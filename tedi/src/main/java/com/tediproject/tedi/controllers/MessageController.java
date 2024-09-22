@@ -1,8 +1,6 @@
 package com.tediproject.tedi.controllers;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tediproject.tedi.dto.InChatUserDto;
 import com.tediproject.tedi.model.Message;
-import com.tediproject.tedi.model.UserEntity;
 import com.tediproject.tedi.repo.MessageRepo;
 import com.tediproject.tedi.repo.UserRepo;
 import com.tediproject.tedi.security.JwtUtil;
@@ -28,6 +25,7 @@ import com.tediproject.tedi.service.NetworkService;
 @Controller
 public class MessageController {
     
+    //needed components
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -46,9 +44,11 @@ public class MessageController {
     @Autowired
     private MessageService messService;
 
+    //send messages in real time
     @MessageMapping(value="/chat")
     public Message receiveMessage(@Payload Message message, Principal principal){
 
+        //create a new message to save in the database for chat history
         Message mess = new Message();
         mess.setSenderId(message.getSenderId());
         mess.setReceiverId(message.getReceiverId());
@@ -56,81 +56,44 @@ public class MessageController {
         mess.setDate(message.getDate());
         messRepo.save(mess);
         
-
+        //send the message
         simpMessagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/chat", message);
-      
-        System.out.println(message.toString());
+
         return message;
     }
 
+    //get user's data for the messages page
     @GetMapping(value="/Messages")
     public ResponseEntity<?> getInChatUserData(@RequestParam(value="token", required = false) String token){
         try{
-            System.out.println("IN GET");
-            System.out.println("TOKEN IS "+token);
-            jwtUtil.validateToken(token);
-            System.out.println("VALID TOKEN");
-            UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-            System.out.println("MAKING USER DTO");
-            if(user != null){
-                InChatUserDto chatUser = new InChatUserDto();
-                chatUser.setId(user.getID());
-                chatUser.setFirst_name(user.getFirstName());
-                chatUser.setLast_name(user.getLastName());
-                chatUser.setEmail(user.getEmail());
-                chatUser.setLastChatUserId(user.getLastChatUserId());
-                if (user.getProfilePicture() != null) {
-                    String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
-                    chatUser.setImage(base64Image);
-                }
-                System.out.println("MAKING THE CONNECTIONS NOWWWWWW");
-                List<UserEntity> connectedUsers = netService.findUserConnections(token);
-                System.out.println("GOT CONNECTIONS");
-                List<InChatUserDto> temp = new ArrayList<>();
-                for(UserEntity tempUser : connectedUsers){
-                    Boolean messaged = true;
-                    if(messService.getChatHistory(user.getID(), tempUser.getID()).isEmpty()){
-                        messaged = false;
-                    }
-                    InChatUserDto tempchatUser = new InChatUserDto(tempUser.getFirstName(), tempUser.getLastName(),
-                    tempUser.getEmail(), null, tempUser.getID(), messaged, tempUser.getLastChatUserId(), null);
-                    if (tempUser.getProfilePicture() != null) {
-                        String base64Image = Base64.getEncoder().encodeToString(tempUser.getProfilePicture());
-                        tempchatUser.setImage(base64Image);
-                    }
-                    
-                    temp.add(tempchatUser);
-                }
-                chatUser.setConnections(temp);
-                System.out.println("BACKEND DONE");
-                return ResponseEntity.ok(chatUser);
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
+            jwtUtil.validateToken(token); //make sure user is validated
+            InChatUserDto chatUser = messService.getUserData(token); //get user data
+            
+            return ResponseEntity.ok(chatUser); //send dto to frontend
         }
-        catch(Exception e){
+        catch(Exception e){ //if error occurs throw exception
             return ResponseEntity.badRequest().body("token is required");
         }
     }
 
+    //get chat history of 2 users
     @GetMapping(value="/chathistory/{user1}/{user2}")
     public ResponseEntity<?> getChatHistory(@PathVariable long user1, @PathVariable long user2){
         try {
             List<Message> history = messService.getChatHistory(user1, user2);
             return ResponseEntity.ok(history);
-        } catch (Exception e) {
+        } catch (Exception e) { //if error return error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
+    //get the profile picture of the user the current user is messaging
     @GetMapping(value="/image/{userId}")
     public ResponseEntity<?> getReceiverPfp(@PathVariable long userId){
         try {
-            UserEntity user = userRepo.findById(userId);
-            if (user.getProfilePicture() != null) {
-                String base64Image = Base64.getEncoder().encodeToString(user.getProfilePicture());
-                return ResponseEntity.ok(base64Image);
+            String image = messService.getImage(userId);
+            if (image != null) {
+                return ResponseEntity.ok(image);
             }
             else{
                 return ResponseEntity.ok(null);

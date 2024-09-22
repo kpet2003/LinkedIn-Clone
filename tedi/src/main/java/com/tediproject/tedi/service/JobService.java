@@ -25,6 +25,8 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class JobService {
+
+    //needed components
     
     @Autowired
     UserRepo userRepo;
@@ -44,60 +46,65 @@ public class JobService {
     @Autowired
     RecommendationService recommendationService;
 
+    //function to create a new job
     public void createJob(NewJobDto job) {
-        Job j = new Job();
+        Job j = new Job(); //make a new job and set its data
         j.setAuthor(userRepo.findByEmail(jwtUtil.getEmailFromJWT(job.getAuthorToken())));
         j.setJob_title(job.getJobTitle());
         j.setJob_description(job.getJobDesc());
         List<Skills> jobSkills = new ArrayList<>();
-        for(String skill: job.getJobSkills()){
-            Skills s = skillsRepo.findBySkill(skill);
-            if(s==null){
+        for(String skill: job.getJobSkills()){ //for every skill in the new job
+            Skills s = skillsRepo.findBySkill(skill); //look for it in the existing skills
+            if(s==null){ //if it does not exist add it
                 s = new Skills();
                 s.setSkill(skill);
                 skillsRepo.save(s);
             }
-            jobSkills.add(s);
+            jobSkills.add(s); //add it to the new job's skills list in both cases
         }
-        j.setRelevant_skills(jobSkills);
-        jobRepo.save(j);
+        j.setRelevant_skills(jobSkills); //set the skills of the new job
+        jobRepo.save(j); //save the new job
     }
 
+    //function to get all jobs in the database
     public List<JobDto> getJobs(String token){
-        List<JobDto> jobs = new ArrayList<>();
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<UserEntity> connections = networkService.findUserConnections(token);
-        Double[][] matrix = recommendationService.recommendationMatrixJobs();
+        List<JobDto> jobs = new ArrayList<>(); //create a list to keep jobs
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //find user in database
+        List<UserEntity> connections = networkService.findUserConnections(token); //get user's connections
+        Double[][] matrix = recommendationService.recommendationMatrixJobs(); //make recommandation matrix
+        //get recommendations
         Double[][] recommendation = recommendationService.gradientDescentJobs(matrix, 0.001, 10000, 0.001);
 
-        long id = user.getID();
+        long id = user.getID(); //get user id
 
-        Double[] user_jobs = recommendation[(int)(id-1)];
+        Double[] user_jobs = recommendation[(int)(id-1)]; //get the recommended jobs for this user
 
-        List<ArticlePair> job_data = new ArrayList<>();
+        List<ArticlePair> job_data = new ArrayList<>(); //list of jobs
 
-        for(int i=0; i<user_jobs.length; i++) {
+        for(int i=0; i<user_jobs.length; i++) { //for all jobs create a pair of their id and their rating
             ArticlePair pair = new ArticlePair();
             pair.setId(i+1);
             pair.setRating(user_jobs[i]);
             job_data.addLast(pair);
         }
         
+        //sort jobs based on rating
          List<ArticlePair> topRatedJobs = job_data.stream()
         .sorted(Comparator.comparingDouble(ArticlePair::getRating).reversed())
         .collect(Collectors.toList());
 
+        //keep the 40 top rated jobs
         int count = 0;
         for(ArticlePair job:topRatedJobs){
-            Job j = jobRepo.findById(job.getId());
+            Job j = jobRepo.findById(job.getId()); //create  and keep a dto for each job added
             String author = j.getAuthor().getFirstName()+" "+j.getAuthor().getLastName();
             JobDto jobDto = new JobDto(author, j.getJob_title(), j.getJob_description(), j.getDate_posted(), j.getId(), j.getAuthor().getID());
             jobs.add(jobDto);
             if(connections.contains(j.getAuthor()) || (j.getAuthor().getID() == id)){
-                continue;
+                continue; //jobs the user or their connections have posted do not add to the count
             }
             count++;
-            if(count >= 40){
+            if(count >= 40){ //once count reaches 40 stop adding jobs
                 break;
             }
         }
@@ -105,90 +112,98 @@ public class JobService {
         return jobs;
     }
 
+    //function to return the jobs the user's connections have posted
     public List<JobDto> getConnectionsJobs(List<JobDto> allJobs, String token){
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //find the user
+        List<UserEntity> connectedUsers = networkService.findUserConnections(token); //find their connections
+        //get the id of each connection
         List<Long> connectionIds = connectedUsers.stream()
                                                 .map(UserEntity::getID)
                                                 .collect(Collectors.toList());
-        List<JobDto> connectedJobs = new ArrayList<>();
-        for(JobDto job:allJobs){
+        List<JobDto> connectedJobs = new ArrayList<>(); //list to keep the jobs we want
+        for(JobDto job:allJobs){ //for each job
             Job j = jobRepo.findById(job.getJobId());
-            if(connectionIds.contains(job.getAuthorId()) && !connectedJobs.contains(job)){
-                if(!j.getApplicants().contains(user)){
-                    connectedJobs.add(job);
+            if(connectionIds.contains(job.getAuthorId()) && !connectedJobs.contains(job)){ //if the author is in the connections and job has not been added yet
+                if(!j.getApplicants().contains(user)){ //and if the user has not applied for it
+                    connectedJobs.add(job); //add the job to the list
                 }
             }
         }
         return connectedJobs;
     }
 
+    //function to get the jobs that users not in the user's connections have posted
     public List<JobDto> getOtherJobs(List<JobDto> allJobs, String token){
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<UserEntity> connectedUsers = networkService.findUserConnections(token);
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //find user
+        List<UserEntity> connectedUsers = networkService.findUserConnections(token); //find user's connections
+        //keep connections ids
         List<Long> connectionIds = connectedUsers.stream()
                                                 .map(UserEntity::getID)
                                                 .collect(Collectors.toList());
-        List<JobDto> otherJobs = new ArrayList<>();
-        for(JobDto job:allJobs){
+        List<JobDto> otherJobs = new ArrayList<>(); //list to keep the jobs we want
+        for(JobDto job:allJobs){ //for each job
             Job j = jobRepo.findById(job.getJobId());
-            if(!connectionIds.contains(job.getAuthorId()) && !otherJobs.contains(job)){
-                if(!j.getApplicants().contains(user) && j.getAuthor().getID() != user.getID()){
-                    otherJobs.add(job);
+            if(!connectionIds.contains(job.getAuthorId()) && !otherJobs.contains(job)){ //if the author is not in the connections and job has not been added yet
+                if(!j.getApplicants().contains(user) && j.getAuthor().getID() != user.getID()){ //if the user has not applied for it and is not the author of it
+                    otherJobs.add(job); //add the job
                 }
             }
         }
         return otherJobs;
     }
 
+    //function to get the jobs a user has posted
     public List<JobDto> getMyJobs(List<JobDto> allJobs, String token){
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<JobDto> myJobs = new ArrayList<>();
-        for(JobDto job:allJobs){
-            if(job.getAuthorId() == user.getID()){
-                myJobs.add(job);
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //find user
+        List<JobDto> myJobs = new ArrayList<>(); //list to keep the jobs we want
+        for(JobDto job:allJobs){ //for each job
+            if(job.getAuthorId() == user.getID()){ //if the user is the author
+                myJobs.add(job); //add it
             }
         }
         return myJobs;
     }
 
+    //function to get the jobs the user has applier for
     public List<JobDto> getAppliedJobs(List<JobDto> allJobs, String token){
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
-        List<JobDto> appliedJobs = new ArrayList<>();
-        for(JobDto job:allJobs){
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //find user
+        List<JobDto> appliedJobs = new ArrayList<>(); //list for the jobs we want
+        for(JobDto job:allJobs){ //for each job
             Job j = jobRepo.findById(job.getJobId());
-            if(j.getApplicants().contains(user)){
-                appliedJobs.add(job);
+            if(j.getApplicants().contains(user)){ //if the user is in the applicants
+                appliedJobs.add(job); //add it
             }
         }
         return appliedJobs;
     }
 
+    //function to add an application to a job
     @Transactional
     public void applyForJob(long jobId, String userToken) {
-        // Retrieve the job and user entities
-        Job job = jobRepo.findById(jobId);
-        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(userToken));
+        Job job = jobRepo.findById(jobId); //find job
+        UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(userToken)); //find user applying
         
-        if (!job.getApplicants().contains(user)) {
-            job.getApplicants().add(user);
+        if (!job.getApplicants().contains(user)) { //if user is not in the applicants
+            job.getApplicants().add(user); //add them
         }
 
-        if (!user.getJobs_applied().contains(job)) {
-            user.getJobs_applied().add(job);
+        if (!user.getJobs_applied().contains(job)) { //if job is not in the jobs the user has applied for
+            user.getJobs_applied().add(job); //add it
         }
         
-        // Save the updated entities
+        //save the changes
         jobRepo.save(job);
         userRepo.save(user);
     }
 
+    //function to return the applicants of a job
     public List<ApplicantDto> getApplicants(long jobId){
-        Job job = jobRepo.findById(jobId);
-        List<ApplicantDto> applicants = new ArrayList<>();
-        List<UserEntity> temp = new ArrayList<>();
-        temp = job.getApplicants();
-        for(UserEntity user: temp){
+        Job job = jobRepo.findById(jobId); //find job
+        List<ApplicantDto> applicants = new ArrayList<>(); //list to keep applicants
+        List<UserEntity> temp = new ArrayList<>(); //list of users
+        temp = job.getApplicants(); //keep the applicants in the users list
+        for(UserEntity user: temp){ //for each user
+            //create a dto and add it to the applicants list
             String name = user.getFirstName()+" "+user.getLastName();
             String base64Image = null;
             if (user.getProfilePicture() != null) {
@@ -199,20 +214,21 @@ public class JobService {
         }
         return applicants;
     }
-
+ 
+    //function to add a view to a job
     public void addView(long jobId, String token) {
-       Job job = jobRepo.findById(jobId);
-       UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token));
+       Job job = jobRepo.findById(jobId); //find the job
+       UserEntity user = userRepo.findByEmail(jwtUtil.getEmailFromJWT(token)); //get the user that viewed it
 
-       if (!job.getViews().contains(user)) {
+       if (!job.getViews().contains(user)) { //if not already added add user to job's views
         job.getViews().add(user);
         }
 
-        if (!user.getJobs_viewed().contains(job)) {
+        if (!user.getJobs_viewed().contains(job)) { //if not already added add job to user's views
             user.getJobs_viewed().add(job);
         }
         
-        // Save the updated entities
+        //save changes
         jobRepo.save(job);
         userRepo.save(user);
     }
