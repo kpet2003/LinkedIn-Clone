@@ -273,21 +273,39 @@ class UserService {
 
     async getProfile(id, cancel){
         const url = SERVER_URL + `/VisitProfile/${id}`;
-        const response = await axios.get(url, {
-            signal: cancel.signal,
-            responseType: 'json'
-        });
-        return response.data;
+        if(cancel){
+            const response = await axios.get(url, {
+                signal: cancel.signal,
+                responseType: 'json'
+            });
+            return response.data;
+        }
+        else{
+            const response = await axios.get(url, {
+                responseType: 'json'
+            });
+            return response.data;
+        }
     }
 
     async getUserChatData(token, cancel){
         const url = SERVER_URL + '/Messages';
-        const response = await axios.get(url, {
-            signal: cancel.signal,
-            params: {token: token},
-            responseType: 'json'
-        });
-        return response.data;
+        if(cancel){     
+            const response = await axios.get(url, {
+                signal: cancel.signal,
+                params: {token: token},
+                responseType: 'json'
+            });
+            return response.data;
+        }
+        else{
+            const response = await axios.get(url, {
+                signal: cancel.signal,
+                params: {token: token},
+                responseType: 'json'
+            });
+            return response.data;
+        }
     }
 
     async getChatHistory(user1,user2){
