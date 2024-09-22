@@ -128,7 +128,7 @@ function Pfp(){
     const deleteSkill = async(skill_id) => {
         try {
             await userService.removeSkill(skill_id,localStorage.getItem('jwt_token')); //remove skill from database
-            const response = await userService.getSkills(localStorage.getItem('jwt_token')); //get the updated list of skills
+            const response = await userService.getSkills(localStorage.getItem('jwt_token'), null); //get the updated list of skills
             setSkills(response); //save the new skills
         }
         catch(error) { //if error occurs
@@ -140,7 +140,7 @@ function Pfp(){
     const deleteEducation = async(edu_id) =>{
         try {
             await userService.removeEdu(edu_id,localStorage.getItem('jwt_token')); //remove from database
-            const response = await userService.getEducation(localStorage.getItem('jwt_token')); //get the updated list of education points
+            const response = await userService.getEducation(localStorage.getItem('jwt_token'), null); //get the updated list of education points
             setEducation(response); //save them
         }
         catch(error) { //if error occurs
@@ -152,7 +152,7 @@ function Pfp(){
     const deleteExperience = async(exp_id) => {
         try {
             await userService.removeExp(exp_id,localStorage.getItem('jwt_token')); //remove from database
-            const response = await userService.getExperience(localStorage.getItem('jwt_token')); //get the updated list of experience points
+            const response = await userService.getExperience(localStorage.getItem('jwt_token'), null); //get the updated list of experience points
             setExperience(response); //save them
         }
         catch(error) { //if error occurs
@@ -197,7 +197,7 @@ function Pfp(){
 
                     await userService.changeEducation(data); //change education in database
                     alert('Education info changed successfully'); //message to user
-                    const response = await userService.getEducation(localStorage.getItem('jwt_token')); //get updated education
+                    const response = await userService.getEducation(localStorage.getItem('jwt_token'), null); //get updated education
                     setEducation(response); //save it
                 }
                 else if(changedField === 'workExperience'){ //if experience was changed
@@ -207,7 +207,7 @@ function Pfp(){
                     }
                     await userService.changeWork(data); //change experience in database
                     alert('Work experience changed successfully'); //message to user
-                    const response = await userService.getExperience(localStorage.getItem('jwt_token')); //get updated experience
+                    const response = await userService.getExperience(localStorage.getItem('jwt_token'), null); //get updated experience
                     setExperience(response); //save it
                 }
                 else if(changedField === 'skills'){ //if skills were changed
@@ -242,7 +242,7 @@ function Pfp(){
                 }
             }
         
-            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token')); //get updated user data
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'), null); //get updated user data
             setUser((user) => ({ //save it
                 ...user,
                 ...updatedUser,
@@ -271,7 +271,7 @@ function Pfp(){
             else{
                 await userService.changeSkillsState(data);//otherwise skills state has changed, change it
             }
-            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token')); //get updated user data
+            const updatedUser = await userService.getUserData(localStorage.getItem('jwt_token'), null); //get updated user data
             setUser((user) => ({ //save user data
                 ...user,
                 ...updatedUser,
