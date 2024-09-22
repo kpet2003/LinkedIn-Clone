@@ -37,22 +37,29 @@ public class SecurityConfig {
         this.jwtEntryPoint = jwtEntryPoint;
     }
     
+    // sets up security for the app
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http 
+            // enable cors, according to the configuration in corsConfigurationSource
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            // disable csrf protection
             .csrf(csrf -> csrf.disable()) 
+            // allow all requests made to /SignUp/signup and welcome page; for all other pages the user has to be authenticated
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/static/css/**", "/static/js/**", "/**", "/ws/**").permitAll()
                 .requestMatchers("/").permitAll() 
                 .requestMatchers("/SignUp/signup").permitAll() 
-                .requestMatchers("/AdminPage").hasRole("admin")
-                .requestMatchers("/HomePage").hasRole("user")
+                .requestMatchers("/AdminPage").hasRole("admin") // only admin can reach adminPage
+                .requestMatchers("/HomePage").hasRole("user")   // only users can reach homePage
 
                 .anyRequest().authenticated()) 
+                // configuration related to jwt tokens
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(jwtEntryPoint))
+                // creates stateless sessions
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+                // jwt authentication
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) 
             .build(); 
     }
@@ -67,6 +74,7 @@ public class SecurityConfig {
 
 
     @Bean
+    // encrypts the passwords
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -78,12 +86,15 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
+        
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
+        // the REST API methods allowed
 		configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+        // any domain can make requests to the server
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        // send header to the client
         configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
 		source.registerCorsConfiguration("/**", configuration);
