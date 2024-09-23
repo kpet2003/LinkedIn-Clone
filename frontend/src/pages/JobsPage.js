@@ -1,13 +1,10 @@
 
 import '../styling/HomePage.css';
 import '../styling/Jobs.css'
-import React, { useEffect, useState,Suspense } from 'react';
-import userService from "../service/userService.js";
+import React, { useEffect, useState } from 'react';
 import jobService from "../service/jobService.js";
 import avatar from '../icons/avatar.png';
-import ArticleService from '../service/articleService.js';
 import NavigationBar from './NavigationBar.js';
-import {useNavigate} from "react-router-dom";
 import Popup from 'reactjs-popup';
 
 
@@ -250,37 +247,32 @@ function Jobs() {
             {/* popup that will show the form to be filled in to post a new job */}
             <Popup trigger={
                 <div>
-                    {/* button that will show the popup when clicked */}
-                    <button className='save-button job-button'>Post a Job</button>
+                <button className='save-button job-button'>Post a Job</button>
                 </div>
-            } modal closeOnDocumentClick className="modal-content create-job-container" onClose={reset}> {/* form will reset when closed */}
+            } modal closeOnDocumentClick className="modal-content create-job-container" onClose={reset}>
                 {(close) => (
                     <div className='modal-background create-job-container'>
-                        {/* like the other popup, popup will close when x icon (span) is clicked */}
                         <span className="close" onClick={close}>
                         &times;
                         </span><br></br>
-                        <h2>Post a Job</h2> {/* popup title */}
-                        <form onSubmit={handleSubmit}> {/* the form, handleSubmit is called when submit type input is clicked */}
-                        {/* area to write the job title and a label for it */}
+                        <h2>Post a Job</h2>
+                        <form onSubmit={handleSubmit}>
                         <label style={{ display: 'block', textAlign: 'left' }}>Job Title:</label><br></br>
                         <textarea className='insert-text' style={{width: 250}} onChange={handleChange} id='title'></textarea><br></br><br></br>
-                        {/* area to write the job description and a label for it */}
                         <label style={{ display: 'block', textAlign: 'left' }}>Job Description:</label><br></br>
                         <textarea className='insert-text about' style={{width: 250}} onChange={handleChange} id='desc'></textarea><br></br><br></br>
-                        {/* area to add skills (shows the skills already added too) and a label for it */}
                         <label style={{ display: 'block', textAlign: 'left' }}>Required Skills: </label><br></br>
-                        <input  //when + is clicked whatever has been written in the input is added to the skills of the job
+                        <input 
                             type="text" 
                             value={newSkill} 
-                            onChange={handleSkillInput} // Controlled input for skill
+                            onChange={handleSkillInput}
                             placeholder="Add a skill" 
                             style={{borderRadius: 5, border: '1px solid gray', height: 25,outline: 'none'}}
                             />
                             <span onClick={addSkill} style={{ marginLeft: '10px', cursor: 'pointer',outline: 'none'}}>&#43;</span>
                             
                             <br />
-                            <ul> {/* list of skills already added */}
+                            <ul>
                             {newJob.skills.map((skill, index) => (
                                 <li key={index} style={{textAlign:'left'}}>{skill}</li>
                             ))}
