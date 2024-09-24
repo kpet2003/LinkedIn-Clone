@@ -53,6 +53,11 @@ body {
     padding: 5px 20px;
 }
 
+.reset_button:hover{
+    background-color: rgb(12, 67, 231);
+    cursor: pointer;
+}
+
 .submit {
     display: flex;
     flex-direction: row;
