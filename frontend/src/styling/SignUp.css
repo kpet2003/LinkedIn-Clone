@@ -43,6 +43,16 @@ body {
     padding: 5px 20px;
 }
 
+.reset_button {
+    margin-left: 5px;
+    cursor: pointer;
+    color: white;
+    background-color: royalblue;
+    border-style: none;
+    border-radius: 10px;
+    padding: 5px 20px;
+}
+
 .submit {
     display: flex;
     flex-direction: row;
@@ -56,7 +66,7 @@ body {
     border-style: none;
     border-radius: 10px;
     padding: 5px 20px;
-    margin-left: 250px;
+    margin-left: 240px;
 }
 
 .submit_button:hover{

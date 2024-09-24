@@ -98,7 +98,7 @@ function SignUpPage(){
                 </div>
                
                <div className='submit'>
-                    <input type='reset' value="Reset" className='button' onClick={Reset} ></input>
+                    <input type='reset' value="Reset" className='reset_button' onClick={Reset} ></input>
                     <input type='submit' value="Sign Up"  className='submit_button'></input>
                </div>
             </form>
