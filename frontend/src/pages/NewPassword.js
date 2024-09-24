@@ -51,7 +51,7 @@ function ChangePassword(){
                 <input type='password' onChange={handleChange1} style={{ outline: 'none' }}></input><br></br><br></br>
                 <label>Repeat New Password: </label>
                 <input type='password' onChange={handleChange2} style={{ outline: 'none' }} ></input><br></br><br></br>
-                <input type='submit' value="Change"></input>
+                <input type='submit' value="Change" className='save-button'></input>
             </form>
         </div> 
         </div>

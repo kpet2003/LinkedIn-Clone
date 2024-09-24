@@ -85,7 +85,8 @@ body {
 
 .file-input {
     margin-top: 10px;
-    display: block;
+    display: flex;
+    margin-left: 6%;
 }
 
 .save-button {

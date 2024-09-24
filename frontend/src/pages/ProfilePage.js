@@ -314,7 +314,7 @@ function Pfp(){
                         </span><br></br>
                         <h2>Edit Profile Picture</h2>
                         <form onSubmit={handleSubmit}>
-                        <input type="file" className="file-input" onChange={handleChange} id="profilePicture" />
+                        <input type="file" className="file-input" onChange={handleChange} id="profilePicture" style={{marginLeft:0}}/>
                         <input type="submit" value="Save" className="save-button" />
                         </form>
                     </div>
@@ -378,7 +378,7 @@ function Pfp(){
                             </span><br></br>
                             <h2>Edit Workplace</h2>
                             <form onSubmit={handleSubmit}>
-                            <input type="text" className="file-input" onChange={handleChangedText} id="workplace" style={{ outline: 'none' }}/>
+                            <input type="text" className="file-input" onChange={handleChangedText} id="workplace" style={{ outline: 'none'}}/>
                             <input type="submit" value="Save" className="save-button" />
                             </form>
                         </div>

@@ -39,7 +39,7 @@ function NewMail(){
             const token_data = UserService.decodeToken(localStorage.getItem('jwt_token')); //get new email from new token
 
             alert(`E-mail changed successfully to: ${token_data.sub}`); //message to user
-
+            setNewEmail('');//clear input
             setIsPopupOpen(false); //close popup
         } 
         catch (error) { //if error occurs
@@ -67,7 +67,7 @@ function NewMail(){
             <p>Your current e-mail is: {email}</p><br></br>
             <form onSubmit={handleSubmit}>
                 <label>New email: </label>
-                <input type='email' onChange={handleChange} style={{ outline: 'none' }}></input><br></br><br></br>
+                <input type='email' onChange={handleChange} style={{ outline: 'none'}} value={newEmail}></input><br></br><br></br>
                 <input type='submit' value="Change" className='save-button'></input>
             </form>
 
