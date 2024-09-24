@@ -25,6 +25,8 @@ function ChangePassword(){
         try {
             await UserService.changePassword(data); //change password
             alert("Password changed successfully"); //message to user
+            setPass('');
+            setPassRep('');
         } 
         catch (error) { //if error occurs
             console.error("There was an error changing password", error); //write to console
@@ -48,9 +50,9 @@ function ChangePassword(){
             <h1>Change Password</h1><br></br>
             <form onSubmit={handleSubmit}>
                 <label>New Password: </label>
-                <input type='password' onChange={handleChange1} style={{ outline: 'none' }}></input><br></br><br></br>
+                <input type='password' onChange={handleChange1} style={{ outline: 'none' }} value={pass}></input><br></br><br></br>
                 <label>Repeat New Password: </label>
-                <input type='password' onChange={handleChange2} style={{ outline: 'none' }} ></input><br></br><br></br>
+                <input type='password' onChange={handleChange2} style={{ outline: 'none' }} value={passrep} ></input><br></br><br></br>
                 <input type='submit' value="Change" className='save-button'></input>
             </form>
         </div> 
