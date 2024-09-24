@@ -17,7 +17,7 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
     const searchBarRef = useRef(null);
   
 
-    useCallback(() => {
+    useEffect(() => {
         // when the user clicks outside the search bar or the result list, the result list should disappear
         const handleClickOutside = (event) => {
             if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
