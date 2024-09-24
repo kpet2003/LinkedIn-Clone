@@ -28,7 +28,7 @@ function Network() {
         const getConnections = async () => {
             try {
                 console.log(id);
-                const response = await networkService.fetchConnectionsById(id,cancelConnections);
+                const response = await networkService.fetchConnectionsById(localStorage.getItem('jwt_token'),id,cancelConnections);
                 const finalUsers = response;
                 setConnectedUsers(finalUsers);
                 console.log(finalUsers);

@@ -13,9 +13,10 @@ class ArticleService {
     }
 
     // fetch all existing article categories
-    fetchCategories(cancel) {
+    fetchCategories(token,cancel) {
         const API_URL = SERVER_URL + "/HomePage/GetCategories";
         return axios.get(API_URL,{
+            params:{token:token},
             signal: cancel.signal,
             responseType: 'json'
         }).then(response => response.data);
@@ -61,9 +62,9 @@ class ArticleService {
     }
 
     // get comments of article
-    getComments(article_id) {
+    getComments(article_id,token) {
         const API_URL = SERVER_URL + `/HomePage/GetComments/${article_id}`;
-        return axios.get(API_URL,{responseType: 'json'}).then(response => response.data);
+        return axios.get(API_URL,{params:{token:token},responseType: 'json'}).then(response => response.data);
     }
 
     

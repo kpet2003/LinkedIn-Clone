@@ -386,12 +386,14 @@ public class UserControllers {
     // check if the user viewing the profile is connected to the profile's owner
     @GetMapping(value = "/ViewProfile")
     public Boolean checkConnection(@RequestParam(value="user_id", required = false)Long id,@RequestParam(value="token", required = false)String token) {
+        jwtUtil.validateToken(token);
         return userService.checkIfConnected(id,token);
     }
 
     // Return user's skills to the frontend
     @GetMapping(value = "/Profile/GetSkills")
     public List<SkillsDto> getUserSkills(String token) {
+        jwtUtil.validateToken(token);
         List<Skills> skills =  userService.findSkills(token);
 
         List <SkillsDto> user_skills = new ArrayList<>();
@@ -409,6 +411,7 @@ public class UserControllers {
     // Return user's education to the frontend
     @GetMapping(value="/Profile/GetEducation")
     public List<EducationDto> getUserEducation(String token) {
+        jwtUtil.validateToken(token);
         List<Education> edu =  userService.findEducation(token);
 
         List<EducationDto> education = new ArrayList<>();
@@ -426,6 +429,7 @@ public class UserControllers {
     // Return user's experience to the frontend
     @GetMapping(value="/Profile/GetExperience")
     public List<ExperienceDto> getUserExperience(String token) {
+        jwtUtil.validateToken(token);
         List<Experience> exp = userService.findExperience(token);
 
         List <ExperienceDto> user_exp = new ArrayList<>();
@@ -534,6 +538,7 @@ public class UserControllers {
     @DeleteMapping(value = "/Profile/DeleteSkill")
     public ResponseEntity<?> removeSkill(@RequestParam(value="skill_id") Long skill_id,@RequestParam(value="token") String token) {
         try {
+            jwtUtil.validateToken(token);
             userService.deleteSkill(skill_id,token);
             return ResponseEntity.ok("OK");
         }
@@ -546,6 +551,7 @@ public class UserControllers {
     @DeleteMapping(value = "/Profile/DeleteEdu")
     public ResponseEntity<?> removeEducation(@RequestParam(value="education_id") Long education_id,@RequestParam(value="token") String token) {
         try {
+            jwtUtil.validateToken(token);
             userService.deleteEducation(education_id, token);
             return ResponseEntity.ok("OK");
         }
@@ -557,6 +563,7 @@ public class UserControllers {
     @DeleteMapping(value = "/Profile/DeleteExp")
     public ResponseEntity<?> removeExperience(@RequestParam(value="experience_id") Long experience_id,@RequestParam(value="token") String token) {
         try {
+            jwtUtil.validateToken(token);
             userService.deleteExperience(experience_id, token);
             return ResponseEntity.ok("OK");
         }

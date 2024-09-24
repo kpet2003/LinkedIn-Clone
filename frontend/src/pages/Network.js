@@ -17,7 +17,7 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
     const searchBarRef = useRef(null);
   
 
-    useEffect(() => {
+    useCallback(() => {
         // when the user clicks outside the search bar or the result list, the result list should disappear
         const handleClickOutside = (event) => {
             if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
@@ -50,10 +50,6 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
         }
     };
 
-    // call the handleFilter when the user clicks on the glass icon
-    const handleSearchClick = () => {
-        handleFilter();
-    };
 
     // make a new connection request 
     const makeRequest =  useCallback(async(userID) => {
@@ -85,7 +81,6 @@ function SearchBar({users,requestUsers,connectedUsers,setRequestUsers}) {
                 src={glass} 
                 alt='search' 
                 className='photo' 
-                onClick={handleSearchClick} 
             />
                 {/* render the search results and display the user's relationship with each user in the results  */}
                 {isListVisible && searchTerm !== "" && selectedUsers.length > 0 && (
@@ -143,7 +138,7 @@ function MyNetwork() {
                 try {
                     // fetch the users,the connections and the requests so that the relationship with each user is shown in the search results
                     const [usersResponse, requestsResponse, connectionsResponse] = await Promise.all([
-                        networkService.getUsers(usersCancel),
+                        networkService.getUsers(token,usersCancel),
                         networkService.fetchRequests(token,requestsCancel),
                         networkService.fetchConnections(token,connectionsCancel)
                     ]);
@@ -166,7 +161,7 @@ function MyNetwork() {
                 requestsCancel.abort(); 
                 connectionsCancel.abort();
               };
-        },[connectedUsers,requestUsers]);
+        },[]);
 
 
 

@@ -266,7 +266,7 @@ function Timeline({articleData,setArticleData,categories}) {
         try {
             const token = localStorage.getItem('jwt_token');
            await articleService.addComment(token,article_id,NewComment[article_id]);
-            const comment_response =  await  ArticleService.getComments(article_id);
+            const comment_response =  await  ArticleService.getComments(article_id,localStorage.getItem('jwt_token'));
             setArticleData((prevArticleData) =>
                 prevArticleData.map((article) => {
                     if (article.id === article_id) {
@@ -392,7 +392,7 @@ function HomePage() {
                 console.log("Fetched user data: ",user);
                 setUser(user);
                 
-                const categories = await articleService.fetchCategories(cancelCategory);
+                const categories = await articleService.fetchCategories(localStorage.getItem('jwt_token'),cancelCategory);
                 console.log("Fetched categories: ",categories);
                 setCategories(categories);
 

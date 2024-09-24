@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tediproject.tedi.dto.NetworkDto;
 import com.tediproject.tedi.dto.NewRequestDto;
+import com.tediproject.tedi.security.JwtUtil;
 import com.tediproject.tedi.service.NetworkService;
 
 
@@ -23,9 +24,13 @@ public class NetworkController {
     @Autowired
     NetworkService networkService;
 
+    @Autowired
+    JwtUtil jwtUtil;
+
     // return a list of all users to the frontend
     @GetMapping(value = "/Network/getUsers")
-    public List<NetworkDto> getUsers() {
+    public List<NetworkDto> getUsers(@RequestParam("token") String token) {
+        jwtUtil.validateToken(token);
         return networkService.getUsers();
     }
 
@@ -35,6 +40,7 @@ public class NetworkController {
 
 
         try {
+            jwtUtil.validateToken(request.getToken());
             networkService.createRequest(request.getUser_id(),request.getToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
@@ -48,6 +54,7 @@ public class NetworkController {
     @PostMapping(value = "/Notifications/newConnection")
     public ResponseEntity<?> newConnection(@RequestBody NewRequestDto connection) {
         try {
+            jwtUtil.validateToken(connection.getToken());
             networkService.addConnection(connection.getUser_id(),connection.getToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
@@ -61,6 +68,7 @@ public class NetworkController {
     @PostMapping(value="/Notifications/declineRequest")
     public ResponseEntity<?> declineRequest(@RequestBody NewRequestDto request) {
         try {
+            jwtUtil.validateToken(request.getToken());
             networkService.removeRequest(request.getUser_id(),request.getToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } 
@@ -73,19 +81,21 @@ public class NetworkController {
     // fetch the requests for the user
     @GetMapping(value = "/Network/Requests")
     public List<NetworkDto> getRequests(@RequestParam(value="token", required = false)String token ) {
+        jwtUtil.validateToken(token);
         return networkService.findUsers(token);
     }
     
     // fetch the connections of the user
     @GetMapping(value = "/Network/Connections")
     public List<NetworkDto> getConnections(@RequestParam(value="token", required = false)String token ) {
+        jwtUtil.validateToken(token);
         return networkService.findConnections(token);
     }
 
     // fetch the connections of the user with specified id
     @GetMapping(value = "/ViewNetwork/getConnections/{id}")
-    public List<NetworkDto> getNetwork(@PathVariable Long id) {
-
+    public List<NetworkDto> getNetwork(@PathVariable Long id, @RequestParam("token") String token) {
+        jwtUtil.validateToken(token);
         return networkService.findConnectionsById(id);
     }
         

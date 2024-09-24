@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tediproject.tedi.dto.ArticleDto;
 import com.tediproject.tedi.dto.CommentDto;
 import com.tediproject.tedi.dto.NewArticleDto;
+import com.tediproject.tedi.security.JwtUtil;
 import com.tediproject.tedi.service.ArticleService;
 
 
@@ -26,16 +27,21 @@ public class HomepageController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     // send the article data back to the frontend
     @GetMapping(value="/HomePage/ArticleData")
     public List<ArticleDto> getArticles(@RequestParam(value="token", required = false)String token) {
+        jwtUtil.validateToken(token);
         return articleService.fetchArticles(token);
     }
 
     // send the article categories to the frontend
     @GetMapping(value="/HomePage/GetCategories")
-    public List<String> getCategories() {
+    public List<String> getCategories(@RequestParam("token") String token) {
+        jwtUtil.validateToken(token);
         return articleService.getCategories();
     }
 
@@ -51,6 +57,7 @@ public class HomepageController {
 
 
         try {
+            jwtUtil.validateToken(authorToken);
             NewArticleDto article = new NewArticleDto();
             article.setAuthor_token(authorToken);
             article.setTitle(title);
@@ -81,6 +88,7 @@ public class HomepageController {
     @PostMapping("/HomePage/AddLike")
     public ResponseEntity<?> newLike(@RequestParam("token") String token, @RequestParam("article_id") Long article_id) {
         try {
+            jwtUtil.validateToken(token);
             articleService.AddLike(token, article_id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
@@ -93,6 +101,7 @@ public class HomepageController {
     @PostMapping("/HomePage/AddComment")
     public ResponseEntity<?> newComment(@RequestParam("token") String token, @RequestParam("article_id") Long article_id,@RequestParam("comment") String comment) {
         try {
+            jwtUtil.validateToken(token);
             articleService.AddComment(token, article_id, comment);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
@@ -102,7 +111,8 @@ public class HomepageController {
 
     // fetch comments of article
     @GetMapping(value="/HomePage/GetComments/{article_id}")
-    public List<CommentDto> GetComments(@PathVariable Long article_id) {
+    public List<CommentDto> GetComments(@PathVariable Long article_id, @RequestParam("token") String token) {
+        jwtUtil.validateToken(token);
         return articleService.findComments(article_id);
     }
 

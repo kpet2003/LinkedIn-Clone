@@ -23,7 +23,7 @@ function UserList() {
         const fetchUsers = async() => {
             try {
                 // make axios request
-                const response = await  AdminService.getUsers(cancelUser);
+                const response = await  AdminService.getUsers(localStorage.getItem('jwt_token'),cancelUser);
                 const finalUsers = response.filter(user => user.email !== 'admin@gmail.com');
 
                 // save the users list
@@ -86,7 +86,7 @@ function UserList() {
     const exportXML = async() => {
         
         try {
-            const response = await adminService.getxmlUsers(selectedUsers);
+            const response = await adminService.getxmlUsers(localStorage.getItem('jwt_token'),selectedUsers);
             console.log(response);
 
             

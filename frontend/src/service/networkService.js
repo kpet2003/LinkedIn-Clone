@@ -3,9 +3,9 @@ const SERVER_URL =  "https://localhost:8080"
 class networkService {
 
     // get a list of all users
-    getUsers(cancel) {
+    getUsers(token,cancel) {
         const API_URL = SERVER_URL +"/Network/getUsers";
-        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
+        return axios.get(API_URL,{params:{token:token},signal:cancel.signal}).then(response => response.data);
     }
 
     // make a new connection request
@@ -60,9 +60,9 @@ class networkService {
     }
 
     // fetch connections of user with id=id
-    fetchConnectionsById(id,cancel) {
+    fetchConnectionsById(token,id,cancel) {
         const API_URL = SERVER_URL + `/ViewNetwork/getConnections/${id}`;
-        return axios.get(API_URL,{signal:cancel.signal}).then(response => response.data);
+        return axios.get(API_URL,{params:{token:token},signal:cancel.signal}).then(response => response.data);
     }
 }
 
